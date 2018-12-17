@@ -111,4 +111,9 @@ router.get(
   }
 );
 
+// router.get("/promoter", (req, res, next) => {
+//   console.log("promoter");
+//   res.status(200).json({ aaa: 123 });
+// });
+
 module.exports = router;

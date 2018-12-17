@@ -5,6 +5,7 @@ const passport = require("passport");
 const config = require("./db");
 
 const users = require("./routes/user");
+const promoter = require("./routes/promoter");
 
 mongoose
   .connect(
@@ -28,6 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/api/users", users);
+app.use("/api/promoter", promoter);
+// require("./routes/promoter")(app);
 
 app.get("/", function(req, res) {
   res.send("hello");
