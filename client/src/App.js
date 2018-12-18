@@ -12,6 +12,8 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import Promoters from "./components/Promoters";
 
+import MiniDrawer from "./skins/MiniDrawer";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 if (localStorage.jwtToken) {
@@ -29,17 +31,43 @@ if (localStorage.jwtToken) {
 class App extends Component {
   render() {
     return (
+      // <div
+      //   style={{
+      //     height: "100%",
+      //     // minHeight: "100%",
+      //     // zIndex: 1,
+      //     // overflow: "hidden",
+      //     // position: "relative",
+      //     display: "flex"
+      //   }}
+      // >
+      //   <div
+      //     style={{
+      //       display: "flex",
+      //       backgroundColor: "yellow",
+      //       flex: 1
+      //     }}
+      //   >
+      //     sdsd
+      //     </div>
+      // </div>
       <Provider store={store}>
         <Router>
-          <div>
-            <Navbar />
+          <React.Fragment>
+            {/* <Navbar /> */}
             <Route exact path="/" component={Home} />
-            <div className="container">
+            {/* <div className="container"> */}
+            <MiniDrawer>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/organizatorzy" component={Promoters} />
-            </div>
-          </div>
+              <Route
+                exact
+                path="/organizatorzy"
+                render={() => <Promoters title="Organizatorzy" />}
+              />
+            </MiniDrawer>
+            {/* </div> */}
+          </React.Fragment>
         </Router>
       </Provider>
     );
