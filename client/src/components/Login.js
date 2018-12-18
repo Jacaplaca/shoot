@@ -129,7 +129,7 @@ const Login = withFormik({
     };
     // loginUser(user);
     store.dispatch(loginUser(user));
-    this.props.history.push("/");
+    // this.props.history.push("/");
     resetForm();
   },
   validationSchema: Yup.object().shape({
