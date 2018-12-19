@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import setAuthToken from "./setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authentication";
 
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
@@ -55,9 +55,9 @@ class App extends Component {
         <Router>
           <React.Fragment>
             {/* <Navbar /> */}
-            <Route exact path="/" component={Home} />
             {/* <div className="container"> */}
             <MiniDrawer>
+              {/* <Route exact path="/" component={Promoters} /> */}
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route

@@ -15,7 +15,6 @@ import { connect } from "react-redux";
 import * as actions from "../actions/authentication";
 
 import ButtonNavBar from "./ButtonNavBar";
-// import LinearProgress from "./LinearProgress";
 
 let drawerWidth = 240;
 
@@ -24,6 +23,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   appBar: {
+    backgroundColor: theme.palette.menu,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,

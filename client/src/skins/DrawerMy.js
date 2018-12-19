@@ -47,6 +47,8 @@ const styles = theme => ({
     marginRight: 36
   },
   drawerPaper: {
+    backgroundColor: theme.palette.drawer,
+    borderRightColor: theme.palette.drawer,
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
@@ -86,6 +88,7 @@ const styles = theme => ({
 class DrawerMy extends React.Component {
   render() {
     const { classes, theme, auth, open, handleDrawerClose } = this.props;
+    console.log("THEME", theme);
     const links = [
       {
         comp: "promoters",
