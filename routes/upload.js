@@ -1,11 +1,12 @@
 // const express = require("express");
 // const router = express.Router();
 const router = require("express-promise-router")();
-const PromoterController = require("../controllers/promoter");
+const UploadController = require("../controllers/upload");
 
 router
   .route("/")
-  .get(PromoterController.index)
-  .post(PromoterController.check);
+  .post(UploadController.upload)
+  .get(UploadController.index);
+// .post(PromoterController.login);
 
 module.exports = router;

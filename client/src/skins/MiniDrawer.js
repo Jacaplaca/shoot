@@ -8,6 +8,12 @@ import * as actions from "../actions/authentication";
 
 import TopNavBar from "./TopNavBar";
 import DrawerMy from "./DrawerMy";
+import MainContainer from "./MainContainer";
+
+import Register from "../components/Register";
+import Login from "../components/Login";
+import Home from "../components/Home";
+import Promoters from "../components/Promoters";
 //
 // import Costs from "./Costs";
 // import Planer from "./Planer";
@@ -21,12 +27,13 @@ let drawerWidth = 240;
 const styles = theme => ({
   root: {
     // flexGrow: 1,
-    height: "100%",
+    // height: 1000,
     // minHeight: "100%",
     // zIndex: 1,
     // overflow: "hidden",
     // position: "relative",
-    display: "flex"
+    // display: "flex",
+    // backgroundColor: "red"
   },
   toolbar: {
     display: "flex",
@@ -36,11 +43,11 @@ const styles = theme => ({
     ...theme.mixins.toolbar
   },
   content: {
-    // flexGrow: 1,
+    flexGrow: 1,
     display: "flex",
     flex: 1,
-    // backgroundColor: "yellow"
-    backgroundColor: theme.palette.background.default
+    backgroundColor: "yellow"
+    // backgroundColor: theme.palette.background.default
     //padding: theme.spacing.unit * 3
   }
 });
@@ -98,7 +105,10 @@ class MiniDrawer extends React.Component {
     return (
       <BrowserRouter>
         <div className={classes.root}>
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
           <TopNavBar
+            // style={{ position: "absolute", righ: 34, top: 334 }}
             open={this.state.open}
             handleDrawerOpen={this.handleDrawerOpen}
           />
@@ -106,9 +116,23 @@ class MiniDrawer extends React.Component {
             open={this.state.open}
             handleDrawerClose={this.handleDrawerClose}
           />
-          <main className={classes.content}>
-            {/* <div className={classes.toolbar} /> */}
-            {/* {!auth ? (
+          {auth.user.rola === "admin" && (
+            <Route
+              exact
+              path="/organizatorzy"
+              render={() => (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Promoters title="Organizatorzy" />
+                </MainContainer>
+              )}
+            />
+          )}
+          {/* <main className={classes.content}>
+            <div className={classes.toolbar} /> */}
+          {/* {!auth ? (
               <Route path="/" exact component={Login} />
             ) : (
               <Route
@@ -117,7 +141,7 @@ class MiniDrawer extends React.Component {
                 render={() => <PromowaneProdukty title="Produkty promowane" />}
               />
             )} */}
-            {/* {routes.map((route, i) => {
+          {/* {routes.map((route, i) => {
               const { comp, path, component, title } = route;
               return auth && auth[comp] ? (
                 <Route
@@ -129,26 +153,18 @@ class MiniDrawer extends React.Component {
                 />
               ) : null;
             })} */}
-            {this.props.children}
-            {/* <div>
-              lorem alskdjfla skdflaksjd lfkasjdfl ksjadlfk jasdlfk jasdlkfj
-              alsdkfj alsdkfj laskdfj laksdjflaskjdflaskdjflaksdjf aksdjflaksdjf
-              laksdjflkasdjflkasdjflkasdjflkas laskdjf laskdjflaskdfjlasdkjf
-              alsdkfjasldkfjalsdkfjlasdkfjalsdkfjalsdkfj alskdjflaskdfj lasdkf
-              lorem alskdjfla skdflaksjd lfkasjdfl ksjadlfk jasdlfk jasdlkfj
-              alsdkfj alsdkfj laskdfj laksdjflaskjdflaskdjflaksdjf aksdjflaksdjf
-              laksdjflkasdjflkasdjflkasdjflkas laskdjf laskdjflaskdfjlasdkjf
-              alsdkfjasldkfjalsdkfjlasdkfjalsdkfjalsdkfj alskdjflaskdfj lasdkf
-              lorem alskdjfla skdflaksjd lfkasjdfl ksjadlfk jasdlfk jasdlkfj
-              alsdkfj alsdkfj laskdfj laksdjflaskjdflaskdjflaksdjf aksdjflaksdjf
-              laksdjflkasdjflkasdjflkasdjflkas laskdjf laskdjflaskdfjlasdkjf
-              alsdkfjasldkfjalsdkfjlasdkfjalsdkfjalsdkfj alskdjflaskdfj lasdkf
-              lorem alskdjfla skdflaksjd lfkasjdfl ksjadlfk jasdlfk jasdlkfj
-              alsdkfj alsdkfj laskdfj laksdjflaskjdflaskdjflaksdjf aksdjflaksdjf
-              laksdjflkasdjflkasdjflkasdjflkas laskdjf laskdjflaskdfjlasdkjf
-              alsdkfjasldkfjalsdkfjlasdkfjalsdkfjalsdkfj alskdjflaskdfj lasdkf
-            </div> */}
-          </main>
+          {/* <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            {auth.user.rola === "admin" && (
+              <Route
+                exact
+                path="/organizatorzy"
+                render={() => <Promoters title="Organizatorzy" />}
+              />
+            )} */}
+          {/* {this.props.children} */}
+
+          {/* </main> */}
         </div>
       </BrowserRouter>
     );

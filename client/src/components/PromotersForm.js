@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { loginUser } from "../actions/authentication";
+// import axios from "axios";
+// import { loginUser } from "../actions/authentication";
+import { registerUser } from "../actions/authentication";
 import store from "../store";
 import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
@@ -14,6 +16,9 @@ import * as Yup from "yup";
 
 import InputComponent from "../inputs/InputComponent";
 import ButtonMy from "../skins/ButtonMy";
+const axios = require("axios");
+
+const endpoint = "/api/upload";
 
 class Thumb extends Component {
   state = {
@@ -78,9 +83,13 @@ const styles = theme => ({
 });
 
 class PromotersFormik extends Component {
+  // componentDidMount() {
+  //   this.props.setFieldValue("email", "ccc@ccc.com");
+  // }
+
   render() {
     const {
-      values: { name, adres, password, logo, www },
+      values: { name, adres, password, logo, www, email, password2 },
       errors,
       touched,
       handleSubmit,
@@ -91,6 +100,7 @@ class PromotersFormik extends Component {
       classes,
       setFieldValue
     } = this.props;
+    // setFieldValue("email", "ccc@ccc.com");
     return (
       <Paper
         style={{
@@ -152,6 +162,19 @@ class PromotersFormik extends Component {
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
+                name="email"
+                label="E-mail"
+                type="string"
+                edytuj={handleChange}
+                // edytuj={change.bind(null, "password")}
+                value={email}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email ? errors.email : " "}
+                onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <InputComponent
                 name="password"
                 label="Hasło"
                 type="password"
@@ -161,6 +184,21 @@ class PromotersFormik extends Component {
                 error={touched.password && Boolean(errors.password)}
                 helperText={
                   touched.password && errors.password ? errors.password : " "
+                }
+                onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <InputComponent
+                name="password2"
+                label="Potwierdź hasło"
+                type="password"
+                edytuj={handleChange}
+                // edytuj={change.bind(null, "password")}
+                value={password2}
+                error={touched.password2 && Boolean(errors.password2)}
+                helperText={
+                  touched.password2 && errors.password2 ? errors.password2 : " "
                 }
                 onBlur={handleBlur}
               />
@@ -197,7 +235,7 @@ class PromotersFormik extends Component {
                   component="span"
                   className={classes.button}
                 >
-                  Załaduj logo
+                  Załącz logo organizatora
                   <CloudUploadIcon className={classes.rightIcon} />
                 </Button>
               </label>
@@ -213,7 +251,7 @@ class PromotersFormik extends Component {
             color="primary"
             disabled={!isValid}
           >
-            Zaloguj się
+            Dodaj organizatora
             <Key style={{ marginLeft: 10 }} />
           </ButtonMy>
         </form>
@@ -223,13 +261,16 @@ class PromotersFormik extends Component {
 }
 
 const PromotersForm = withFormik({
-  mapPropsToValue({ name, adres, password, www, logo }) {
+  // mapPropsToValues: () => ({ email: "foo@bar.de" }),
+  mapPropsToValues({ name, adres, password, www, logo, email, password2 }) {
     return {
-      name: name || "",
+      name: name || "namepromoter",
       logo: logo || "",
-      www: www || "",
-      password: password || "",
-      adres: adres || ""
+      www: www || "www",
+      password: password || "aaaaaa",
+      password2: password2 || "aaaaaa",
+      adres: adres || "adres",
+      email: email || "ccc@ccc.co"
     };
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
@@ -237,17 +278,58 @@ const PromotersForm = withFormik({
       name: values.name,
       adres: values.adres,
       password: values.password,
-      logo: values.logo,
-      www: values.www
+      // password2: values.password2,
+      logo: "",
+      www: values.www,
+      email: values.email,
+      rola: "promoter"
     };
-    console.log(promoter);
-    // store.dispatch(loginUser(user));
+    if (values.logo) {
+      const data = new FormData();
+      data.append("file", values.logo, values.logo.name);
+      axios
+        .post(endpoint, data, {
+          onUploadProgress: ProgressEvent => {
+            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
+          }
+        })
+        .then(res => {
+          // console.log(res.data.file);
+          Object.assign(promoter, { logo: res.data.file });
+          // console.log(promoter);
+          store.dispatch(registerUser(promoter));
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    } else {
+      store.dispatch(registerUser(promoter));
+    }
     resetForm();
   },
   validationSchema: Yup.object().shape({
+    name: Yup.string().required("Podaj nazwę organizatora"),
+    email: Yup.string()
+      .email("Podaj prawidłowy e-mail")
+      .required("Podaj e-mail organizatora")
+      .test("a@a.com", "Podany e-mail jest już zarejestrowany", function(
+        value
+      ) {
+        // console.log(value);
+        return axios.post("/api/email/", { email: value }).then(response => {
+          // console.log(response);
+          return response.data.free === true;
+        });
+        // return fetch("/api/email" + value).then(
+        //   response => response.responseText === "true"
+        // );
+      }),
     password: Yup.string()
-      .min(6, "Hasło musi mieć conajmniej 6 znaków")
-      .required("Podaj hasło")
+      .min(0, "Hasło musi mieć conajmniej 6 znaków")
+      .required("Podaj hasło"),
+    password2: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Wpisane hasła muszą być indentyczne")
+      .required("Password confirm is required")
   })
 })(PromotersFormik);
 
@@ -263,7 +345,7 @@ const mapStateToProps = state => ({
 
 export default withStyles(styles, { withTheme: true })(
   connect(
-    mapStateToProps
-    // actions
+    mapStateToProps,
+    { registerUser }
   )(withRouter(PromotersForm))
 );

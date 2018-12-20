@@ -23,6 +23,10 @@ const styles = theme => ({
     flexGrow: 1
   },
   appBar: {
+    overflow: "hidden",
+    position: "fixed" /* Set the navbar to fixed position */,
+    top: 0 /* Position the navbar at the top of the page */,
+    // width: 100%; /* Full width */
     backgroundColor: theme.palette.menu,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
@@ -81,7 +85,7 @@ class TopNavBar extends React.Component {
     const { classes, theme, auth, open, handleDrawerOpen } = this.props;
     return (
       <AppBar
-        position="absolute"
+        // position="absolute"
         className={classNames(
           classes.appBar,
           open && classes.appBarShift,

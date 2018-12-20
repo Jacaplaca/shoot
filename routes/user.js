@@ -10,29 +10,34 @@ const validateLoginInput = require("../validation/login");
 const User = require("../models/User");
 
 router.post("/register", function(req, res) {
-  const { errors, isValid } = validateRegisterInput(req.body);
+  // const { errors, isValid } = validateRegisterInput(req.body);
+  console.log(req.body);
 
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
+  // if (!isValid) {
+  //   return res.status(400).json(errors);
+  // }
   User.findOne({
     email: req.body.email
   }).then(user => {
     if (user) {
+      console.log("jest juz");
       return res.status(400).json({
         email: "Email already exists"
       });
     } else {
-      const avatar = gravatar.url(req.body.email, {
-        s: "200",
-        r: "pg",
-        d: "mm"
-      });
+      // const avatar = gravatar.url(req.body.email, {
+      //   s: "200",
+      //   r: "pg",
+      //   d: "mm"
+      // });
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        avatar
+        adres: req.body.adres,
+        logo: req.body.logo,
+        www: req.body.www,
+        rola: req.body.rola
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -73,6 +78,7 @@ router.post("/login", (req, res) => {
         const payload = {
           id: user.id,
           name: user.name,
+          rola: user.rola,
           avatar: user.avatar
         };
         jwt.sign(

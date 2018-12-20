@@ -29,10 +29,16 @@
     "eject": "react-scripts eject"
   },
   "proxy": {
-    "/api/promoter": {
+    "/api/promoters": {
+      "target": "http://localhost:5001/"
+    },
+    "/api/email": {
       "target": "http://localhost:5001/"
     },
     "/api/users": {
+      "target": "http://localhost:5001/"
+    },
+    "/api/upload": {
       "target": "http://localhost:5001/"
     }
   }

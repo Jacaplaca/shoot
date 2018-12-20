@@ -5,6 +5,8 @@ import MainFrameHOC from "../skins/MainFrameHOC";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PromotersForm from "./PromotersForm";
+import PromotersList from "./PromotersList";
+import Button from "@material-ui/core/Button";
 
 const styles = theme => ({
   root: {
@@ -19,11 +21,18 @@ const styles = theme => ({
 });
 
 const Promoters = props => {
-  const { classes } = props;
+  const { classes, promoters, auth } = props;
+  console.log("promoter", promoters);
+  console.log("user", auth);
   return (
     <div className={classes.root}>
-      <PromotersForm />;
-      <Grid container spacing={24}>
+      <PromotersForm />
+      {/* <PromotersList /> */}
+      {/* {promoters.length > 0 &&
+        promoters.map(promoter => (
+          <div key={promoter.email}>{promoter.name}</div>
+        ))} */}
+      {/* <Grid container spacing={24}>
         <Grid item xs={12}>
           <Paper className={classes.paper}>xs=12</Paper>
         </Grid>
@@ -45,7 +54,7 @@ const Promoters = props => {
         <Grid item xs={6} sm={3}>
           <Paper className={classes.paper}>xs=6 sm=3</Paper>
         </Grid>
-      </Grid>
+      </Grid> */}
     </div>
   );
 };

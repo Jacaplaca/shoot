@@ -47,9 +47,12 @@ const styles = theme => ({
     marginRight: 36
   },
   drawerPaper: {
+    overflow: "hidden",
+    position: "fixed" /* Set the navbar to fixed position */,
+    top: 0 /* Position the navbar at the top of the page */,
     backgroundColor: theme.palette.drawer,
     borderRightColor: theme.palette.drawer,
-    position: "relative",
+    // position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
@@ -94,7 +97,8 @@ class DrawerMy extends React.Component {
         comp: "promoters",
         text: "Organizatorzy",
         link: "/organizatorzy",
-        icon: "MoneyIcon"
+        icon: "MoneyIcon",
+        rola: "admin"
       }
       // {
       //   comp: "planer",
@@ -141,12 +145,16 @@ class DrawerMy extends React.Component {
 
         <div>
           {links.map((el, i) => {
-            const { comp, text, link, icon } = el;
-            return (
-              // <ShowLinkToComp key={i} comp={comp}>
-              <DrawerLink text={text} link={link} icon={icon} />
-              // </ShowLinkToComp>
-            );
+            const { comp, text, link, icon, rola } = el;
+            const userType = auth.user.rola;
+            console.log(userType);
+            if (userType === rola) {
+              return (
+                // <ShowLinkToComp key={i} comp={comp}>
+                <DrawerLink key={text} text={text} link={link} icon={icon} />
+                // </ShowLinkToComp>
+              );
+            }
           })}
         </div>
       </Drawer>

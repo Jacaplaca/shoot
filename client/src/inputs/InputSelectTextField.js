@@ -48,10 +48,11 @@ class InputSelectTextField extends Component {
       name,
       onChange,
       password,
-      passwordVisibility
+      passwordVisibility,
+      type
     } = this.props;
     const endAdornment = () => {
-      if (value.length > 0 && name !== "password") {
+      if (value.length > 0 && type !== "password") {
         return (
           <InputAdornment position="end">
             <ClearButton
@@ -62,7 +63,7 @@ class InputSelectTextField extends Component {
             />
           </InputAdornment>
         );
-      } else if (value.length > 0 && name === "password") {
+      } else if (value.length > 0 && type === "password") {
         return (
           <InputAdornment position="end">
             <IconButton
