@@ -4,8 +4,8 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
-import { registerUser } from "../actions/authentication";
-import store from "../store";
+import { registerUser } from "../../actions/authentication";
+import store from "../../store";
 import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
@@ -14,58 +14,13 @@ import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import * as Yup from "yup";
 
-import InputComponent from "../inputs/InputComponent";
-import ButtonMy from "../skins/ButtonMy";
+import InputComponent from "../../inputs/InputComponent";
+import ButtonMy from "../../skins/ButtonMy";
+import Thumb from "../Thumb";
+import UploadFile from "../../inputs/UploadFile";
 const axios = require("axios");
 
 const endpoint = "/api/upload";
-
-class Thumb extends Component {
-  state = {
-    loading: false,
-    thumb: undefined
-  };
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.file) {
-      return;
-    }
-    if (nextProps.file !== this.props.file) {
-      this.setState({ loading: true }, () => {
-        let reader = new FileReader();
-
-        reader.onloadend = () => {
-          this.setState({ loading: false, thumb: reader.result });
-        };
-
-        reader.readAsDataURL(nextProps.file);
-      });
-    }
-  }
-
-  render() {
-    const { file } = this.props;
-    const { loading, thumb } = this.state;
-
-    if (!file) {
-      return null;
-    }
-
-    if (loading) {
-      return <p>loading...</p>;
-    }
-
-    return (
-      <img
-        src={thumb}
-        alt={file.name}
-        className="img-thumbnail mt-2"
-        height={200}
-        width={200}
-      />
-    );
-  }
-}
 
 const styles = theme => ({
   button: {
@@ -203,42 +158,14 @@ class PromotersFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-            {/* <div className="form-group">
-              <label htmlFor="file">File upload</label>
-              <input
-                id="file"
-                name="logo"
-                type="file"
-                onChange={event => {
-                  setFieldValue("logo", event.currentTarget.files[0]);
-                }}
-                className="form-control"
-              />
-              <Thumb file={logo} />
-            </div> */}
+
             <Grid item xs={12} sm={6} md={4}>
-              <input
-                accept="image/*"
-                // className={classes.input}
-                style={{ display: "none" }}
-                id="raised-button-file"
-                multiple
-                type="file"
+              <UploadFile
+                title="Załącz logo organizatora"
                 onChange={event => {
                   setFieldValue("logo", event.currentTarget.files[0]);
                 }}
               />
-              <label htmlFor="raised-button-file">
-                <Button
-                  variant="contained"
-                  color="default"
-                  component="span"
-                  className={classes.button}
-                >
-                  Załącz logo organizatora
-                  <CloudUploadIcon className={classes.rightIcon} />
-                </Button>
-              </label>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <Thumb file={logo} />

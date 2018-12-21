@@ -99,13 +99,14 @@ class DrawerMy extends React.Component {
         link: "/organizatorzy",
         icon: "MoneyIcon",
         rola: "admin"
+      },
+      {
+        comp: "contests",
+        text: "Zawody",
+        link: "/zawody",
+        icon: "EventIcon",
+        rola: "admin"
       }
-      // {
-      //   comp: "planer",
-      //   text: "Aktywności",
-      //   link: "/planer",
-      //   icon: "EventIcon"
-      // },
       // {
       //   comp: "raporty",
       //   text: "Raporty",

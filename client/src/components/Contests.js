@@ -4,8 +4,8 @@ import { compose } from "redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import PromotersForm from "./Promoters/PromotersForm";
-import PromotersList from "./Promoters/PromotersList";
+import ContestsForm from "./Contests/ContestsForm";
+import ContestsList from "./Contests/ContestsList";
 import Button from "@material-ui/core/Button";
 
 const styles = theme => ({
@@ -20,14 +20,14 @@ const styles = theme => ({
   }
 });
 
-const Promoters = props => {
+const Contests = props => {
   const { classes, promoters, auth } = props;
   console.log("promoter", promoters);
   console.log("user", auth);
   return (
     <div className={classes.root}>
-      <PromotersForm />
-      {/* <PromotersList /> */}
+      <ContestsForm />
+      {/* <ContestsList /> */}
       {/* {promoters.length > 0 &&
         promoters.map(promoter => (
           <div key={promoter.email}>{promoter.name}</div>
@@ -59,9 +59,9 @@ const Promoters = props => {
   );
 };
 
-// export default MainFrameHOC(Promoters);
+// export default MainFrameHOC(Contests);
 
 export default compose(
   withStyles(styles, { withTheme: true }),
   MainFrameHOC
-)(Promoters);
+)(Contests);
