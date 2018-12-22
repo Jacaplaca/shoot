@@ -15,6 +15,7 @@ import Login from "../components/Login";
 import Home from "../components/Home";
 import Promoters from "../components/Promoters";
 import Contests from "../components/Contests";
+import Judges from "../components/Judges";
 //
 // import Costs from "./Costs";
 // import Planer from "./Planer";
@@ -141,6 +142,20 @@ class MiniDrawer extends React.Component {
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
                   <Contests title="Zawody" />
+                </MainContainer>
+              )}
+            />
+          )}
+          {auth.user.rola === "admin" && (
+            <Route
+              exact
+              path="/sedziowie"
+              render={() => (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Judges title="Sędziowie" />
                 </MainContainer>
               )}
             />

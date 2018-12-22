@@ -9,6 +9,22 @@ const validateLoginInput = require("../validation/login");
 
 const User = require("../models/User");
 
+router.get("/", function(req, res) {
+  User.findOne({ _id: "5c1e57e8373aae3c64f2e7d3" })
+    // .populate("contests")
+    .populate("judges")
+    .populate("contests")
+    // .populate("cont")
+    // .select("name")
+    // .populate({
+    //   path: "contests",
+    //   // Get friends of friends - populate the 'friends' array for every friend
+    //   populate: { path: "judges" }
+    // })
+    .then(resp => res.status(200).json(resp))
+    .catch(e => console.log(e));
+});
+
 router.post("/register", function(req, res) {
   // const { errors, isValid } = validateRegisterInput(req.body);
   console.log(req.body);
@@ -38,6 +54,7 @@ router.post("/register", function(req, res) {
         logo: req.body.logo,
         www: req.body.www,
         rola: req.body.rola
+        // contests: req.body.contest
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -59,6 +76,7 @@ router.post("/register", function(req, res) {
 });
 
 router.post("/login", (req, res) => {
+  console.log("/loging", req.body);
   const { errors, isValid } = validateLoginInput(req.body);
 
   if (!isValid) {

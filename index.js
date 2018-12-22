@@ -10,6 +10,8 @@ const cors = require("cors");
 
 const users = require("./routes/user");
 const promoter = require("./routes/promoter");
+const judge = require("./routes/judge");
+const contest = require("./routes/contest");
 const email = require("./routes/email");
 const upload = require("./routes/upload");
 
@@ -41,6 +43,8 @@ app.use(fileUpload());
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/api/users", users);
+app.use("/api/contests", contest);
+app.use("/api/judges", judge);
 app.use("/api/promoters", promoter);
 app.use("/api/email", email);
 app.use("/api/upload", upload);

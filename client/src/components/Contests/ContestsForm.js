@@ -136,18 +136,15 @@ class ContestsFormik extends Component {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
+              <InputSelectBaza
+                object={this.props.judges}
                 name="judgeMain"
-                label="Sędzia główny"
                 type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
+                wybrano={handleChange}
+                // wybrano={e => onChange(e)}
                 value={judgeMain}
-                error={touched.judgeMain && Boolean(errors.judgeMain)}
-                helperText={
-                  touched.judgeMain && errors.judgeMain ? errors.judgeMain : " "
-                }
-                onBlur={handleBlur}
+                label="Sędzia główny"
+                // placeholder="Organizator"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -164,35 +161,27 @@ class ContestsFormik extends Component {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
+              <InputSelectBaza
+                object={this.props.judges}
                 name="judgeCounting"
-                label="Sędzia biura obliczeń"
                 type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
+                wybrano={handleChange}
+                // wybrano={e => onChange(e)}
                 value={judgeCounting}
-                error={touched.judgeCounting && Boolean(errors.judgeCounting)}
-                helperText={
-                  touched.judgeCounting && errors.judgeCounting
-                    ? errors.judgeCounting
-                    : " "
-                }
-                onBlur={handleBlur}
+                label="Sędzia liczący"
+                // placeholder="Organizator"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
+              <InputSelectBaza
+                object={this.props.judges}
                 name="judgeRTS"
-                label="Sędzia RTS"
                 type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
+                wybrano={handleChange}
+                // wybrano={e => onChange(e)}
                 value={judgeRTS}
-                error={touched.judgeRTS && Boolean(errors.judgeRTS)}
-                helperText={
-                  touched.judgeRTS && errors.judgeRTS ? errors.judgeRTS : " "
-                }
-                onBlur={handleBlur}
+                label="Sędzia RTS"
+                // placeholder="Organizator"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -251,16 +240,16 @@ const ContestsForm = withFormik({
     tech
   }) {
     return {
-      name: name || "",
+      name: name || "nazwa zawodow",
       date: date || "",
       logo: logo || "",
       promoter: promoter || "",
-      facility: facility || "",
+      facility: facility || "strzelnica",
       judgeMain: judgeMain || "",
-      lzss: lzss || "",
+      lzss: lzss || "lzss",
       judgeCounting: judgeCounting || "",
       judgeRTS: judgeRTS || "",
-      tech: tech || ""
+      tech: tech || "kontrola techniczna"
     };
   },
   onChange(values) {
@@ -292,6 +281,9 @@ const ContestsForm = withFormik({
           // console.log(res.data.file);
           Object.assign(promoter, { logo: res.data.file });
           console.log(promoter);
+          axios
+            .post("/api/contests/", promoter)
+            .then(resp => console.log(resp));
           // store.dispatch(registerUser(promoter));
         })
         .catch(function(error) {
@@ -299,6 +291,7 @@ const ContestsForm = withFormik({
         });
     } else {
       console.log(promoter);
+      axios.post("/api/contests/", promoter).then(resp => console.log(resp));
       // store.dispatch(registerUser(promoter));
     }
     resetForm();
@@ -311,7 +304,8 @@ const ContestsForm = withFormik({
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  promoters: state.promoters
+  promoters: state.promoters,
+  judges: state.judges
 });
 
 // export default connect(
