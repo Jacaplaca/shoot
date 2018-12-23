@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
-const Contest = require("./contest");
-const Judge = require("./judge");
-console.log("User, judge", Judge);
-console.log("User, contest", Contest);
+// const Judge = require("./judge");
+// const mongoose = require("mongoose");
+const Turnament = mongoose.model("turnaments");
+// const Turnament = require("./turnament");
+// const Cont = require("./cont");
+// console.log("User, judge", Judge);
+
+// console.log("User, cont", Cont);
+console.log("User, turnament", Turnament);
 
 const Schema = mongoose.Schema;
 
@@ -35,15 +40,14 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  contests: [{ type: Schema.Types.ObjectId, ref: Contest }],
-  judges: [{ type: Schema.Types.ObjectId, ref: Judge }]
+  turnaments: [{ type: Schema.Types.ObjectId, ref: Turnament }]
+  // judges: [{ type: Schema.Types.ObjectId, ref: Judge }]
 });
+//
+// global.UserSchema = global.UserSchema || mongoose.model("users", UserSchema);
+// module.exports = global.UserSchema;
 
-global.UserSchema = global.UserSchema || mongoose.model("users", UserSchema);
-console.log("userschema", global.UserSchema);
-module.exports = global.UserSchema;
-
-// module.exports = mongoose.model("users", UserSchema);
+module.exports = mongoose.model("users", UserSchema);
 // module.exports =
 //   mongoose.models && mongoose.models.User
 //     ? mongoose.models.User

@@ -8,10 +8,12 @@ const path = require("path");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 
+const turnament = require("./routes/turnament");
 const users = require("./routes/user");
 const promoter = require("./routes/promoter");
+// const contest = require("./routes/contest");
 const judge = require("./routes/judge");
-const contest = require("./routes/contest");
+// const contest = require("./routes/contest");
 const email = require("./routes/email");
 const upload = require("./routes/upload");
 
@@ -34,7 +36,7 @@ mongoose
 const app = express();
 app.use(passport.initialize());
 require("./passport")(passport);
-
+// mongoose.connection.close();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -43,8 +45,9 @@ app.use(fileUpload());
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/api/users", users);
-app.use("/api/contests", contest);
+// app.use("/api/contests", contest);
 app.use("/api/judges", judge);
+app.use("/api/turnaments", turnament);
 app.use("/api/promoters", promoter);
 app.use("/api/email", email);
 app.use("/api/upload", upload);

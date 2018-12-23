@@ -7,13 +7,16 @@ const passport = require("passport");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 
-const User = require("../models/User");
+// const User = require("../models/User");
+const mongoose = require("mongoose");
+const User = mongoose.model("users");
 
 router.get("/", function(req, res) {
-  User.findOne({ _id: "5c1e57e8373aae3c64f2e7d3" })
+  console.log("user get /");
+  User.find()
+    .populate("turnaments")
+    // .populate("judges")
     // .populate("contests")
-    .populate("judges")
-    .populate("contests")
     // .populate("cont")
     // .select("name")
     // .populate({

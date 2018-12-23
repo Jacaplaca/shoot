@@ -282,7 +282,7 @@ const ContestsForm = withFormik({
           Object.assign(promoter, { logo: res.data.file });
           console.log(promoter);
           axios
-            .post("/api/contests/", promoter)
+            .post("/api/turnaments/", promoter)
             .then(resp => console.log(resp));
           // store.dispatch(registerUser(promoter));
         })
@@ -291,7 +291,7 @@ const ContestsForm = withFormik({
         });
     } else {
       console.log(promoter);
-      axios.post("/api/contests/", promoter).then(resp => console.log(resp));
+      axios.post("/api/turnaments/", promoter).then(resp => console.log(resp));
       // store.dispatch(registerUser(promoter));
     }
     resetForm();

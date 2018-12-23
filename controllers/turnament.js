@@ -1,15 +1,17 @@
 // const User = require("../models/user");
 // const bcrypt = require("bcrypt");
 // const saltRounds = 10;
+// const Turnament = require("../models/contest");
+const Turnament = require("../models/turnament");
 const User = require("../models/user");
-const Contest = require("../models/contest");
+// console.log("controller Turnament");
 // const Judge = require("../models/judge");
 
 module.exports = {
   index: async (req, res, next) => {
-    Contest.find()
+    Turnament.find()
       // .select({"name" 'judgeMain'})
-      .populate("promoter")
+      // .populate("promoter")
       .populate("judgeMain")
       .populate("judgeCounting")
       .populate("judgeRTS")
@@ -35,7 +37,7 @@ module.exports = {
       tech
     } = req.body;
 
-    const newContest = new Contest({
+    const newTurnament = new Turnament({
       name,
       date,
       logo,
@@ -49,19 +51,19 @@ module.exports = {
     });
 
     try {
-      const addedContest = await Contest.create(newContest);
-      console.log(addedContest);
+      const addedTurnament = await Turnament.create(newTurnament);
+      console.log(addedTurnament);
       const promoterUpdated = await User.update(
         { _id: promoter },
-        { $push: { contests: addedContest._id } }
+        { $push: { turnaments: addedTurnament._id } }
       );
       // const promoterUpdated = await User.update(
       //   { _id: promoter },
-      //   { $push: { contests: addedContest._id } }
+      //   { $push: { contests: addedTurnament._id } }
       // );
 
       res.status(200).json({
-        message: addedContest
+        message: addedTurnament
       });
     } catch (e) {
       console.log("The raw response from Mongo was ", e);
