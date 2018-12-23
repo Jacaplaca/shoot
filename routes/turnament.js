@@ -8,4 +8,6 @@ router
   .get(TurnamentController.index)
   .post(TurnamentController.add);
 
+router.route("/remove/:id").post(TurnamentController.remove);
+
 module.exports = router;

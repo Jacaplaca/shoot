@@ -14,8 +14,11 @@ import Register from "../components/Register";
 import Login from "../components/Login";
 import Home from "../components/Home";
 import Promoters from "../components/Promoters";
-import Contests from "../components/Contests";
+import Turnaments from "../components/Turnaments";
 import Judges from "../components/Judges";
+import Competitions from "../components/Competitions";
+import Players from "../components/Players";
+// import Players from "../components/Players";
 //
 // import Costs from "./Costs";
 // import Planer from "./Planer";
@@ -141,7 +144,7 @@ class MiniDrawer extends React.Component {
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
-                  <Contests title="Zawody" />
+                  <Turnaments title="Zawody" />
                 </MainContainer>
               )}
             />
@@ -156,6 +159,34 @@ class MiniDrawer extends React.Component {
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
                   <Judges title="Sędziowie" />
+                </MainContainer>
+              )}
+            />
+          )}
+          {auth.user.rola === "admin" && (
+            <Route
+              exact
+              path="/konkurencje"
+              render={() => (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Competitions title="Konkurencje" />
+                </MainContainer>
+              )}
+            />
+          )}
+          {auth.user.rola === "admin" && (
+            <Route
+              exact
+              path="/zawodnicy"
+              render={() => (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Players title="Zawodnicy" />
                 </MainContainer>
               )}
             />

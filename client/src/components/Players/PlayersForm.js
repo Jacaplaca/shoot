@@ -39,7 +39,7 @@ const styles = theme => ({
   }
 });
 
-class ContestsFormik extends Component {
+class PlayersFormik extends Component {
   // componentDidMount() {
   //   this.props.setFieldValue("email", "ccc@ccc.com");
   // }
@@ -47,19 +47,15 @@ class ContestsFormik extends Component {
   render() {
     const {
       values: {
+        turnament,
         name,
-        date,
-        logo,
-        promoter,
-        facility,
-        judgeMain,
-        lzss,
-        judgeCounting,
-        judgeRTS,
-        tech,
-        add1,
-        add2,
-        add3
+        surname,
+        caliber,
+        gun,
+        scope,
+        team,
+        rank,
+        club
       },
       errors,
       touched,
@@ -82,22 +78,21 @@ class ContestsFormik extends Component {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={24}>
             <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="date"
-                label="Data"
-                type="date"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
-                value={date}
-                error={touched.date && Boolean(errors.date)}
-                helperText={touched.date && errors.date ? errors.date : " "}
-                onBlur={handleBlur}
+              <InputSelectBaza
+                object={this.props.turnaments}
+                name="turnament"
+                type="string"
+                wybrano={handleChange}
+                // wybrano={e => onChange(e)}
+                value={turnament}
+                label="Zawody"
+                // placeholder="Organizator"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="name"
-                label="Nazwa"
+                label="Imię"
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
@@ -108,105 +103,100 @@ class ContestsFormik extends Component {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <InputSelectBaza
-                object={this.props.promoters}
-                name="promoter"
-                type="string"
-                wybrano={handleChange}
-                // wybrano={e => onChange(e)}
-                value={promoter}
-                label="Organizator"
-                // placeholder="Organizator"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
               <InputComponent
-                name="facility"
-                label="Strzelnica"
+                name="surname"
+                label="nazwisko"
                 type="string"
                 // edytuj={change.bind(null, "email")}
-                // edytuj={handleChange}
-                edytuj={e => console.log(e)}
-                value={facility}
-                error={touched.facility && Boolean(errors.facility)}
+                edytuj={handleChange}
+                // edytuj={e => console.log(e)}
+                value={surname}
+                error={touched.surname && Boolean(errors.surname)}
                 helperText={
-                  touched.facility && errors.facility ? errors.facility : " "
+                  touched.surname && errors.surname ? errors.surname : " "
                 }
                 onBlur={handleBlur}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <InputSelectBaza
-                object={this.props.judges}
-                name="judgeMain"
-                type="string"
-                wybrano={handleChange}
-                // wybrano={e => onChange(e)}
-                value={judgeMain}
-                label="Sędzia główny"
-                // placeholder="Organizator"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
               <InputComponent
-                name="lzss"
-                label="Obserwator LZSS"
+                name="caliber"
+                label="Kaliber"
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
-                value={lzss}
-                error={touched.lzss && Boolean(errors.lzss)}
-                helperText={touched.lzss && errors.lzss ? errors.lzss : " "}
+                value={caliber}
+                error={touched.caliber && Boolean(errors.caliber)}
+                helperText={
+                  touched.caliber && errors.caliber ? errors.caliber : " "
+                }
                 onBlur={handleBlur}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <InputSelectBaza
-                object={this.props.judges}
-                name="judgeCounting"
-                type="string"
-                wybrano={handleChange}
-                // wybrano={e => onChange(e)}
-                value={judgeCounting}
-                label="Sędzia liczący"
-                // placeholder="Organizator"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputSelectBaza
-                object={this.props.judges}
-                name="judgeRTS"
-                type="string"
-                wybrano={handleChange}
-                // wybrano={e => onChange(e)}
-                value={judgeRTS}
-                label="Sędzia RTS"
-                // placeholder="Organizator"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
               <InputComponent
-                name="tech"
-                label="Kontrola technicza"
+                name="gun"
+                label="Broń"
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
-                value={tech}
-                error={touched.tech && Boolean(errors.tech)}
-                helperText={touched.tech && errors.tech ? errors.tech : " "}
+                value={gun}
+                error={touched.gun && Boolean(errors.gun)}
+                helperText={touched.gun && errors.gun ? errors.gun : " "}
                 onBlur={handleBlur}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <UploadFile
-                title="Załącz logo zawodów"
-                onChange={event => {
-                  setFieldValue("logo", event.currentTarget.files[0]);
-                }}
+              <InputComponent
+                name="scope"
+                label="Luneta"
+                type="string"
+                // edytuj={change.bind(null, "email")}
+                edytuj={handleChange}
+                value={scope}
+                error={touched.scope && Boolean(errors.scope)}
+                helperText={touched.scope && errors.scope ? errors.scope : " "}
+                onBlur={handleBlur}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <Thumb file={logo} />
+              <InputComponent
+                name="team"
+                label="Team"
+                type="string"
+                // edytuj={change.bind(null, "email")}
+                edytuj={handleChange}
+                value={team}
+                error={touched.team && Boolean(errors.team)}
+                helperText={touched.team && errors.team ? errors.team : " "}
+                onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <InputComponent
+                name="rank"
+                label="Klasa"
+                type="string"
+                // edytuj={change.bind(null, "email")}
+                edytuj={handleChange}
+                value={rank}
+                error={touched.rank && Boolean(errors.rank)}
+                helperText={touched.rank && errors.rank ? errors.rank : " "}
+                onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <InputComponent
+                name="club"
+                label="Klub"
+                type="string"
+                // edytuj={change.bind(null, "email")}
+                edytuj={handleChange}
+                value={club}
+                error={touched.club && Boolean(errors.club)}
+                helperText={touched.club && errors.club ? errors.club : " "}
+                onBlur={handleBlur}
+              />
             </Grid>
           </Grid>
 
@@ -216,7 +206,7 @@ class ContestsFormik extends Component {
             color="primary"
             disabled={!isValid}
           >
-            Dodaj organizatora
+            Dodaj zawodnika
             <Key style={{ marginLeft: 10 }} />
           </ButtonMy>
         </form>
@@ -225,48 +215,46 @@ class ContestsFormik extends Component {
   }
 }
 
-const ContestsForm = withFormik({
+const PlayersForm = withFormik({
   // mapPropsToValues: () => ({ email: "foo@bar.de" }),
   mapPropsToValues({
+    turnament,
     name,
-    date,
-    logo,
-    promoter,
-    facility,
-    judgeMain,
-    lzss,
-    judgeCounting,
-    judgeRTS,
-    tech
+    surname,
+    caliber,
+    gun,
+    scope,
+    team,
+    rank,
+    club
   }) {
     return {
-      name: name || "nazwa zawodow",
-      date: date || "",
-      logo: logo || "",
-      promoter: promoter || "",
-      facility: facility || "strzelnica",
-      judgeMain: judgeMain || "",
-      lzss: lzss || "lzss",
-      judgeCounting: judgeCounting || "",
-      judgeRTS: judgeRTS || "",
-      tech: tech || "kontrola techniczna"
+      turnament: turnament || "",
+      name: name || "name",
+      surname: surname || "surname",
+      caliber: caliber || "caliber",
+      gun: gun || "gun",
+      scope: scope || "scope",
+      team: team || "team",
+      rank: rank || "rank",
+      club: club || "club"
     };
   },
   onChange(values) {
     console.log("handleChange", values);
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-    const promoter = {
+    console.log(values);
+    const player = {
+      turnament: values.turnament,
       name: values.name,
-      date: values.date,
-      logo: "",
-      promoter: values.promoter,
-      judgeMain: values.judgeMain,
-      facility: values.facility,
-      lzss: values.lzss,
-      judgeCounting: values.judgeCounting,
-      judgeRTS: values.judgeRTS,
-      tech: values.tech
+      surname: values.surname,
+      caliber: values.caliber,
+      gun: values.gun,
+      scope: values.scope,
+      team: values.team,
+      rank: values.rank,
+      club: values.club
     };
     if (values.logo) {
       const data = new FormData();
@@ -279,43 +267,40 @@ const ContestsForm = withFormik({
         })
         .then(res => {
           // console.log(res.data.file);
-          Object.assign(promoter, { logo: res.data.file });
-          console.log(promoter);
-          axios
-            .post("/api/turnaments/", promoter)
-            .then(resp => console.log(resp));
-          // store.dispatch(registerUser(promoter));
+          Object.assign(player, { logo: res.data.file });
+          console.log(player);
+          axios.post("/api/players/", player).then(resp => console.log(resp));
+          // store.dispatch(registerUser(players));
         })
         .catch(function(error) {
           console.log(error);
         });
     } else {
-      console.log(promoter);
-      axios.post("/api/turnaments/", promoter).then(resp => console.log(resp));
-      // store.dispatch(registerUser(promoter));
+      console.log(player);
+      axios.post("/api/players/", player).then(resp => console.log(resp));
+      // store.dispatch(registerUser(players));
     }
     resetForm();
   },
   validationSchema: Yup.object().shape({
     name: Yup.string().required("Podaj nazwę organizatora")
   })
-})(ContestsFormik);
+})(PlayersFormik);
 
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  promoters: state.promoters,
-  judges: state.judges
+  turnaments: state.turnaments
 });
 
 // export default connect(
 //   mapStateToProps,
 //   { loginUser }
-// )(withRouter(ContestsForm));
+// )(withRouter(PlayersForm));
 
 export default withStyles(styles, { withTheme: true })(
   connect(
     mapStateToProps,
     { registerUser }
-  )(withRouter(ContestsForm))
+  )(withRouter(PlayersForm))
 );

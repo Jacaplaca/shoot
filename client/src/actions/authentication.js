@@ -4,23 +4,24 @@ import setAuthToken from "../setAuthToken";
 import jwt_decode from "jwt-decode";
 import { fetchPromoters } from "../actions/promoters";
 import { fetchJudges } from "../actions/judges";
+import { fetchTurnaments } from "../actions/turnaments";
 
 export const registerUser = (user, history) => dispatch => {
-  console.log("registerUser");
+  // console.log("registerUser");
   axios
     .post("/api/users/register", user)
-    .then(res => {
-      axios.get("/api/promoters/").then(response => {
-        // console.log("axios register promoters", response);
-        dispatch({ type: PROMOTERS, payload: response.data });
-      });
-    })
-    .then(res => {
-      axios.get("/api/judges/").then(response => {
-        // console.log("axios register promoters", response);
-        dispatch({ type: JUDGES, payload: response.data });
-      });
-    })
+    // .then(res => {
+    //   axios.get("/api/promoters/").then(response => {
+    //     // console.log("axios register promoters", response);
+    //     dispatch({ type: PROMOTERS, payload: response.data });
+    //   });
+    // })
+    // .then(res => {
+    //   axios.get("/api/judges/").then(response => {
+    //     // console.log("axios register promoters", response);
+    //     dispatch({ type: JUDGES, payload: response.data });
+    //   });
+    // })
     .then(res => history.push("/login"))
     .catch(err => {
       dispatch({
@@ -40,7 +41,7 @@ export const loginUser = user => dispatch => {
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
     })
-    .then(res => fetchPromoters())
+    // .then(res => fetchPromoters())
     .catch(err => {
       dispatch({
         type: GET_ERRORS,
@@ -55,6 +56,7 @@ export const setCurrentUser = decoded => dispatch => {
     // console.log("kto jest", decoded.rola);
     dispatch(fetchPromoters());
     dispatch(fetchJudges());
+    dispatch(fetchTurnaments());
     // fetchJudges();
     // fetchPromoters();
     // axios

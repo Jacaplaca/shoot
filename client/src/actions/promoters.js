@@ -4,7 +4,7 @@ import { PROMOTERS, GET_ERRORS } from "./types";
 // import jwt_decode from "jwt-decode";
 
 export const fetchPromoters = user => dispatch => {
-  console.log(user);
+  // console.log(user);
   axios
     // .post("/api/promoters", user)
     .get("/api/promoters")

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 // import man from '../../public'
 
-class ContestsList extends Component {
+class CompetitionsList extends Component {
   render() {
     const { classes, promoters, auth, promotersArr } = this.props;
     console.log("promoter", promoters);
@@ -36,9 +36,9 @@ function mapStateToProps({ auth, promoters }) {
 //   withStyles(styles, { withTheme: true }),
 //   // MainFrameHOC
 //   mapStateToProps
-// )(ContestsList);
+// )(CompetitionsList);
 
 export default connect(
   mapStateToProps
   // actions
-)(ContestsList);
+)(CompetitionsList);

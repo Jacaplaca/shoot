@@ -1,11 +1,14 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+
 import { compose } from "redux";
+// import { fetchCompetitions } from "../actions/judges";
+
 import MainFrameHOC from "../skins/MainFrameHOC";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import PromotersForm from "./Promoters/PromotersForm";
-import PromotersList from "./Promoters/PromotersList";
+import CompetitionsForm from "./Competitions/CompetitionsForm";
+import CompetitionsList from "./Competitions/CompetitionsList";
 import Button from "@material-ui/core/Button";
 
 const styles = theme => ({
@@ -20,14 +23,14 @@ const styles = theme => ({
   }
 });
 
-const Promoters = props => {
+const Competitions = props => {
   const { classes, promoters, auth } = props;
-  // console.log("promoter", promoters);
-  // console.log("user", auth);
+  console.log("promoter", promoters);
+  console.log("user", auth);
   return (
     <div className={classes.root}>
-      <PromotersForm />
-      {/* <PromotersList /> */}
+      <CompetitionsForm />
+      {/* <CompetitionsList /> */}
       {/* {promoters.length > 0 &&
         promoters.map(promoter => (
           <div key={promoter.email}>{promoter.name}</div>
@@ -59,9 +62,10 @@ const Promoters = props => {
   );
 };
 
-// export default MainFrameHOC(Promoters);
+// export default MainFrameHOC(Competitions);
 
 export default compose(
   withStyles(styles, { withTheme: true }),
   MainFrameHOC
-)(Promoters);
+  // { fetchCompetitions }
+)(Competitions);

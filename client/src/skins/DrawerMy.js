@@ -91,7 +91,7 @@ const styles = theme => ({
 class DrawerMy extends React.Component {
   render() {
     const { classes, theme, auth, open, handleDrawerClose } = this.props;
-    console.log("THEME", theme);
+    // console.log("THEME", theme);
     const links = [
       {
         comp: "promoters",
@@ -101,7 +101,7 @@ class DrawerMy extends React.Component {
         rola: "admin"
       },
       {
-        comp: "contests",
+        comp: "turnamets",
         text: "Zawody",
         link: "/zawody",
         icon: "EventIcon",
@@ -113,13 +113,21 @@ class DrawerMy extends React.Component {
         link: "/sedziowie",
         icon: "EventAvailableIcon",
         rola: "admin"
+      },
+      {
+        comp: "competitions",
+        text: "Konkurencje",
+        link: "/konkurencje",
+        icon: "InsertChartOutlined",
+        rola: "admin"
+      },
+      {
+        comp: "players",
+        text: "Zawodnicy",
+        link: "/zawodnicy",
+        icon: "InsertChartOutlined",
+        rola: "admin"
       }
-      // {
-      //   comp: "nextReports",
-      //   text: "Next Reports",
-      //   link: "/nextreports",
-      //   icon: "InsertChartOutlined"
-      // }
     ];
     return (
       <Drawer
@@ -149,7 +157,7 @@ class DrawerMy extends React.Component {
           {links.map((el, i) => {
             const { comp, text, link, icon, rola } = el;
             const userType = auth.user.rola;
-            console.log(userType);
+            // console.log(userType);
             if (userType === rola) {
               return (
                 // <ShowLinkToComp key={i} comp={comp}>

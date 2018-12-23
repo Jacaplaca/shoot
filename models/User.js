@@ -7,7 +7,7 @@ const Turnament = mongoose.model("turnaments");
 // console.log("User, judge", Judge);
 
 // console.log("User, cont", Cont);
-console.log("User, turnament", Turnament);
+// console.log("User, turnament", Turnament);
 
 const Schema = mongoose.Schema;
 

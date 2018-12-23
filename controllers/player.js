@@ -1,20 +1,21 @@
 // const User = require("../models/user");
 // const bcrypt = require("bcrypt");
 // const saltRounds = 10;
-// const Turnament = require("../models/contest");
+// const Player = require("../models/contest");
 const Turnament = require("../models/turnament");
+const Player = require("../models/player");
 const User = require("../models/user");
 // console.log("controller Turnament");
 // const Judge = require("../models/judge");
 
 module.exports = {
   index: async (req, res, next) => {
-    Turnament.find()
+    Player.find()
       // .select({"name" 'judgeMain'})
       // .populate("promoter")
-      .populate("judgeMain")
-      .populate("judgeCounting")
-      .populate("judgeRTS")
+      // .populate("judgeMain")
+      // .populate("judgeCounting")
+      // .populate("judgeRTS")
       // .exec()
       // .populate("judgeMain")
       .then(response => {
@@ -23,60 +24,46 @@ module.exports = {
       });
   },
 
-  remove: async (req, res, next) => {
-    console.log(req.params.id);
-
-    try {
-      const removedTurnament = await Turnament.findByIdAndRemove(req.params.id)
-        .remove()
-        .exec();
-      res.status(200).json({
-        message: removedTurnament
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  },
-
   add: async (req, res, next) => {
     const {
+      turnament,
       name,
-      date,
-      logo,
-      promoter,
-      facility,
-      judgeMain,
-      lzss,
-      judgeCounting,
-      judgeRTS,
-      tech
+      surname,
+      caliber,
+      gun,
+      scope,
+      team,
+      rank,
+      club
     } = req.body;
 
-    const newTurnament = new Turnament({
+    const newPlayer = new Player({
+      turnament,
       name,
-      date,
-      logo,
-      promoter,
-      facility,
-      judgeMain,
-      lzss,
-      judgeCounting,
-      judgeRTS,
-      tech
+      surname,
+      caliber,
+      gun,
+      scope,
+      team,
+      rank: rank.split(","),
+      club
     });
 
     try {
-      const addedTurnament = await Turnament.create(newTurnament);
-      console.log(addedTurnament);
-      const promoterUpdated = await User.update(
-        { _id: promoter },
-        { $push: { turnaments: addedTurnament._id } }
-      );
-      res.status(200).json(addedTurnament);
+      const addedPlayer = await Player.create(newPlayer);
+      // console.log(addedPlayer);
       // const promoterUpdated = await User.update(
       //   { _id: promoter },
-      //   { $push: { contests: addedTurnament._id } }
+      //   { $push: { turnaments: addedPlayer._id } }
       // );
+      // const promoterUpdated = await User.update(
+      //   { _id: promoter },
+      //   { $push: { contests: addedPlayer._id } }
+      // );
+
+      res.status(200).json({
+        message: addedPlayer
+      });
     } catch (e) {
       console.log("The raw response from Mongo was ", e);
     }
