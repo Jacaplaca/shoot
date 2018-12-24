@@ -23,6 +23,15 @@ module.exports = {
       });
   },
 
+  pickOne: async (req, res, nex) => {
+    try {
+      const result = await Turnament.findById(req.params.id);
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
   remove: async (req, res, next) => {
     console.log(req.params.id);
 

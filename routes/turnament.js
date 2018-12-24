@@ -9,5 +9,6 @@ router
   .post(TurnamentController.add);
 
 router.route("/remove/:id").post(TurnamentController.remove);
+router.route("/:id").get(TurnamentController.pickOne);
 
 module.exports = router;

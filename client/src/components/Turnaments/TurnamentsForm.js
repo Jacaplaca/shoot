@@ -12,6 +12,7 @@ import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { styles } from "./TurnamentsRow";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import * as Yup from "yup";
 
@@ -25,20 +26,20 @@ const axios = require("axios");
 
 const endpoint = "/api/upload";
 
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  },
-  iconSmall: {
-    fontSize: 20
-  }
-});
+// const styles = theme => ({
+//   button: {
+//     margin: theme.spacing.unit
+//   },
+//   leftIcon: {
+//     marginRight: theme.spacing.unit
+//   },
+//   rightIcon: {
+//     marginLeft: theme.spacing.unit
+//   },
+//   iconSmall: {
+//     fontSize: 20
+//   }
+// });
 
 class TurnamentsFormik extends Component {
   // state = { prepopulate: this.props.toEdit };
@@ -83,6 +84,7 @@ class TurnamentsFormik extends Component {
     // const { prepopulate } = this.state;
     // setFieldValue("name", "asdfsadf");
     // console.log(toEdit);
+    console.log("imported styles", this.props.classes);
     return (
       <Paper
         style={{
@@ -90,6 +92,7 @@ class TurnamentsFormik extends Component {
         }}
       >
         <form onSubmit={handleSubmit}>
+          <div className={this.props.classes.back}>laskdjflsadkfjlasdkf</div>
           <Grid container spacing={24}>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
@@ -333,7 +336,8 @@ const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
   promoters: state.promoters,
-  judges: state.judges
+  judges: state.judges,
+  toEdit: state.edit
 });
 
 // export default connect(

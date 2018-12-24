@@ -4,11 +4,13 @@ import authReducer from "./authReducer";
 import promotersReducer from "./promotersReducer";
 import judgesReducer from "./judgesReducer";
 import turnamentsReducer from "./turnamentsReducer";
+import editReducer from "./editReducer";
 
 export default combineReducers({
   errors: errorReducer,
   auth: authReducer,
   promoters: promotersReducer,
   turnaments: turnamentsReducer,
-  judges: judgesReducer
+  judges: judgesReducer,
+  edit: editReducer
 });

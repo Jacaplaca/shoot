@@ -3,6 +3,8 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
+import EventListener, { withOptions } from "react-event-listener";
+import classNames from "classnames";
 import {
   darken,
   emphasize,
@@ -13,6 +15,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Confirmation from "../../skins/Confirmation";
 import { fetchTurnaments } from "../../actions/turnaments";
+import { editFetch } from "../../actions/edit";
+// import { style } from "../../index";
 
 // import obrazek from '../../'
 class TurnamentsRow extends Component {
@@ -41,8 +45,13 @@ class TurnamentsRow extends Component {
     this.setState({ confirmation: false, toDelete: null })
   ];
 
+  handleResize = () => {
+    console.log("resize");
+  };
+
   render() {
-    const { turnament, classes, edit } = this.props;
+    console.log("row styles", styles);
+    const { turnament, classes, edit, editFetch, theme } = this.props;
     const {
       _id,
       date,
@@ -58,103 +67,97 @@ class TurnamentsRow extends Component {
     const { confirmation } = this.state;
     return (
       <React.Fragment>
+        <EventListener
+          target="window"
+          onResize={this.handleResize}
+          onScroll={withOptions(this.handleScroll, {
+            passive: true,
+            capture: false
+          })}
+        />
         <Confirmation
           open={confirmation}
           action={this.handleDelete}
           close={this.closeConfirmation}
         />
-        <div className={classes.container}>
-          <IconButton
-            onClick={() => edit(turnament)}
-            color="primary"
-            className={classes.button}
-            aria-label="Add to shopping cart"
-            // disabled={wyslano ? true : false}
-          >
-            <Edit />
-          </IconButton>
-          <span className={classes.date}>{date}</span>
-          <span className={classes.name}>{name}</span>
-          <span className={classes.typical}>{facility}</span>
-          <span className={classes.typical}>{`${judgeMain.name} ${
+        <div className={classes.table}>
+          <span className={classes.main}>
+            <IconButton
+              onClick={() => editFetch("turnaments", _id)}
+              color="primary"
+              aria-label="Add to shopping cart"
+            >
+              <Edit />
+            </IconButton>
+          </span>
+          <span className={classNames(classes.main, classes.date)}>{date}</span>
+          <span className={classNames(classes.main, classes.name)}>{name}</span>
+          <span className={classNames(classes.main)}>{facility}</span>
+          <span className={classNames(classes.main)}>{`${judgeMain.name} ${
             judgeMain.surename
           }`}</span>
-          <span className={classes.typical}>{`${judgeCounting.name} ${
+          <span className={classNames(classes.main)}>{`${judgeCounting.name} ${
             judgeCounting.surename
           }`}</span>
-          <span className={classes.typical}>{`${judgeRTS.name} ${
+          <span className={classNames(classes.main)}>{`${judgeRTS.name} ${
             judgeRTS.surename
           }`}</span>
-          <span className={classes.typical}>{lzss}</span>
-          <span className={classes.typical}>{tech}</span>
-          <span>
+          <span className={classNames(classes.main)}>{lzss}</span>
+          <span className={classNames(classes.main)}>{tech}</span>
+          <span className={classNames(classes.main)}>
             <img className={classes.logo} src={require(`../../${logo}`)} />
           </span>
-          <IconButton
-            style={{
-              position: "absolute",
-              right: "20px"
-            }}
-            className={classes.button}
-            aria-label="Delete"
-            onClick={() => this.openConfirmation(_id)}
-            // onClick={() => this.setState({ open: true, id })}
-            // disabled={wyslano ? true : false}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <span className={classNames(classes.main)}>
+            <IconButton
+              // className={classes.button}
+              aria-label="Delete"
+              onClick={() => this.openConfirmation(_id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </span>
         </div>
       </React.Fragment>
     );
   }
 }
 
-const styles = theme => ({
+export const styles = theme => ({
+  back: { background: "red", color: "yellow", fontWeight: "800" },
+  main: {
+    alignSelf: "center",
+    justifySelf: "center",
+    paddingLeft: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+    textAlign: "center"
+  },
+  test: { fontWeight: "900", color: "red" },
+  table: {
+    display: "grid",
+    minWidth: 900,
+    gridTemplateColumns:
+      "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px",
+    color: theme.palette.text.primary,
+    background: lighten(theme.palette.menu, 0.1),
+    marginBottom: 6
+  },
   container: {
     color: theme.palette.text.primary,
     background: lighten(theme.palette.menu, 0.1),
     marginBottom: 6
-    // borderColor: theme.palette.text.primary,
-    // borderStyle: "solid",
-    // borderWidth: 1
   },
   date: {
-    // width: 50,
-    minWidth: "10%",
-    // maxWidth: 50,
-    padding: 5,
-    paddingLeft: 10,
-    display: "inline-block"
+    fontWeight: 600
   },
   name: {
-    // width: 100,
-    minWidth: "10%",
-    // maxWidth: 100,
-    padding: 5,
-    display: "inline-block"
+    fontWeight: 600
   },
-  typical: {
-    // width: 100,
-    minWidth: "10%",
-    // maxWidth: 100,
-    padding: 5,
-    display: "inline-block"
-  },
-  logo: { width: 50, height: 50, padding: 10 },
-  button: {
-    margin: theme.spacing.unit,
-    width: 30,
-    height: 30
+  logo: {
+    width: 60,
+    height: 60,
+    padding: 5
   }
-  // leftIcon: {
-  //   marginRight: theme.spacing.unit
-  // },
-  // rightIcon: {
-  //   marginLeft: theme.spacing.unit
-  // },
-  // iconSmall: {
-  //   fontSize: 20
-  // }
 });
 
 const mapStateToProps = state => ({
@@ -183,7 +186,7 @@ const enhance = compose(
   withStyles(styles, { withTheme: true }),
   connect(
     mapStateToProps,
-    { fetchTurnaments }
+    { fetchTurnaments, editFetch }
   )
 );
 
