@@ -1,9 +1,10 @@
 export * from "./delete";
 export * from "./edit";
-export * from "./turnaments";
-export * from "./judges";
-export * from "./promoters";
+// export * from "./turnaments";
+// export * from "./judges";
+// export * from "./promoters";
 export * from "./authentication";
 export * from "./toDelete";
 export * from "./confirmation";
 export * from "./addToDB";
+export * from "./fetchFromDB";

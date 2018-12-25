@@ -1,10 +1,8 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER, PROMOTERS, JUDGES } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import setAuthToken from "../setAuthToken";
 import jwt_decode from "jwt-decode";
-import { fetchPromoters } from "../actions/promoters";
-import { fetchJudges } from "../actions/judges";
-import { fetchTurnaments } from "../actions/turnaments";
+import * as actions from "../actions";
 
 export const registerUser = (user, history) => dispatch => {
   // console.log("registerUser");
@@ -54,9 +52,11 @@ export const setCurrentUser = decoded => dispatch => {
   // console.log("decoded", decoded);
   if (decoded.rola === "admin") {
     // console.log("kto jest", decoded.rola);
-    dispatch(fetchPromoters());
-    dispatch(fetchJudges());
-    dispatch(fetchTurnaments());
+    dispatch(actions.fetchFromDB("promoters"));
+    dispatch(actions.fetchFromDB("judges"));
+    dispatch(actions.fetchFromDB("turnaments"));
+    // dispatch(fetchJudges());
+    // dispatch(fetchTurnaments());
     // fetchJudges();
     // fetchPromoters();
     // axios

@@ -40,6 +40,34 @@ const styles = theme => ({
 });
 
 class TurnamentsFormik extends Component {
+  componentDidMount() {
+    console.log("turn comp did mount");
+    this.fun();
+  }
+
+  fun = async () => {
+    console.log("fun");
+    var request = new XMLHttpRequest();
+    request.open(
+      "GET",
+      "http://localhost:3001/static/media/1545752872031.84a98441.png",
+      true
+    );
+    request.responseType = "blob";
+    request.onload = function() {
+      var reader = new FileReader();
+      reader.readAsDataURL(request.response);
+      reader.onload = function(e) {
+        console.log("DataURL:", e.target.result);
+      };
+    };
+    request.send();
+    // const file = await new File(
+    //   "http://localhost:3001/static/media/1545752872031.84a98441.png"
+    // );
+    // console.log(file);
+  };
+
   render() {
     const {
       values: {
@@ -69,12 +97,12 @@ class TurnamentsFormik extends Component {
       onChange,
       toEdit
     } = this.props;
-
     // name = toEdit ? toEdit.name : name;
 
     // const { prepopulate } = this.state;
     // setFieldValue("name", "asdfsadf");
     // console.log(toEdit);
+
     return (
       <Paper
         style={{
@@ -245,11 +273,15 @@ const TurnamentsForm = withFormik({
     toEdit
   }) => {
     console.log(toEdit);
+    // console.log(
+    //   "TurnamentsForm",
+    //   new File("http://localhost:3001/static/media/1545752872031.84a98441.png")
+    // );
     return {
       // name: name || "",
       name: toEdit ? toEdit.name : name || "",
       date: toEdit ? toEdit.date : date || "",
-      logo: logo || "",
+      logo: toEdit ? toEdit.logo : logo || "",
       promoter: promoter || "",
       facility: toEdit ? toEdit.facility : facility || "",
       judgeMain: judgeMain || "",
@@ -296,8 +328,8 @@ const TurnamentsForm = withFormik({
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  // promoters: state.promoters,
-  // judges: state.judges,
+  promoters: state.promoters,
+  judges: state.judges,
   toEdit: state.edit
 });
 

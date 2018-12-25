@@ -7,6 +7,7 @@ class Thumb extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    console.log("thumb will receive props", nextProps);
     if (!nextProps.file) {
       return;
     }
@@ -26,6 +27,8 @@ class Thumb extends Component {
   render() {
     const { file } = this.props;
     const { loading, thumb } = this.state;
+    console.log("thumb file", file);
+    console.log("thumb thumb", thumb);
 
     if (!file) {
       return null;

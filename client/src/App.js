@@ -5,7 +5,8 @@ import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authentication";
-import { fetchPromoters } from "./actions/promoters";
+// import { fetchPromoters } from "./actions/promoters";
+// import * as actions from './actions'
 
 // import Navbar from "./components/Navbar";
 // import Register from "./components/Register";

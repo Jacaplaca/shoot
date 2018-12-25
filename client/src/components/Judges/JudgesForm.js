@@ -15,111 +15,89 @@ import ButtonMy from "../../skins/ButtonMy";
 
 const component = "judges";
 
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  },
-  iconSmall: {
-    fontSize: 20
-  }
-});
-
-class JudgesFormik extends Component {
-  render() {
-    const {
-      values: { name, surename, judgeClass },
-      errors,
-      touched,
-      handleSubmit,
-      handleChange,
-      isValid,
-      setFieldTouched,
-      handleBlur,
-      classes,
-      setFieldValue,
-      onChange,
-      toEdit
-    } = this.props;
-    // setFieldValue("email", "ccc@ccc.com");
-    return (
-      <Paper
-        style={{
-          padding: 30
-        }}
-      >
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={24}>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="name"
-                label="Imię"
-                type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
-                value={name}
-                error={touched.name && Boolean(errors.name)}
-                helperText={touched.name && errors.name ? errors.name : " "}
-                onBlur={handleBlur}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="surename"
-                label="nazwisko"
-                type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
-                // edytuj={e => console.log(e)}
-                value={surename}
-                error={touched.surename && Boolean(errors.surename)}
-                helperText={
-                  touched.surename && errors.surename ? errors.surename : " "
-                }
-                onBlur={handleBlur}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="judgeClass"
-                label="Klasa sędziowska"
-                type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
-                value={judgeClass}
-                error={touched.judgeClass && Boolean(errors.judgeClass)}
-                helperText={
-                  touched.judgeClass && errors.judgeClass
-                    ? errors.judgeClass
-                    : " "
-                }
-                onBlur={handleBlur}
-              />
-            </Grid>
+const JudgesFormik = props => {
+  const {
+    values: { name, surename, judgeClass },
+    errors,
+    touched,
+    handleSubmit,
+    handleChange,
+    isValid,
+    setFieldTouched,
+    handleBlur,
+    classes,
+    setFieldValue,
+    onChange,
+    toEdit
+  } = props;
+  // setFieldValue("email", "ccc@ccc.com");
+  return (
+    <Paper
+      style={{
+        padding: 30
+      }}
+    >
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={24}>
+          <Grid item xs={12} sm={6} md={4}>
+            <InputComponent
+              name="name"
+              label="Imię"
+              type="string"
+              edytuj={handleChange}
+              value={name}
+              error={touched.name && Boolean(errors.name)}
+              helperText={touched.name && errors.name ? errors.name : " "}
+              onBlur={handleBlur}
+            />
           </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <InputComponent
+              name="surename"
+              label="nazwisko"
+              type="string"
+              edytuj={handleChange}
+              value={surename}
+              error={touched.surename && Boolean(errors.surename)}
+              helperText={
+                touched.surename && errors.surename ? errors.surename : " "
+              }
+              onBlur={handleBlur}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <InputComponent
+              name="judgeClass"
+              label="Klasa sędziowska"
+              type="string"
+              edytuj={handleChange}
+              value={judgeClass}
+              error={touched.judgeClass && Boolean(errors.judgeClass)}
+              helperText={
+                touched.judgeClass && errors.judgeClass
+                  ? errors.judgeClass
+                  : " "
+              }
+              onBlur={handleBlur}
+            />
+          </Grid>
+        </Grid>
 
-          <ButtonMy
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!isValid}
-          >
-            Dodaj sędziego
-            <Key style={{ marginLeft: 10 }} />
-          </ButtonMy>
-        </form>
-      </Paper>
-    );
-  }
-}
+        <ButtonMy
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={!isValid}
+        >
+          Dodaj sędziego
+          <Key style={{ marginLeft: 10 }} />
+        </ButtonMy>
+      </form>
+    </Paper>
+  );
+};
 
 const JudgesForm = withFormik({
-  // mapPropsToValues: () => ({ email: "foo@bar.de" }),
   enableReinitialize: true,
   mapPropsToValues({ name, surename, judgeClass, toEdit }) {
     return {
@@ -148,14 +126,10 @@ const JudgesForm = withFormik({
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  // promoters: state.promoters,
   toEdit: state.edit
 });
 
-export default withStyles(styles, { withTheme: true })(
-  connect(
-    mapStateToProps,
-    actions
-    // { registerUser, fetchJudges }
-  )(withRouter(JudgesForm))
-);
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(JudgesForm));

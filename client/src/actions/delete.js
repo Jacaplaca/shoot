@@ -1,7 +1,8 @@
 import axios from "axios";
 import { GET_ERRORS, CONFIRMATION, TODELETE } from "./types";
-import { fetchTurnaments } from "./turnaments";
-import { fetchJudges } from "./judges";
+// import { fetchTurnaments } from "./turnaments";
+// import { fetchJudges } from "./judges";
+import { fetchFromDB } from "./fetchFromDB";
 import store from "../store";
 // import setAuthToken from "../setAuthToken";
 // import jwt_decode from "jwt-decode";
@@ -14,15 +15,7 @@ export const deleteIdAndFetch = collection => async dispatch => {
   axios
     .post(`/api/${collection}/remove/${id}`)
     .then(res => {
-      switch (collection) {
-        case "turnaments":
-          dispatch(fetchTurnaments());
-          break;
-        case "judges":
-          dispatch(fetchJudges());
-          break;
-        default:
-      }
+      dispatch(fetchFromDB(collection));
     })
     .catch(err => {
       dispatch({
