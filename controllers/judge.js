@@ -21,5 +21,28 @@ module.exports = {
 
     const judge = await newJudge.save();
     res.status(200).json(judge);
+  },
+  pickOne: async (req, res, nex) => {
+    try {
+      const result = await Judge.findById(req.params.id);
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  remove: async (req, res, next) => {
+    console.log(req.params.id);
+
+    try {
+      const removedJudge = await Judge.findByIdAndRemove(req.params.id)
+        .remove()
+        .exec();
+      res.status(200).json({
+        message: removedJudge
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 };

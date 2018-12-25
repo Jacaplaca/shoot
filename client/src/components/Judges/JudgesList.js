@@ -1,44 +1,20 @@
-import React, { Component } from "react";
-import { compose } from "redux";
+import React from "react";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-// import man from '../../public'
+import JudgesRow from "./JudgesRow";
 
-class JudgesList extends Component {
-  render() {
-    const { classes, promoters, auth, promotersArr } = this.props;
-    console.log("promoter", promoters);
-    console.log("promoterArr", promotersArr);
-    console.log("user", auth);
-    return (
-      // <div style={{ overflow: "scroll", height: "400px" }}>
-      <div>
-        <h1>adfdf</h1>
-        {promotersArr.length > 0 &&
-          promotersArr.map(promoter => (
-            <div key={promoter.email}>
-              {promoter.name}
-              <img style={{ width: 80 }} src={require(`../${promoter.logo}`)} />
-            </div>
-          ))}
-      </div>
-    );
-  }
-}
+const JudgesList = ({ judges }) => {
+  return (
+    <div>
+      {judges.length > 0 &&
+        judges.map(judge => <JudgesRow key={judge._id} row={judge} />)}
+    </div>
+  );
+};
 
-const styles = {};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors,
+  judges: state.judges
+});
 
-function mapStateToProps({ auth, promoters }) {
-  return { promotersArr: promoters };
-}
-
-// export default compose(
-//   withStyles(styles, { withTheme: true }),
-//   // MainFrameHOC
-//   mapStateToProps
-// )(JudgesList);
-
-export default connect(
-  mapStateToProps
-  // actions
-)(JudgesList);
+export default connect(mapStateToProps)(JudgesList);

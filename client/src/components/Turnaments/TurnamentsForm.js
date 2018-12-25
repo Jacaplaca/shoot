@@ -4,16 +4,12 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
-import { registerUser } from "../../actions/authentication";
-import { fetchTurnaments } from "../../actions/turnaments";
+import * as actions from "../../actions";
 import store from "../../store";
 import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import { styles } from "./TurnamentsRow";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import * as Yup from "yup";
 
 import InputComponent from "../../inputs/InputComponent";
@@ -21,34 +17,29 @@ import ButtonMy from "../../skins/ButtonMy";
 import Thumb from "../Thumb";
 import UploadFile from "../../inputs/UploadFile";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
-import DatePickerMy from "../../inputs/DatePickerMy";
 const axios = require("axios");
+
+const component = "turnaments";
 
 const endpoint = "/api/upload";
 
-// const styles = theme => ({
-//   button: {
-//     margin: theme.spacing.unit
-//   },
-//   leftIcon: {
-//     marginRight: theme.spacing.unit
-//   },
-//   rightIcon: {
-//     marginLeft: theme.spacing.unit
-//   },
-//   iconSmall: {
-//     fontSize: 20
-//   }
-// });
+const styles = theme => ({
+  back2: { background: "red" },
+  button: {
+    margin: theme.spacing.unit
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit
+  },
+  iconSmall: {
+    fontSize: 20
+  }
+});
 
 class TurnamentsFormik extends Component {
-  // state = { prepopulate: this.props.toEdit };
-  //
-  componentDidMount() {
-    console.log(fetchTurnaments);
-    // this.props.fetchTurnaments();
-  }
-
   render() {
     const {
       values: {
@@ -84,7 +75,6 @@ class TurnamentsFormik extends Component {
     // const { prepopulate } = this.state;
     // setFieldValue("name", "asdfsadf");
     // console.log(toEdit);
-    console.log("imported styles", this.props.classes);
     return (
       <Paper
         style={{
@@ -92,7 +82,6 @@ class TurnamentsFormik extends Component {
         }}
       >
         <form onSubmit={handleSubmit}>
-          <div className={this.props.classes.back}>laskdjflsadkfjlasdkf</div>
           <Grid container spacing={24}>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
@@ -230,7 +219,7 @@ class TurnamentsFormik extends Component {
             color="primary"
             disabled={!isValid}
           >
-            Dodaj organizatora
+            Dodaj zawody
             <Key style={{ marginLeft: 10 }} />
           </ButtonMy>
         </form>
@@ -284,7 +273,7 @@ const TurnamentsForm = withFormik({
     console.log("handleChange", values);
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-    const promoter = {
+    const form = {
       name: values.name,
       date: values.date,
       logo: "",
@@ -296,35 +285,7 @@ const TurnamentsForm = withFormik({
       judgeRTS: values.judgeRTS,
       tech: values.tech
     };
-    if (values.logo) {
-      const data = new FormData();
-      data.append("file", values.logo, values.logo.name);
-      axios
-        .post(endpoint, data, {
-          onUploadProgress: ProgressEvent => {
-            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-          }
-        })
-        .then(res => {
-          // console.log(res.data.file);
-          Object.assign(promoter, { logo: res.data.file });
-          console.log(promoter);
-          axios.post("/api/turnaments/", promoter).then(resp => {
-            console.log("resp", resp);
-            store.dispatch(fetchTurnaments());
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    } else {
-      console.log(promoter);
-      axios.post("/api/turnaments/", promoter).then(resp => {
-        console.log("rest", resp);
-        store.dispatch(fetchTurnaments());
-      });
-      // store.dispatch(registerUser(promoter));
-    }
+    store.dispatch(actions.addToDB(component, values, form));
     resetForm();
   },
   validationSchema: Yup.object().shape({
@@ -335,19 +296,15 @@ const TurnamentsForm = withFormik({
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  promoters: state.promoters,
-  judges: state.judges,
+  // promoters: state.promoters,
+  // judges: state.judges,
   toEdit: state.edit
 });
-
-// export default connect(
-//   mapStateToProps,
-//   { loginUser }
-// )(withRouter(TurnamentsForm));
 
 export default withStyles(styles, { withTheme: true })(
   connect(
     mapStateToProps,
-    { fetchTurnaments }
+    // { fetchTurnaments }
+    actions
   )(withRouter(TurnamentsForm))
 );

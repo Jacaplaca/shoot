@@ -4,3 +4,7 @@ export const PROMOTERS = "PROMOTERS";
 export const JUDGES = "JUDGES";
 export const TURNAMENTS = "TURNAMENTS";
 export const EDIT = "EDIT";
+export const DELETE = "DELETE";
+export const TODELETE = "TODELETE";
+export const CONFIRMATION = "CONFIRMATION";
+export const ADDTODB = "ADDTODB";

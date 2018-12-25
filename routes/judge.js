@@ -8,4 +8,7 @@ router
   .get(JudgeController.index)
   .post(JudgeController.add);
 
+router.route("/remove/:id").post(JudgeController.remove);
+router.route("/:id").get(JudgeController.pickOne);
+
 module.exports = router;

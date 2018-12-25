@@ -4,6 +4,11 @@ import { NavLink, withRouter } from "react-router-dom";
 
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import {
+  darken,
+  emphasize,
+  lighten
+} from "@material-ui/core/styles/colorManipulator";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import Typography from "@material-ui/core/Typography";
@@ -25,11 +30,36 @@ import ButtonNavBar from "./ButtonNavBar";
 let drawerWidth = 240;
 let drawerClosedWidth = 72;
 
-const styles = theme => ({
+export const mainStyles = theme => ({
+  back: { background: "red", color: "yellow", fontWeight: "800" },
+  rowBlock: {
+    alignSelf: "center",
+    justifySelf: "center",
+    paddingLeft: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+    textAlign: "center"
+  },
+  rowTable: {
+    display: "grid",
+    minWidth: 900,
+    color: theme.palette.text.primary,
+    background: lighten(theme.palette.menu, 0.1),
+    marginBottom: 6
+  },
+  rowName: {
+    fontWeight: "600"
+  },
+  rowImg: {
+    maxWidth: 60,
+    maxHeight: 60,
+    padding: 5
+  },
   flex: {},
   container: {
     display: "flex",
     flexDirection: "column"
+    //backgroundColor: "red"
   },
   appBar: {
     // flexGrow: 1,
@@ -106,7 +136,7 @@ function mapStateToProps({ auth }) {
   return { auth };
 }
 
-export default withStyles(styles, { withTheme: true })(
+export default withStyles(mainStyles, { withTheme: true })(
   connect(
     mapStateToProps,
     actions

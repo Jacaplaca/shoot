@@ -7,7 +7,7 @@ const TurnamentsList = ({ turnaments }) => {
     <div>
       {turnaments.length > 0 &&
         turnaments.map(turnament => (
-          <TurnamentsRow key={turnament._id} turnament={turnament} />
+          <TurnamentsRow key={turnament._id} row={turnament} />
         ))}
     </div>
   );

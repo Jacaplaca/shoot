@@ -11,9 +11,9 @@ import * as actions from "../../actions";
 import { mainStyles } from "../../skins/MainContainer";
 import { combineStyles } from "../../functions/functions";
 
-const component = "turnaments";
+const component = "judges";
 
-const TurnamentsRow = props => {
+const JudgesRow = props => {
   console.log("row styles", styles);
   const {
     row,
@@ -26,18 +26,7 @@ const TurnamentsRow = props => {
     confirmation,
     deleteIdAndFetch
   } = props;
-  const {
-    _id,
-    date,
-    name,
-    facility,
-    judgeMain,
-    judgeRTS,
-    judgeCounting,
-    lzss,
-    tech,
-    logo
-  } = row;
+  const { _id, name, surename, judgeClass } = row;
   return (
     <React.Fragment>
       <Confirmation
@@ -58,29 +47,10 @@ const TurnamentsRow = props => {
             <Edit />
           </IconButton>
         </span>
-        <span className={classNames(classes.rowBlock, classes.date)}>
-          {date}
-        </span>
         <span className={classNames(classes.rowBlock, classes.rowName)}>
-          {name}
+          {`${name} ${surename}`}
         </span>
-        <span className={classNames(classes.rowBlock)}>{facility}</span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeMain ? `${judgeMain.name} ${judgeMain.surename}` : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeCounting
-            ? `${judgeCounting.name} ${judgeCounting.surename}`
-            : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surename}` : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>{lzss}</span>
-        <span className={classNames(classes.rowBlock)}>{tech}</span>
-        <span className={classNames(classes.rowBlock)}>
-          <img className={classes.rowImg} src={require(`../../${logo}`)} />
-        </span>
+        <span className={classNames(classes.rowBlock)}>{judgeClass}</span>
         <span className={classNames(classes.rowBlock)}>
           <IconButton aria-label="Delete" onClick={() => toDeleteAction(_id)}>
             <DeleteIcon />
@@ -115,4 +85,4 @@ const enhance = compose(
   )
 );
 
-export default enhance(TurnamentsRow);
+export default enhance(JudgesRow);

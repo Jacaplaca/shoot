@@ -30,14 +30,14 @@ const czerwony = "rgb(255, 0, 0)";
 const bialy = "#e7e7e7";
 const pomaranczowy = orange[300];
 
-export const style = {
-  rowElement: {
-    fontWeight: "800",
-    background: "red",
-    color: "yellow",
-    display: "none"
-  }
-};
+// export const style = {
+//   rowElement: {
+//     fontWeight: "800",
+//     background: "red",
+//     color: "yellow",
+//     display: "none"
+//   }
+// };
 
 const newTheme = theme =>
   createMuiTheme({

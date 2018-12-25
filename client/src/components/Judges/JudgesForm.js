@@ -2,27 +2,18 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-// import axios from "axios";
-// import { loginUser } from "../actions/authentication";
-import { registerUser } from "../../actions/authentication";
 import store from "../../store";
+import * as actions from "../../actions";
 import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import * as Yup from "yup";
 
 import InputComponent from "../../inputs/InputComponent";
 import ButtonMy from "../../skins/ButtonMy";
-import Thumb from "../Thumb";
-import UploadFile from "../../inputs/UploadFile";
-import InputSelectBaza from "../../inputs/InputSelectBaza";
-import DatePickerMy from "../../inputs/DatePickerMy";
-const axios = require("axios");
 
-const endpoint = "/api/upload";
+const component = "judges";
 
 const styles = theme => ({
   button: {
@@ -40,10 +31,6 @@ const styles = theme => ({
 });
 
 class JudgesFormik extends Component {
-  // componentDidMount() {
-  //   this.props.setFieldValue("email", "ccc@ccc.com");
-  // }
-
   render() {
     const {
       values: { name, surename, judgeClass },
@@ -56,7 +43,8 @@ class JudgesFormik extends Component {
       handleBlur,
       classes,
       setFieldValue,
-      onChange
+      onChange,
+      toEdit
     } = this.props;
     // setFieldValue("email", "ccc@ccc.com");
     return (
@@ -132,46 +120,24 @@ class JudgesFormik extends Component {
 
 const JudgesForm = withFormik({
   // mapPropsToValues: () => ({ email: "foo@bar.de" }),
-  mapPropsToValues({ name, surename, judgeClass }) {
+  enableReinitialize: true,
+  mapPropsToValues({ name, surename, judgeClass, toEdit }) {
     return {
-      name: name || "name",
-      surename: surename || "surename",
-      judgeClass: judgeClass || "judgeClass"
+      name: toEdit ? toEdit.name : name || "",
+      surename: toEdit ? toEdit.surename : surename || "",
+      judgeClass: toEdit ? toEdit.judgeClass : judgeClass || ""
     };
   },
   onChange(values) {
     console.log("handleChange", values);
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-    const judges = {
+    const form = {
       name: values.name,
       surename: values.surename,
       judgeClass: values.judgeClass
     };
-    if (values.logo) {
-      const data = new FormData();
-      data.append("file", values.logo, values.logo.name);
-      axios
-        .post(endpoint, data, {
-          onUploadProgress: ProgressEvent => {
-            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-          }
-        })
-        .then(res => {
-          // console.log(res.data.file);
-          Object.assign(judges, { logo: res.data.file });
-          console.log(judges);
-          axios.post("/api/judges/", judges).then(resp => console.log(resp));
-          // store.dispatch(registerUser(judges));
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    } else {
-      console.log(judges);
-      axios.post("/api/judges/", judges).then(resp => console.log(resp));
-      // store.dispatch(registerUser(judges));
-    }
+    store.dispatch(actions.addToDB(component, values, form));
     resetForm();
   },
   validationSchema: Yup.object().shape({
@@ -182,17 +148,14 @@ const JudgesForm = withFormik({
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  promoters: state.promoters
+  // promoters: state.promoters,
+  toEdit: state.edit
 });
-
-// export default connect(
-//   mapStateToProps,
-//   { loginUser }
-// )(withRouter(JudgesForm));
 
 export default withStyles(styles, { withTheme: true })(
   connect(
     mapStateToProps,
-    { registerUser }
+    actions
+    // { registerUser, fetchJudges }
   )(withRouter(JudgesForm))
 );
