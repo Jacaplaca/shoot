@@ -3,6 +3,12 @@ import { EDIT, GET_ERRORS } from "./types";
 
 export const editFetch = (collection, id) => dispatch => {
   console.log("edit");
+  if (!collection) {
+    dispatch({
+      type: EDIT,
+      payload: null
+    });
+  }
 
   const url = `/api/${collection}/${id}`;
   axios

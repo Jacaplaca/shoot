@@ -11,4 +11,6 @@ router
 router.route("/remove/:id").post(PromoterController.remove);
 router.route("/:id").get(PromoterController.pickOne);
 
+router.route("/update/:id").post(PromoterController.update);
+
 module.exports = router;

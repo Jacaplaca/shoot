@@ -4,7 +4,7 @@ const User = require("../models/user");
 
 module.exports = {
   check: async (req, res, next) => {
-    // console.log(req.body);
+    console.log("emailo", req.body);
     User.findOne({
       email: req.body.email
     }).then(user => res.status(200).json({ free: user === null }));

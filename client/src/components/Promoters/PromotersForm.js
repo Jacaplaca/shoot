@@ -7,42 +7,20 @@ import { connect } from "react-redux";
 import { registerUser } from "../../actions/authentication";
 import store from "../../store";
 import * as actions from "../../actions";
-import { withStyles } from "@material-ui/core/styles";
-import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import * as Yup from "yup";
 
 import InputComponent from "../../inputs/InputComponent";
-import ButtonMy from "../../skins/ButtonMy";
 import Thumb from "../Thumb";
 import UploadFile from "../../inputs/UploadFile";
+import FormButtons from "../../skins/FormButtons";
 const axios = require("axios");
 
-const endpoint = "/api/upload";
 const component = "promoters";
-
-// const styles = theme => ({
-//   button: {
-//     margin: theme.spacing.unit
-//   },
-//   leftIcon: {
-//     marginRight: theme.spacing.unit
-//   },
-//   rightIcon: {
-//     marginLeft: theme.spacing.unit
-//   },
-//   iconSmall: {
-//     fontSize: 20
-//   }
-// });
 
 class PromotersFormik extends Component {
   // componentDidMount() {
-  //   this.props.setFieldValue("email", "ccc@ccc.com");
-  // }
 
   render() {
     const {
@@ -56,9 +34,9 @@ class PromotersFormik extends Component {
       handleBlur,
       classes,
       setFieldValue,
-      toEdit
+      toEdit,
+      resetForm
     } = this.props;
-    // setFieldValue("email", "ccc@ccc.com");
     return (
       <Paper
         style={{
@@ -93,18 +71,6 @@ class PromotersFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-
-            {/* <InputComponent
-                name="logo"
-                label="Logo"
-                type="file"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
-                value={logo}
-                error={touched.logo && Boolean(errors.logo)}
-                helperText={touched.logo && errors.logo ? errors.logo : " "}
-                onBlur={handleBlur}
-              /> */}
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="www"
@@ -131,36 +97,44 @@ class PromotersFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="password"
-                label="Hasło"
-                type="password"
-                edytuj={handleChange}
-                // edytuj={change.bind(null, "password")}
-                value={password}
-                error={touched.password && Boolean(errors.password)}
-                helperText={
-                  touched.password && errors.password ? errors.password : " "
-                }
-                onBlur={handleBlur}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="password2"
-                label="Potwierdź hasło"
-                type="password"
-                edytuj={handleChange}
-                // edytuj={change.bind(null, "password")}
-                value={password2}
-                error={touched.password2 && Boolean(errors.password2)}
-                helperText={
-                  touched.password2 && errors.password2 ? errors.password2 : " "
-                }
-                onBlur={handleBlur}
-              />
-            </Grid>
+            {!editedObject ? (
+              <React.Fragment>
+                <Grid item xs={12} sm={6} md={4}>
+                  <InputComponent
+                    name="password"
+                    label="Hasło"
+                    type="password"
+                    edytuj={handleChange}
+                    // edytuj={change.bind(null, "password")}
+                    value={password}
+                    error={touched.password && Boolean(errors.password)}
+                    helperText={
+                      touched.password && errors.password
+                        ? errors.password
+                        : " "
+                    }
+                    onBlur={handleBlur}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <InputComponent
+                    name="password2"
+                    label="Potwierdź hasło"
+                    type="password"
+                    edytuj={handleChange}
+                    // edytuj={change.bind(null, "password")}
+                    value={password2}
+                    error={touched.password2 && Boolean(errors.password2)}
+                    helperText={
+                      touched.password2 && errors.password2
+                        ? errors.password2
+                        : " "
+                    }
+                    onBlur={handleBlur}
+                  />
+                </Grid>
+              </React.Fragment>
+            ) : null}
 
             <Grid item xs={12} sm={6} md={4}>
               <UploadFile
@@ -175,21 +149,53 @@ class PromotersFormik extends Component {
             </Grid>
           </Grid>
 
-          <ButtonMy
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!isValid}
-          >
-            Dodaj organizatora
-            <Key style={{ marginLeft: 10 }} />
-          </ButtonMy>
+          <FormButtons
+            subDisable={!isValid}
+            subLabel={toEdit ? "Edytuj organizatora" : "Dodaj organizatora"}
+            cancelLabel={"Anuluj"}
+            cancelAction={() => {
+              store.dispatch(actions.editFetch());
+              resetForm();
+            }}
+          />
         </form>
       </Paper>
     );
   }
 }
 
+const validationSchemaStandard = {
+  name: Yup.string().required("Podaj nazwę organizatora"),
+  email: Yup.string()
+    .email("Podaj prawidłowy e-mail")
+    .required("Podaj e-mail organizatora")
+    .test("a@a.com", "Podany e-mail jest już zarejestrowany", function(value) {
+      return axios
+        .post("/api/email/", {
+          email: editedObject
+            ? value === editedObject.email
+              ? ""
+              : value
+            : value
+        })
+        .then(response => {
+          // console.log(response);
+          console.log(value);
+          return response.data.free === true;
+        });
+    })
+};
+
+const validationSchemaPass = {
+  password: Yup.string()
+    .min(0, "Hasło musi mieć conajmniej 6 znaków")
+    .required("Podaj hasło"),
+  password2: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Wpisane hasła muszą być indentyczne")
+    .required("Password confirm is required")
+};
+
+let editedObject;
 const PromotersForm = withFormik({
   enableReinitialize: true,
   // mapPropsToValues: () => ({ email: "foo@bar.de" }),
@@ -203,6 +209,7 @@ const PromotersForm = withFormik({
     password2,
     toEdit
   }) {
+    editedObject = toEdit;
     return {
       name: toEdit ? toEdit.name : name || "",
       logo: toEdit ? toEdit.logo : logo || "",
@@ -224,34 +231,21 @@ const PromotersForm = withFormik({
       email: values.email,
       rola: "promoter"
     };
-    store.dispatch(actions.addToDB(component, values, form));
+    let id;
+    if (editedObject) {
+      id = editedObject._id;
+    }
+    store.dispatch(actions.addToDB(component, values, form, id));
     resetForm();
   },
-  validationSchema: Yup.object().shape({
-    name: Yup.string().required("Podaj nazwę organizatora"),
-    email: Yup.string()
-      .email("Podaj prawidłowy e-mail")
-      .required("Podaj e-mail organizatora")
-      .test("a@a.com", "Podany e-mail jest już zarejestrowany", function(
-        value
-      ) {
-        // console.log(value);
-        return axios.post("/api/email/", { email: value }).then(response => {
-          // console.log(response);
-          return response.data.free === true;
-        });
-        // return fetch("/api/email" + value).then(
-        //   response => response.responseText === "true"
-        // );
-      }),
-    password: Yup.string()
-      .min(0, "Hasło musi mieć conajmniej 6 znaków")
-      .required("Podaj hasło"),
-    password2: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Wpisane hasła muszą być indentyczne")
-      .required("Password confirm is required")
-  })
+  validationSchema: Yup.object().shape(
+    !editedObject
+      ? validationSchemaStandard
+      : { ...validationSchemaStandard, ...validationSchemaPass }
+  )
 })(PromotersFormik);
+
+// const validationSchemaEdit = { ... };
 
 const mapStateToProps = state => ({
   auth: state.auth,

@@ -17,6 +17,26 @@ module.exports = {
       console.log(e);
     }
   },
+  update: async (req, res, next) => {
+    const { name, email, adres, logo, www } = req.body;
+    const updatedPromoter = {
+      name,
+      email,
+      adres,
+      logo,
+      www
+    };
+
+    try {
+      const result = await User.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: updatedPromoter }
+      );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
   check: async (req, res, next) => {
     console.log(req.body);
     res.status(200).json({ aaa: 123 });

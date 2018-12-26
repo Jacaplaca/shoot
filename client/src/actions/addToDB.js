@@ -39,11 +39,9 @@ export const addToDB = (collection, values, form, id) => async dispatch => {
         }
       })
       .then(res => {
-        // console.log(res.data.file);
         Object.assign(form, { logo: res.data.file });
         console.log(form);
         axios.post(url, form).then(resp => dispatch(fetchFromDB(collection)));
-        // store.dispatch(registerUser(form));
       })
       .catch(function(error) {
         console.log(error);
@@ -64,33 +62,5 @@ export const addToDB = (collection, values, form, id) => async dispatch => {
       .catch(function(error) {
         console.log(error);
       });
-    // store.dispatch(registerUser(form));
   }
-
-  // const myStore = await store.getState();
-  //
-  // const id = myStore.delete;
-  //
-  // axios
-  //   .post(`/api/${collection}/remove/${id}`)
-  //   .then(res => {
-  //     switch (collection) {
-  //       case "turnaments":
-  //         dispatch(fetchTurnaments());
-  //         break;
-  //       default:
-  //     }
-  //   })
-  //   .catch(err => {
-  //     dispatch({
-  //       type: GET_ERRORS,
-  //       payload: err.response.data
-  //     });
-  //   });
-
-  // dispatch({
-  //   type: CONFIRMATION,
-  //   payload: false
-  // });
-  // dispatch({ type: TODELETE, payload: null });
 };
