@@ -11,4 +11,6 @@ router
 router.route("/remove/:id").post(JudgeController.remove);
 router.route("/:id").get(JudgeController.pickOne);
 
+router.route("/update/:id").post(JudgeController.update);
+
 module.exports = router;

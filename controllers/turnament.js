@@ -11,7 +11,7 @@ module.exports = {
   index: async (req, res, next) => {
     Turnament.find()
       // .select({"name" 'judgeMain'})
-      // .populate("promoter")
+      .populate("promoter")
       .populate("judgeMain")
       .populate("judgeCounting")
       .populate("judgeRTS")
@@ -25,7 +25,11 @@ module.exports = {
 
   pickOne: async (req, res, nex) => {
     try {
-      const result = await Turnament.findById(req.params.id);
+      const result = await Turnament.findById(req.params.id)
+        .populate("judgeMain")
+        .populate("judgeCounting")
+        .populate("judgeRTS")
+        .populate("promoter");
       res.status(200).json(result);
     } catch (e) {
       console.log(e);

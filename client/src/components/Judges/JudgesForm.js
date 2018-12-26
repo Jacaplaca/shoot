@@ -17,7 +17,7 @@ const component = "judges";
 
 const JudgesFormik = props => {
   const {
-    values: { name, surename, judgeClass },
+    values: { name, surname, judgeClass },
     errors,
     touched,
     handleSubmit,
@@ -53,14 +53,14 @@ const JudgesFormik = props => {
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <InputComponent
-              name="surename"
+              name="surname"
               label="nazwisko"
               type="string"
               edytuj={handleChange}
-              value={surename}
-              error={touched.surename && Boolean(errors.surename)}
+              value={surname}
+              error={touched.surname && Boolean(errors.surname)}
               helperText={
-                touched.surename && errors.surename ? errors.surename : " "
+                touched.surname && errors.surname ? errors.surname : " "
               }
               onBlur={handleBlur}
             />
@@ -89,7 +89,8 @@ const JudgesFormik = props => {
           color="primary"
           disabled={!isValid}
         >
-          Dodaj sędziego
+          {toEdit ? "Edytuj sędziego" : "Dodaj sędziego"}
+
           <Key style={{ marginLeft: 10 }} />
         </ButtonMy>
       </form>
@@ -97,12 +98,14 @@ const JudgesFormik = props => {
   );
 };
 
+let editedObject;
 const JudgesForm = withFormik({
   enableReinitialize: true,
-  mapPropsToValues({ name, surename, judgeClass, toEdit }) {
+  mapPropsToValues({ name, surname, judgeClass, toEdit }) {
+    editedObject = toEdit;
     return {
       name: toEdit ? toEdit.name : name || "",
-      surename: toEdit ? toEdit.surename : surename || "",
+      surname: toEdit ? toEdit.surname : surname || "",
       judgeClass: toEdit ? toEdit.judgeClass : judgeClass || ""
     };
   },
@@ -112,10 +115,15 @@ const JudgesForm = withFormik({
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
     const form = {
       name: values.name,
-      surename: values.surename,
+      surname: values.surname,
       judgeClass: values.judgeClass
     };
-    store.dispatch(actions.addToDB(component, values, form));
+    // console.log("handleSubmit", ed);
+    let id;
+    if (editedObject) {
+      id = editedObject._id;
+    }
+    store.dispatch(actions.addToDB(component, values, form, id));
     resetForm();
   },
   validationSchema: Yup.object().shape({

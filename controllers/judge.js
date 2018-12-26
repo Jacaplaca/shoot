@@ -10,19 +10,38 @@ module.exports = {
       .then(response => res.status(200).json(response));
   },
   add: async (req, res, next) => {
-    const { name, surename, judgeClass } = req.body;
+    const { name, surname, judgeClass } = req.body;
 
     const newJudge = new Judge({
       name,
-      surename,
-      judgeClass,
-      contests: "5c1e6928d0568f42c84b78f1"
+      surname,
+      judgeClass
     });
 
     const judge = await newJudge.save();
     res.status(200).json(judge);
   },
-  pickOne: async (req, res, nex) => {
+
+  update: async (req, res, next) => {
+    const { name, surname, judgeClass } = req.body;
+    const updatedJudge = {
+      name,
+      surname,
+      judgeClass
+    };
+
+    try {
+      const result = await Judge.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: updatedJudge }
+      );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  pickOne: async (req, res, next) => {
     try {
       const result = await Judge.findById(req.params.id);
       res.status(200).json(result);

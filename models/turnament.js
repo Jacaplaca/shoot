@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 // const Judge = mongoose.model("judges");
+const User = require("./user");
 const Judge = require("./judge");
 // const Cont = require("./cont");
-// const User = require("./user");
 // const User = mongoose.model("users");
 // console.log("judge conte", Contest);
 
@@ -22,7 +22,9 @@ const TurnamentSchema = new Schema({
     type: String
   },
   promoter: {
-    type: String
+    // type: String
+    type: Schema.Types.ObjectId,
+    ref: User
   },
   facility: {
     type: String

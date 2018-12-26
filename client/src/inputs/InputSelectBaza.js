@@ -83,6 +83,44 @@ class InputSelectBaza extends React.Component {
   //   window.addEventListener("click", console.log(e), false);
   // }
 
+  componentWillReceiveProps(nextProps) {
+    // console.log("nextProps InputSelectBaza()", this.props.suggestion.name);
+    if (nextProps.value && nextProps.value._id) {
+      // this.setState({ openSuggestions: false });
+      let value;
+      switch (this.props.suggestion.name) {
+        case "nameSurnameSuggestion":
+          value = `${nextProps.value.name} ${nextProps.value.surname}`;
+          break;
+        default:
+          value = `${nextProps.value.name}`;
+      }
+
+      const input = {
+        target: { value, title: nextProps.value._id }
+      };
+      this.onChange2(input);
+      // let value;
+      //
+      // switch (this.props.suggestion) {
+      //   case nameSurnameSuggestion:
+      //     value = `${nextProps.value.name} ${nextProps.value.surname}`;
+      //     break;
+      //   default:
+      //     value = `${nextProps.value.name}`;
+      // }
+      //
+      // let input = {
+      //   target: {
+      //     value: nextProps.value._id,
+      //     name: this.props.name
+      //   }
+      // };
+      // this.setState({value});
+      // this.props.wybrano(input);
+    }
+  }
+
   renderSuggestionsContainer = ({ containerProps, children, query }) => {
     const { suggestions, fetchowane, offset, fetchowaneRest } = this.state;
     const { object } = this.props;

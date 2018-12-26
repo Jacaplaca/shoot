@@ -8,13 +8,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Confirmation from "../../skins/Confirmation";
 import * as actions from "../../actions";
-import { mainStyles } from "../../skins/MainContainer";
+import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 
 const component = "judges";
 
 const JudgesRow = props => {
-  console.log("row styles", styles);
+  // console.log("row styles", styles);
   const {
     row,
     classes,
@@ -26,7 +26,7 @@ const JudgesRow = props => {
     confirmation,
     deleteIdAndFetch
   } = props;
-  const { _id, name, surename, judgeClass } = row;
+  const { _id, name, surname, judgeClass } = row;
   return (
     <React.Fragment>
       <Confirmation
@@ -48,7 +48,7 @@ const JudgesRow = props => {
           </IconButton>
         </span>
         <span className={classNames(classes.rowBlock, classes.rowName)}>
-          {`${name} ${surename}`}
+          {`${name} ${surname}`}
         </span>
         <span className={classNames(classes.rowBlock)}>{judgeClass}</span>
         <span className={classNames(classes.rowBlock)}>
@@ -61,10 +61,9 @@ const JudgesRow = props => {
   );
 };
 
-export const styles = theme => ({
+const styles = theme => ({
   table: {
-    gridTemplateColumns:
-      "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px"
+    gridTemplateColumns: "50px 1fr 1fr  60px"
   }
 });
 
@@ -74,7 +73,7 @@ const mapStateToProps = state => ({
   confirmation: state.confirmation
 });
 
-const combinedStyles = combineStyles(styles, mainStyles);
+const combinedStyles = combineStyles(styles, rowStyles);
 
 const enhance = compose(
   // withRouter,

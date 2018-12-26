@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 // const Judge = require("./judge");
 // const mongoose = require("mongoose");
-const Turnament = mongoose.model("turnaments");
+// const Turnament = mongoose.model("turnaments");
 // const Turnament = require("./turnament");
 // const Cont = require("./cont");
 // console.log("User, judge", Judge);
@@ -39,8 +39,8 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  },
-  turnaments: [{ type: Schema.Types.ObjectId, ref: Turnament }]
+  }
+  // turnaments: [{ type: Schema.Types.ObjectId, ref: Turnament }]
   // judges: [{ type: Schema.Types.ObjectId, ref: Judge }]
 });
 //

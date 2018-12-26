@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 // import { loginUser } from "../actions/authentication";
 import { registerUser } from "../../actions/authentication";
 import store from "../../store";
+import * as actions from "../../actions";
 import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
@@ -21,21 +22,22 @@ import UploadFile from "../../inputs/UploadFile";
 const axios = require("axios");
 
 const endpoint = "/api/upload";
+const component = "promoters";
 
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  },
-  iconSmall: {
-    fontSize: 20
-  }
-});
+// const styles = theme => ({
+//   button: {
+//     margin: theme.spacing.unit
+//   },
+//   leftIcon: {
+//     marginRight: theme.spacing.unit
+//   },
+//   rightIcon: {
+//     marginLeft: theme.spacing.unit
+//   },
+//   iconSmall: {
+//     fontSize: 20
+//   }
+// });
 
 class PromotersFormik extends Component {
   // componentDidMount() {
@@ -53,7 +55,8 @@ class PromotersFormik extends Component {
       setFieldTouched,
       handleBlur,
       classes,
-      setFieldValue
+      setFieldValue,
+      toEdit
     } = this.props;
     // setFieldValue("email", "ccc@ccc.com");
     return (
@@ -188,20 +191,30 @@ class PromotersFormik extends Component {
 }
 
 const PromotersForm = withFormik({
+  enableReinitialize: true,
   // mapPropsToValues: () => ({ email: "foo@bar.de" }),
-  mapPropsToValues({ name, adres, password, www, logo, email, password2 }) {
+  mapPropsToValues({
+    name,
+    adres,
+    password,
+    www,
+    logo,
+    email,
+    password2,
+    toEdit
+  }) {
     return {
-      name: name || "namepromoter",
-      logo: logo || "",
-      www: www || "www",
-      password: password || "aaaaaa",
-      password2: password2 || "aaaaaa",
-      adres: adres || "adres",
-      email: email || "ccc@ccc.co"
+      name: toEdit ? toEdit.name : name || "",
+      logo: toEdit ? toEdit.logo : logo || "",
+      www: toEdit ? toEdit.www : www || "",
+      password: password || "",
+      password2: password2 || "",
+      adres: toEdit ? toEdit.adres : adres || "",
+      email: toEdit ? toEdit.email : email || ""
     };
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-    const promoter = {
+    const form = {
       name: values.name,
       adres: values.adres,
       password: values.password,
@@ -211,27 +224,7 @@ const PromotersForm = withFormik({
       email: values.email,
       rola: "promoter"
     };
-    if (values.logo) {
-      const data = new FormData();
-      data.append("file", values.logo, values.logo.name);
-      axios
-        .post(endpoint, data, {
-          onUploadProgress: ProgressEvent => {
-            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-          }
-        })
-        .then(res => {
-          // console.log(res.data.file);
-          Object.assign(promoter, { logo: res.data.file });
-          // console.log(promoter);
-          store.dispatch(registerUser(promoter));
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    } else {
-      store.dispatch(registerUser(promoter));
-    }
+    store.dispatch(actions.addToDB(component, values, form));
     resetForm();
   },
   validationSchema: Yup.object().shape({
@@ -262,7 +255,8 @@ const PromotersForm = withFormik({
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  toEdit: state.edit
 });
 
 // export default connect(
@@ -270,9 +264,7 @@ const mapStateToProps = state => ({
 //   { loginUser }
 // )(withRouter(PromotersForm));
 
-export default withStyles(styles, { withTheme: true })(
-  connect(
-    mapStateToProps,
-    { registerUser }
-  )(withRouter(PromotersForm))
-);
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(withRouter(PromotersForm));

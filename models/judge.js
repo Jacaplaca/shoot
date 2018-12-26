@@ -12,7 +12,7 @@ const JudgeSchema = new Schema({
     type: String,
     required: true
   },
-  surename: {
+  surname: {
     type: String,
     required: true
   },

@@ -13,6 +13,7 @@ import axios from "axios";
 // import * as actions from "../actions";
 
 export const combineStyles = (...styles) => {
+  console.log("combineStyles()", styles);
   return function CombineStyles(theme) {
     const outStyles = styles.map(arg => {
       // Apply the "theme" object for style functions.
@@ -27,7 +28,7 @@ export const combineStyles = (...styles) => {
   };
 };
 
-export default combineStyles;
+// export default combineStyles;
 
 export const fetchDB = async (value, offset, baza, limit) => {
   const result = await axios.get(

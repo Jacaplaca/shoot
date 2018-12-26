@@ -15,13 +15,16 @@ export const simpleSuggestion = (suggestion, { query, isHighlighted }) => {
       key={suggestion._id}
       title={suggestion._id}
     >
-      <div style={{ display: "block", width: "100%" }} title={suggestion._id}>
+      <div
+        style={{ display: "block", width: "100%", color: "black" }}
+        title={suggestion._id}
+      >
         <span>
           {parts.map((part, index) => {
             return part.highlight ? (
               <span
                 key={String(index)}
-                style={{ fontWeight: 500 }}
+                style={{ fontWeight: 600 }}
                 title={suggestion._id}
               >
                 {part.text}
@@ -29,7 +32,7 @@ export const simpleSuggestion = (suggestion, { query, isHighlighted }) => {
             ) : (
               <strong
                 key={String(index)}
-                style={{ fontWeight: 300 }}
+                style={{ fontWeight: 400 }}
                 title={suggestion._id}
               >
                 {part.text}
@@ -39,6 +42,40 @@ export const simpleSuggestion = (suggestion, { query, isHighlighted }) => {
         </span>
       </div>
       {/* <span>{gmina}</span> */}
+    </MenuItem>
+  );
+};
+
+export const nameSurnameSuggestion = (suggestion, { query, isHighlighted }) => {
+  const { name, surname, _id } = suggestion;
+  const fullName = `${name} ${surname}`;
+  const matches = match(fullName, query);
+  const parts = parse(fullName, matches);
+
+  return (
+    <MenuItem selected={isHighlighted} component="div" dense title={_id}>
+      <div
+        style={{ display: "block", width: "100%", color: "black" }}
+        title={_id}
+      >
+        <span title={_id}>
+          {parts.map((part, index) => {
+            return part.highlight ? (
+              <span key={String(index)} title={_id} style={{ fontWeight: 500 }}>
+                {part.text}
+              </span>
+            ) : (
+              <strong
+                key={String(index)}
+                title={_id}
+                style={{ fontWeight: 300 }}
+              >
+                {part.text}
+              </strong>
+            );
+          })}
+        </span>
+      </div>
     </MenuItem>
   );
 };

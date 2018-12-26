@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TURNAMENTS, JUDGES, GET_ERRORS, PROMOTERS } from "./types";
+import { TURNAMENTS, JUDGES, GET_ERRORS, PROMOTERS, EDIT } from "./types";
 // import setAuthToken from "../setAuthToken";
 // import jwt_decode from "jwt-decode";
 
@@ -31,6 +31,12 @@ export const fetchFromDB = collection => dispatch => {
       dispatch({
         type,
         payload: res.data
+      });
+    })
+    .then(() => {
+      dispatch({
+        type: EDIT,
+        payload: null
       });
     })
     .catch(err => {

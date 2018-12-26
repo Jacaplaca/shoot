@@ -8,13 +8,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Confirmation from "../../skins/Confirmation";
 import * as actions from "../../actions";
+// import { mainStyles } from "../../skins/MainContainer";
 import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 
-const component = "turnaments";
+const component = "promoters";
 
-const TurnamentsRow = props => {
-  // console.log("row styles", styles);
+const PromotersRow = props => {
   const {
     row,
     classes,
@@ -26,18 +26,7 @@ const TurnamentsRow = props => {
     confirmation,
     deleteIdAndFetch
   } = props;
-  const {
-    _id,
-    date,
-    name,
-    facility,
-    judgeMain,
-    judgeRTS,
-    judgeCounting,
-    lzss,
-    tech,
-    logo
-  } = row;
+  const { _id, name, email, adres, logo, www } = row;
   return (
     <React.Fragment>
       <Confirmation
@@ -58,29 +47,17 @@ const TurnamentsRow = props => {
             <Edit />
           </IconButton>
         </span>
-        <span className={classNames(classes.rowBlock, classes.date)}>
-          {date}
-        </span>
+
         <span className={classNames(classes.rowBlock, classes.rowName)}>
           {name}
         </span>
-        <span className={classNames(classes.rowBlock)}>{facility}</span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeMain ? `${judgeMain.name} ${judgeMain.surname}` : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeCounting
-            ? `${judgeCounting.name} ${judgeCounting.surname}`
-            : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surname}` : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>{lzss}</span>
-        <span className={classNames(classes.rowBlock)}>{tech}</span>
+        <span className={classNames(classes.rowBlock)}>{email}</span>
+        <span className={classNames(classes.rowBlock)}>{adres}</span>
+        <span className={classNames(classes.rowBlock)}>{www}</span>
         <span className={classNames(classes.rowBlock)}>
           <img className={classes.rowImg} src={require(`../../${logo}`)} />
         </span>
+
         <span className={classNames(classes.rowBlock)}>
           <IconButton aria-label="Delete" onClick={() => toDeleteAction(_id)}>
             <DeleteIcon />
@@ -93,8 +70,7 @@ const TurnamentsRow = props => {
 
 const styles = theme => ({
   table: {
-    gridTemplateColumns:
-      "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px"
+    gridTemplateColumns: "50px 1fr 1fr 1fr 1fr 70px 60px"
   }
 });
 
@@ -115,4 +91,4 @@ const enhance = compose(
   )
 );
 
-export default enhance(TurnamentsRow);
+export default enhance(PromotersRow);

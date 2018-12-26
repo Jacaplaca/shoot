@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-// import axios from "axios";
 // import { loginUser } from "../actions/authentication";
 import * as actions from "../../actions";
 import store from "../../store";
@@ -17,11 +16,9 @@ import ButtonMy from "../../skins/ButtonMy";
 import Thumb from "../Thumb";
 import UploadFile from "../../inputs/UploadFile";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
-const axios = require("axios");
+import { nameSurnameSuggestion } from "../../inputs/Suggestions";
 
 const component = "turnaments";
-
-const endpoint = "/api/upload";
 
 const styles = theme => ({
   back2: { background: "red" },
@@ -40,34 +37,6 @@ const styles = theme => ({
 });
 
 class TurnamentsFormik extends Component {
-  componentDidMount() {
-    console.log("turn comp did mount");
-    this.fun();
-  }
-
-  fun = async () => {
-    console.log("fun");
-    var request = new XMLHttpRequest();
-    request.open(
-      "GET",
-      "http://localhost:3001/static/media/1545752872031.84a98441.png",
-      true
-    );
-    request.responseType = "blob";
-    request.onload = function() {
-      var reader = new FileReader();
-      reader.readAsDataURL(request.response);
-      reader.onload = function(e) {
-        console.log("DataURL:", e.target.result);
-      };
-    };
-    request.send();
-    // const file = await new File(
-    //   "http://localhost:3001/static/media/1545752872031.84a98441.png"
-    // );
-    // console.log(file);
-  };
-
   render() {
     const {
       values: {
@@ -172,6 +141,8 @@ class TurnamentsFormik extends Component {
                 name="judgeMain"
                 type="string"
                 wybrano={handleChange}
+                suggestion={nameSurnameSuggestion}
+                names={["name", "surname"]}
                 // wybrano={e => onChange(e)}
                 value={judgeMain}
                 label="Sędzia główny"
@@ -197,6 +168,8 @@ class TurnamentsFormik extends Component {
                 name="judgeCounting"
                 type="string"
                 wybrano={handleChange}
+                suggestion={nameSurnameSuggestion}
+                names={["name", "surname"]}
                 // wybrano={e => onChange(e)}
                 value={judgeCounting}
                 label="Sędzia liczący"
@@ -209,6 +182,8 @@ class TurnamentsFormik extends Component {
                 name="judgeRTS"
                 type="string"
                 wybrano={handleChange}
+                suggestion={nameSurnameSuggestion}
+                names={["name", "surname"]}
                 // wybrano={e => onChange(e)}
                 value={judgeRTS}
                 label="Sędzia RTS"
@@ -272,37 +247,18 @@ const TurnamentsForm = withFormik({
     tech,
     toEdit
   }) => {
-    console.log(toEdit);
-    // console.log(
-    //   "TurnamentsForm",
-    //   new File("http://localhost:3001/static/media/1545752872031.84a98441.png")
-    // );
     return {
-      // name: name || "",
       name: toEdit ? toEdit.name : name || "",
       date: toEdit ? toEdit.date : date || "",
       logo: toEdit ? toEdit.logo : logo || "",
-      promoter: promoter || "",
+      promoter: toEdit ? toEdit.promoter : promoter || "",
       facility: toEdit ? toEdit.facility : facility || "",
-      judgeMain: judgeMain || "",
-      lzss: lzss || "lzss",
-      judgeCounting: judgeCounting || "",
-      judgeRTS: judgeRTS || "",
-      tech: tech || "kontrola techniczna"
-      // name: name || "nazwa zawodow",
-      // date: date || "",
-      // logo: logo || "",
-      // promoter: promoter || "",
-      // facility: facility || "strzelnica",
-      // judgeMain: judgeMain || "",
-      // lzss: lzss || "lzss",
-      // judgeCounting: judgeCounting || "",
-      // judgeRTS: judgeRTS || "",
-      // tech: tech || "kontrola techniczna"
+      judgeMain: toEdit ? toEdit.judgeMain : judgeMain || "",
+      lzss: toEdit ? toEdit.lzss : lzss || "",
+      judgeCounting: toEdit ? toEdit.judgeCounting : judgeCounting || "",
+      judgeRTS: toEdit ? toEdit.judgeRTS : judgeRTS || "",
+      tech: toEdit ? toEdit.tech : tech || ""
     };
-  },
-  onChange(values) {
-    console.log("handleChange", values);
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
     const form = {

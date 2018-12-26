@@ -1,44 +1,20 @@
-import React, { Component } from "react";
-import { compose } from "redux";
+import React from "react";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-// import man from '../../public'
+import PromotersRow from "./PromotersRow";
 
-class PromotersList extends Component {
-  render() {
-    const { classes, promoters, auth, promotersArr } = this.props;
-    console.log("promoter", promoters);
-    console.log("promoterArr", promotersArr);
-    console.log("user", auth);
-    return (
-      // <div style={{ overflow: "scroll", height: "400px" }}>
-      <div>
-        <h1>adfdf</h1>
-        {promotersArr.length > 0 &&
-          promotersArr.map(promoter => (
-            <div key={promoter.email}>
-              {promoter.name}
-              <img style={{ width: 80 }} src={require(`../${promoter.logo}`)} />
-            </div>
-          ))}
-      </div>
-    );
-  }
-}
+const PromotersList = ({ rows }) => {
+  return (
+    <div>
+      {rows.length > 0 &&
+        rows.map(row => <PromotersRow key={row._id} row={row} />)}
+    </div>
+  );
+};
 
-const styles = {};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors,
+  rows: state.promoters
+});
 
-function mapStateToProps({ auth, promoters }) {
-  return { promotersArr: promoters };
-}
-
-// export default compose(
-//   withStyles(styles, { withTheme: true }),
-//   // MainFrameHOC
-//   mapStateToProps
-// )(PromotersList);
-
-export default connect(
-  mapStateToProps
-  // actions
-)(PromotersList);
+export default connect(mapStateToProps)(PromotersList);

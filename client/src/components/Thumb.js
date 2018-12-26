@@ -7,28 +7,36 @@ class Thumb extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log("thumb will receive props", nextProps);
+    // console.log("thumb will receive props", nextProps);
     if (!nextProps.file) {
       return;
     }
     if (nextProps.file !== this.props.file) {
-      this.setState({ loading: true }, () => {
-        let reader = new FileReader();
+      if (typeof nextProps.file.name == "string") {
+        this.setState({ loading: true }, () => {
+          let reader = new FileReader();
 
-        reader.onloadend = () => {
-          this.setState({ loading: false, thumb: reader.result });
-        };
+          reader.onloadend = () => {
+            this.setState({ loading: false, thumb: reader.result });
+          };
 
-        reader.readAsDataURL(nextProps.file);
-      });
+          reader.readAsDataURL(nextProps.file);
+        });
+      } else {
+        // console.log("file", require(`../${nextProps.file}`));
+        this.setState({
+          loading: false,
+          thumb: require(`../${nextProps.file}`)
+        });
+      }
     }
   }
 
   render() {
     const { file } = this.props;
     const { loading, thumb } = this.state;
-    console.log("thumb file", file);
-    console.log("thumb thumb", thumb);
+    // console.log("thumb file", file);
+    // console.log("thumb thumb", thumb);
 
     if (!file) {
       return null;

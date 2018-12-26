@@ -43,7 +43,7 @@ module.exports = {
     //
     // const newJudge = new Judge({
     //   name,
-    //   surename,
+    //   surname,
     //   judgeClass,
     //   contests: "5c1e6928d0568f42c84b78f1"
     // });
