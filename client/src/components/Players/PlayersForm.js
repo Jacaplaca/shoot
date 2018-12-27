@@ -4,46 +4,17 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
-import { registerUser } from "../../actions/authentication";
 import store from "../../store";
-import { withStyles } from "@material-ui/core/styles";
-import Key from "@material-ui/icons/VpnKey";
+import * as actions from "../../actions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import * as Yup from "yup";
 
 import InputComponent from "../../inputs/InputComponent";
-import ButtonMy from "../../skins/ButtonMy";
-import Thumb from "../Thumb";
-import UploadFile from "../../inputs/UploadFile";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
-import DatePickerMy from "../../inputs/DatePickerMy";
-const axios = require("axios");
-
-const endpoint = "/api/upload";
-
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  },
-  iconSmall: {
-    fontSize: 20
-  }
-});
+import FormButtons from "../../skins/FormButtons";
 
 class PlayersFormik extends Component {
-  // componentDidMount() {
-  //   this.props.setFieldValue("email", "ccc@ccc.com");
-  // }
-
   render() {
     const {
       values: {
@@ -66,7 +37,10 @@ class PlayersFormik extends Component {
       handleBlur,
       classes,
       setFieldValue,
-      onChange
+      onChange,
+      collection,
+      toEdit,
+      resetForm
     } = this.props;
     // setFieldValue("email", "ccc@ccc.com");
     return (
@@ -200,15 +174,15 @@ class PlayersFormik extends Component {
             </Grid>
           </Grid>
 
-          <ButtonMy
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!isValid}
-          >
-            Dodaj zawodnika
-            <Key style={{ marginLeft: 10 }} />
-          </ButtonMy>
+          <FormButtons
+            subDisable={!isValid}
+            subLabel={toEdit ? "Edytuj Zawodnika" : "Dodaj Zawodnika"}
+            cancelLabel={"Anuluj"}
+            cancelAction={() => {
+              store.dispatch(actions.editFetch());
+              resetForm();
+            }}
+          />
         </form>
       </Paper>
     );
@@ -216,6 +190,7 @@ class PlayersFormik extends Component {
 }
 
 const PlayersForm = withFormik({
+  enableReinitialize: true,
   // mapPropsToValues: () => ({ email: "foo@bar.de" }),
   mapPropsToValues({
     turnament,
@@ -226,26 +201,28 @@ const PlayersForm = withFormik({
     scope,
     team,
     rank,
-    club
+    club,
+    toEdit,
+    collection
   }) {
+    // console.log("maps to props", toEdit);
     return {
-      turnament: turnament || "",
-      name: name || "name",
-      surname: surname || "surname",
-      caliber: caliber || "caliber",
-      gun: gun || "gun",
-      scope: scope || "scope",
-      team: team || "team",
-      rank: rank || "rank",
-      club: club || "club"
+      turnament: toEdit ? toEdit.turnament : turnament || "",
+      name: toEdit ? toEdit.name : name || "",
+      surname: toEdit ? toEdit.surname : surname || "surname",
+      caliber: toEdit ? toEdit.caliber : caliber || "caliber",
+      gun: toEdit ? toEdit.gun : gun || "gun",
+      scope: toEdit ? toEdit.scope : scope || "scope",
+      team: toEdit ? toEdit.team : team || "team",
+      rank: toEdit ? toEdit.rank : rank || "rank",
+      club: toEdit ? toEdit.club : club || "club",
+      toEdit,
+      collection
     };
   },
-  onChange(values) {
-    console.log("handleChange", values);
-  },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
-    console.log(values);
-    const player = {
+    // console.log("handleSubmit", values);
+    const form = {
       turnament: values.turnament,
       name: values.name,
       surname: values.surname,
@@ -256,41 +233,23 @@ const PlayersForm = withFormik({
       rank: values.rank,
       club: values.club
     };
-    if (values.logo) {
-      const data = new FormData();
-      data.append("file", values.logo, values.logo.name);
-      axios
-        .post(endpoint, data, {
-          onUploadProgress: ProgressEvent => {
-            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-          }
-        })
-        .then(res => {
-          // console.log(res.data.file);
-          Object.assign(player, { logo: res.data.file });
-          console.log(player);
-          axios.post("/api/players/", player).then(resp => console.log(resp));
-          // store.dispatch(registerUser(players));
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    } else {
-      console.log(player);
-      axios.post("/api/players/", player).then(resp => console.log(resp));
-      // store.dispatch(registerUser(players));
+    let id;
+    if (values.toEdit) {
+      id = values.toEdit._id;
     }
+    store.dispatch(actions.addToDB(values.collection, values, form, id));
     resetForm();
   },
   validationSchema: Yup.object().shape({
-    name: Yup.string().required("Podaj nazwę organizatora")
+    name: Yup.string().required("Podaj imię")
   })
 })(PlayersFormik);
 
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  turnaments: state.turnaments
+  turnaments: state.turnaments,
+  toEdit: state.edit
 });
 
 // export default connect(
@@ -298,9 +257,7 @@ const mapStateToProps = state => ({
 //   { loginUser }
 // )(withRouter(PlayersForm));
 
-export default withStyles(styles, { withTheme: true })(
-  connect(
-    mapStateToProps,
-    { registerUser }
-  )(withRouter(PlayersForm))
-);
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(PlayersForm));

@@ -4,16 +4,14 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import store from "../../store";
 import * as actions from "../../actions";
-import { withStyles } from "@material-ui/core/styles";
-import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
 
 import InputComponent from "../../inputs/InputComponent";
-import ButtonMy from "../../skins/ButtonMy";
+import FormButtons from "../../skins/FormButtons";
 
-const component = "judges";
+// const component = "judges";
 
 const JudgesFormik = props => {
   const {
@@ -28,8 +26,11 @@ const JudgesFormik = props => {
     classes,
     setFieldValue,
     onChange,
-    toEdit
+    toEdit,
+    resetForm,
+    collection
   } = props;
+  console.log("judges", props);
   // setFieldValue("email", "ccc@ccc.com");
   return (
     <Paper
@@ -83,47 +84,46 @@ const JudgesFormik = props => {
           </Grid>
         </Grid>
 
-        <ButtonMy
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={!isValid}
-        >
-          {toEdit ? "Edytuj sędziego" : "Dodaj sędziego"}
-
-          <Key style={{ marginLeft: 10 }} />
-        </ButtonMy>
+        <FormButtons
+          subDisable={!isValid}
+          subLabel={toEdit ? "Edytuj sędziego" : "Dodaj sędziego"}
+          cancelLabel={"Anuluj"}
+          cancelAction={() => {
+            store.dispatch(actions.editFetch());
+            resetForm();
+          }}
+        />
       </form>
     </Paper>
   );
 };
 
-let editedObject;
+// let editedObject;
 const JudgesForm = withFormik({
   enableReinitialize: true,
-  mapPropsToValues({ name, surname, judgeClass, toEdit }) {
-    editedObject = toEdit;
+  mapPropsToValues({ name, surname, judgeClass, toEdit, collection }) {
+    // editedObject = toEdit;
     return {
       name: toEdit ? toEdit.name : name || "",
       surname: toEdit ? toEdit.surname : surname || "",
-      judgeClass: toEdit ? toEdit.judgeClass : judgeClass || ""
+      judgeClass: toEdit ? toEdit.judgeClass : judgeClass || "",
+      toEdit,
+      collection
     };
   },
-  onChange(values) {
-    console.log("handleChange", values);
-  },
-  handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
+  handleSubmit(values, { resetForm, setErrors, setSubmitting, collection }) {
     const form = {
       name: values.name,
       surname: values.surname,
       judgeClass: values.judgeClass
     };
-    // console.log("handleSubmit", ed);
+    // console.log("handleSubmit judges", values.collection);
+    // console.log("handleSubmit toEdit", values.toEdit);
     let id;
-    if (editedObject) {
-      id = editedObject._id;
+    if (values.toEdit) {
+      id = values.toEdit._id;
     }
-    store.dispatch(actions.addToDB(component, values, form, id));
+    store.dispatch(actions.addToDB(values.collection, values, form, id));
     resetForm();
   },
   validationSchema: Yup.object().shape({

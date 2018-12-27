@@ -17,24 +17,9 @@ import Thumb from "../Thumb";
 import UploadFile from "../../inputs/UploadFile";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
 import { nameSurnameSuggestion } from "../../inputs/Suggestions";
+import FormButtons from "../../skins/FormButtons";
 
-const component = "turnaments";
-
-const styles = theme => ({
-  back2: { background: "red" },
-  button: {
-    margin: theme.spacing.unit
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  },
-  iconSmall: {
-    fontSize: 20
-  }
-});
+// const component = "turnaments";
 
 class TurnamentsFormik extends Component {
   render() {
@@ -54,6 +39,7 @@ class TurnamentsFormik extends Component {
         add2,
         add3
       },
+      collection,
       errors,
       touched,
       handleSubmit,
@@ -64,7 +50,8 @@ class TurnamentsFormik extends Component {
       classes,
       setFieldValue,
       onChange,
-      toEdit
+      toEdit,
+      resetForm
     } = this.props;
     // name = toEdit ? toEdit.name : name;
 
@@ -216,15 +203,15 @@ class TurnamentsFormik extends Component {
             </Grid>
           </Grid>
 
-          <ButtonMy
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!isValid}
-          >
-            Dodaj zawody
-            <Key style={{ marginLeft: 10 }} />
-          </ButtonMy>
+          <FormButtons
+            subDisable={!isValid}
+            subLabel={toEdit ? "Edytuj zawody" : "Dodaj zawody"}
+            cancelLabel={"Anuluj"}
+            cancelAction={() => {
+              store.dispatch(actions.editFetch());
+              resetForm();
+            }}
+          />
         </form>
       </Paper>
     );
@@ -245,7 +232,8 @@ const TurnamentsForm = withFormik({
     judgeCounting,
     judgeRTS,
     tech,
-    toEdit
+    toEdit,
+    collection
   }) => {
     return {
       name: toEdit ? toEdit.name : name || "",
@@ -257,7 +245,9 @@ const TurnamentsForm = withFormik({
       lzss: toEdit ? toEdit.lzss : lzss || "",
       judgeCounting: toEdit ? toEdit.judgeCounting : judgeCounting || "",
       judgeRTS: toEdit ? toEdit.judgeRTS : judgeRTS || "",
-      tech: toEdit ? toEdit.tech : tech || ""
+      tech: toEdit ? toEdit.tech : tech || "",
+      collection,
+      toEdit
     };
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
@@ -273,7 +263,11 @@ const TurnamentsForm = withFormik({
       judgeRTS: values.judgeRTS,
       tech: values.tech
     };
-    store.dispatch(actions.addToDB(component, values, form));
+    let id;
+    if (values.toEdit) {
+      id = values.toEdit._id;
+    }
+    store.dispatch(actions.addToDB(values.collection, values, form, id));
     resetForm();
   },
   validationSchema: Yup.object().shape({
@@ -289,10 +283,8 @@ const mapStateToProps = state => ({
   toEdit: state.edit
 });
 
-export default withStyles(styles, { withTheme: true })(
-  connect(
-    mapStateToProps,
-    // { fetchTurnaments }
-    actions
-  )(withRouter(TurnamentsForm))
-);
+export default connect(
+  mapStateToProps,
+  // { fetchTurnaments }
+  actions
+)(withRouter(TurnamentsForm));

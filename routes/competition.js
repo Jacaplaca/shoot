@@ -8,4 +8,9 @@ router
   // .get(CompetitionController.index)
   .post(CompetitionController.add);
 
+router.route("/remove/:id").post(CompetitionController.remove);
+router.route("/:id").get(CompetitionController.pickOne);
+
+router.route("/update/:id").post(CompetitionController.update);
+
 module.exports = router;

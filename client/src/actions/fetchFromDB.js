@@ -1,11 +1,20 @@
 import axios from "axios";
-import { TURNAMENTS, JUDGES, GET_ERRORS, PROMOTERS, EDIT } from "./types";
+import {
+  TURNAMENTS,
+  JUDGES,
+  GET_ERRORS,
+  PROMOTERS,
+  EDIT,
+  PLAYERS
+} from "./types";
 // import setAuthToken from "../setAuthToken";
 // import jwt_decode from "jwt-decode";
 
-export const fetchFromDB = collection => dispatch => {
+export const fetchFromDB = (collection, filter, id) => dispatch => {
   let url;
   let type;
+
+  console.log("fetchFromDB", collection, filter, id);
 
   switch (collection) {
     case "turnaments":
@@ -20,11 +29,15 @@ export const fetchFromDB = collection => dispatch => {
       url = `/api/promoters`;
       type = PROMOTERS;
       break;
+    case "players":
+      url = `/api/players/turnament/${id}`;
+      type = PLAYERS;
+      break;
     default:
   }
-  console.log("fetchFromDB()", collection, url, type);
+  // console.log("fetchFromDB()", collection, url, type);
 
-  console.log("fetchTurnaments");
+  // console.log("fetchTurnaments");
   axios
     .get(url)
     .then(res => {

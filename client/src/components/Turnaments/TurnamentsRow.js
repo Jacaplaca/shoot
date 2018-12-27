@@ -1,33 +1,15 @@
 import React from "react";
-import { compose } from "redux";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Edit from "@material-ui/icons/Edit";
-import Confirmation from "../../skins/Confirmation";
 import * as actions from "../../actions";
 import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
+import RowHOC from "../RowHOC";
 
-const component = "turnaments";
-
-const TurnamentsRow = props => {
-  // console.log("row styles", styles);
+const TurnamentsRow = ({ row, classes }) => {
   const {
-    row,
-    classes,
-    edit,
-    editFetch,
-    theme,
-    toDeleteAction,
-    confirmationAction,
-    confirmation,
-    deleteIdAndFetch
-  } = props;
-  const {
-    _id,
     date,
     name,
     facility,
@@ -40,53 +22,27 @@ const TurnamentsRow = props => {
   } = row;
   return (
     <React.Fragment>
-      <Confirmation
-        open={confirmation}
-        action={() => deleteIdAndFetch(component)}
-        close={() => {
-          confirmationAction(false);
-          toDeleteAction(null);
-        }}
-      />
-      <div className={classNames(classes.rowTable, classes.table)}>
-        <span className={classes.main}>
-          <IconButton
-            onClick={() => editFetch(component, _id)}
-            color="primary"
-            aria-label="Add to shopping cart"
-          >
-            <Edit />
-          </IconButton>
-        </span>
-        <span className={classNames(classes.rowBlock, classes.date)}>
-          {date}
-        </span>
-        <span className={classNames(classes.rowBlock, classes.rowName)}>
-          {name}
-        </span>
-        <span className={classNames(classes.rowBlock)}>{facility}</span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeMain ? `${judgeMain.name} ${judgeMain.surname}` : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeCounting
-            ? `${judgeCounting.name} ${judgeCounting.surname}`
-            : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surname}` : "usnięto"}
-        </span>
-        <span className={classNames(classes.rowBlock)}>{lzss}</span>
-        <span className={classNames(classes.rowBlock)}>{tech}</span>
-        <span className={classNames(classes.rowBlock)}>
-          <img className={classes.rowImg} src={require(`../../${logo}`)} />
-        </span>
-        <span className={classNames(classes.rowBlock)}>
-          <IconButton aria-label="Delete" onClick={() => toDeleteAction(_id)}>
-            <DeleteIcon />
-          </IconButton>
-        </span>
-      </div>
+      <span className={classNames(classes.rowBlock, classes.date)}>{date}</span>
+      <span className={classNames(classes.rowBlock, classes.rowName)}>
+        {name}
+      </span>
+      <span className={classNames(classes.rowBlock)}>{facility}</span>
+      <span className={classNames(classes.rowBlock)}>
+        {judgeMain ? `${judgeMain.name} ${judgeMain.surname}` : "usnięto"}
+      </span>
+      <span className={classNames(classes.rowBlock)}>
+        {judgeCounting
+          ? `${judgeCounting.name} ${judgeCounting.surname}`
+          : "usnięto"}
+      </span>
+      <span className={classNames(classes.rowBlock)}>
+        {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surname}` : "usnięto"}
+      </span>
+      <span className={classNames(classes.rowBlock)}>{lzss}</span>
+      <span className={classNames(classes.rowBlock)}>{tech}</span>
+      <span className={classNames(classes.rowBlock)}>
+        <img className={classes.rowImg} src={require(`../../${logo}`)} />
+      </span>
     </React.Fragment>
   );
 };
@@ -100,8 +56,7 @@ const styles = theme => ({
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors,
-  confirmation: state.confirmation
+  errors: state.errors
 });
 
 const combinedStyles = combineStyles(styles, rowStyles);
@@ -112,7 +67,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     actions
-  )
+  ),
+  RowHOC
 );
 
 export default enhance(TurnamentsRow);

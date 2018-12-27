@@ -8,15 +8,16 @@ import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
 
-const PromotersRow = ({ row, classes }) => {
-  const { name, surname, judgeClass } = row;
+const CompetitionsRow = ({ row, classes }) => {
+  // const { name, surname, judgeClass } = row;
   return (
-    <React.Fragment>
-      <span className={classNames(classes.rowBlock, classes.rowName)}>
-        {`${name} ${surname}`}
-      </span>
-      <span className={classNames(classes.rowBlock)}>{judgeClass}</span>
-    </React.Fragment>
+    <div>co pokaza</div>
+    // <React.Fragment>
+    //   <span className={classNames(classes.rowBlock, classes.rowName)}>
+    //     {`${name} ${surname}`}
+    //   </span>
+    //   <span className={classNames(classes.rowBlock)}>{judgeClass}</span>
+    // </React.Fragment>
   );
 };
 
@@ -43,4 +44,4 @@ const enhance = compose(
   RowHOC
 );
 
-export default enhance(PromotersRow);
+export default enhance(CompetitionsRow);

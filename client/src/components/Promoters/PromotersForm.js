@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
-import { registerUser } from "../../actions/authentication";
+// import { registerUser } from "../../actions/authentication";
 import store from "../../store";
 import * as actions from "../../actions";
 import Paper from "@material-ui/core/Paper";
@@ -16,8 +16,6 @@ import Thumb from "../Thumb";
 import UploadFile from "../../inputs/UploadFile";
 import FormButtons from "../../skins/FormButtons";
 const axios = require("axios");
-
-const component = "promoters";
 
 class PromotersFormik extends Component {
   // componentDidMount() {
@@ -35,8 +33,12 @@ class PromotersFormik extends Component {
       classes,
       setFieldValue,
       toEdit,
-      resetForm
+      resetForm,
+      validationSchema,
+      collection
     } = this.props;
+    // console.log("editedObject", !!editedObject);
+    // console.log("validationSchema", validationSchema);
     return (
       <Paper
         style={{
@@ -97,7 +99,7 @@ class PromotersFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-            {!editedObject ? (
+            {!toEdit ? (
               <React.Fragment>
                 <Grid item xs={12} sm={6} md={4}>
                   <InputComponent
@@ -164,38 +166,41 @@ class PromotersFormik extends Component {
   }
 }
 
-const validationSchemaStandard = {
-  name: Yup.string().required("Podaj nazwę organizatora"),
-  email: Yup.string()
-    .email("Podaj prawidłowy e-mail")
-    .required("Podaj e-mail organizatora")
-    .test("a@a.com", "Podany e-mail jest już zarejestrowany", function(value) {
-      return axios
-        .post("/api/email/", {
-          email: editedObject
-            ? value === editedObject.email
-              ? ""
+const validationSchemaStandard = props => {
+  return {
+    name: Yup.string().required("Podaj nazwę organizatora"),
+    email: Yup.string()
+      .email("Podaj prawidłowy e-mail")
+      .required("Podaj e-mail organizatora")
+      .test("a@a.com", "Podany e-mail jest już zarejestrowany", function(
+        value
+      ) {
+        return axios
+          .post("/api/email/", {
+            email: props.toEdit
+              ? value === props.toEdit.email
+                ? ""
+                : value
               : value
-            : value
-        })
-        .then(response => {
-          // console.log(response);
-          console.log(value);
-          return response.data.free === true;
-        });
-    })
+          })
+          .then(response => {
+            // console.log(response);
+            // console.log(value);
+            return response.data.free === true;
+          });
+      })
+  };
 };
 
 const validationSchemaPass = {
   password: Yup.string()
-    .min(0, "Hasło musi mieć conajmniej 6 znaków")
+    .min(6, "Hasło musi mieć conajmniej 6 znaków")
     .required("Podaj hasło"),
   password2: Yup.string()
     .oneOf([Yup.ref("password"), null], "Wpisane hasła muszą być indentyczne")
     .required("Password confirm is required")
 };
 
-let editedObject;
 const PromotersForm = withFormik({
   enableReinitialize: true,
   // mapPropsToValues: () => ({ email: "foo@bar.de" }),
@@ -207,17 +212,19 @@ const PromotersForm = withFormik({
     logo,
     email,
     password2,
-    toEdit
+    toEdit,
+    collection
   }) {
-    editedObject = toEdit;
     return {
-      name: toEdit ? toEdit.name : name || "",
+      name: toEdit ? toEdit.name : name || "aaaaaaa",
       logo: toEdit ? toEdit.logo : logo || "",
-      www: toEdit ? toEdit.www : www || "",
-      password: password || "",
-      password2: password2 || "",
-      adres: toEdit ? toEdit.adres : adres || "",
-      email: toEdit ? toEdit.email : email || ""
+      www: toEdit ? toEdit.www : www || "aaaaa",
+      password: password || "aaaaaaaaa",
+      password2: password2 || "aaaaaaaaa",
+      adres: toEdit ? toEdit.adres : adres || "aaaaa",
+      email: toEdit ? toEdit.email : email || "aaaaa@asdfsaldfkjaf.pl",
+      collection,
+      toEdit
     };
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
@@ -232,20 +239,22 @@ const PromotersForm = withFormik({
       rola: "promoter"
     };
     let id;
-    if (editedObject) {
-      id = editedObject._id;
+    if (values.toEdit) {
+      id = values.toEdit._id;
+      store.dispatch(actions.addToDB(values.collection, values, form, id));
+    } else {
+      store.dispatch(actions.addToDB(values.collection, values, form));
+      // store.dispatch(actions.registerUser(form));
     }
-    store.dispatch(actions.addToDB(component, values, form, id));
     resetForm();
   },
-  validationSchema: Yup.object().shape(
-    !editedObject
-      ? validationSchemaStandard
-      : { ...validationSchemaStandard, ...validationSchemaPass }
-  )
+  validationSchema: props =>
+    Yup.object().shape(
+      !props.toEdit
+        ? { ...validationSchemaStandard(props), ...validationSchemaPass }
+        : validationSchemaStandard(props)
+    )
 })(PromotersFormik);
-
-// const validationSchemaEdit = { ... };
 
 const mapStateToProps = state => ({
   auth: state.auth,
@@ -253,12 +262,8 @@ const mapStateToProps = state => ({
   toEdit: state.edit
 });
 
-// export default connect(
-//   mapStateToProps,
-//   { loginUser }
-// )(withRouter(PromotersForm));
-
 export default connect(
   mapStateToProps,
-  { registerUser }
+  // { registerUser }
+  actions
 )(withRouter(PromotersForm));

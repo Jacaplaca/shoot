@@ -11,4 +11,6 @@ router
 router.route("/remove/:id").post(TurnamentController.remove);
 router.route("/:id").get(TurnamentController.pickOne);
 
+router.route("/update/:id").post(TurnamentController.update);
+
 module.exports = router;

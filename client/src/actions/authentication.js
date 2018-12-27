@@ -1,11 +1,11 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, PROMOTERS } from "./types";
 import setAuthToken from "../setAuthToken";
 import jwt_decode from "jwt-decode";
 import * as actions from "../actions";
 
 export const registerUser = (user, history) => dispatch => {
-  // console.log("registerUser");
+  console.log("registerUser", user);
   axios
     .post("/api/users/register", user)
     // .then(res => {
@@ -20,7 +20,15 @@ export const registerUser = (user, history) => dispatch => {
     //     dispatch({ type: JUDGES, payload: response.data });
     //   });
     // })
-    .then(res => history.push("/login"))
+    .then(res => {
+      if (history) {
+        history.push("/login");
+      } else {
+        dispatch(actions.fetchFromDB("promoters"));
+      }
+
+      history ? history.push("/login") : res.status(200).json(res);
+    })
     .catch(err => {
       dispatch({
         type: GET_ERRORS,

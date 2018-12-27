@@ -26,6 +26,7 @@ module.exports = {
       logo,
       www
     };
+    console.log("updatre params", req.params.id);
 
     try {
       const result = await User.findOneAndUpdate(

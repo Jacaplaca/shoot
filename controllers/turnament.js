@@ -23,6 +23,25 @@ module.exports = {
       });
   },
 
+  update: async (req, res, next) => {
+    const { name, surname, judgeClass } = req.body;
+    const updatedTurnament = {
+      name,
+      surname,
+      judgeClass
+    };
+
+    try {
+      const result = await Turnament.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: updatedTurnament }
+      );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
   pickOne: async (req, res, nex) => {
     try {
       const result = await Turnament.findById(req.params.id)

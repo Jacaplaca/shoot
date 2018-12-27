@@ -100,24 +100,8 @@ class InputSelectBaza extends React.Component {
         target: { value, title: nextProps.value._id }
       };
       this.onChange2(input);
-      // let value;
-      //
-      // switch (this.props.suggestion) {
-      //   case nameSurnameSuggestion:
-      //     value = `${nextProps.value.name} ${nextProps.value.surname}`;
-      //     break;
-      //   default:
-      //     value = `${nextProps.value.name}`;
-      // }
-      //
-      // let input = {
-      //   target: {
-      //     value: nextProps.value._id,
-      //     name: this.props.name
-      //   }
-      // };
-      // this.setState({value});
-      // this.props.wybrano(input);
+    } else if (nextProps.value === "" && this.state.value !== "") {
+      this.setState({ value: "" });
     }
   }
 
@@ -176,9 +160,12 @@ class InputSelectBaza extends React.Component {
       console.log(e.target);
       newValue = e.target.textContent;
       // this.setState({ openSuggestions: false });
-    } else {
+    } else if (e.type === "change") {
+      // console.log("onchange2", e.type);
       newValue = e.target.value;
       this.setState({ openSuggestions: true });
+    } else {
+      newValue = e.target.value;
     }
     // console.log("onChange2", newValue);
     if (newValue.length > 4) {

@@ -9,13 +9,21 @@ import store from "../store";
 
 export const deleteIdAndFetch = collection => async dispatch => {
   const myStore = await store.getState();
-
   const id = myStore.delete;
+  let fetch;
+  const player = myStore.players.filter(player => player._id === id);
+  console.log("deleteIdAndFetch", player);
+
+  if (collection === "players") {
+    fetch = fetchFromDB(collection, "turnament", player[0].turnament);
+  } else {
+    fetch = fetchFromDB(collection);
+  }
 
   axios
     .post(`/api/${collection}/remove/${id}`)
     .then(res => {
-      dispatch(fetchFromDB(collection));
+      dispatch(fetch);
     })
     .catch(err => {
       dispatch({

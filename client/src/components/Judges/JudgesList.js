@@ -2,11 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import JudgesRow from "./JudgesRow";
 
-const JudgesList = ({ judges }) => {
+const JudgesList = ({ rows, collection }) => {
   return (
     <div>
-      {judges.length > 0 &&
-        judges.map(judge => <JudgesRow key={judge._id} row={judge} />)}
+      {rows.length > 0 &&
+        rows.map(row => (
+          <JudgesRow key={row._id} row={row} collection={collection} />
+        ))}
     </div>
   );
 };
@@ -14,7 +16,7 @@ const JudgesList = ({ judges }) => {
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
-  judges: state.judges
+  rows: state.judges
 });
 
 export default connect(mapStateToProps)(JudgesList);

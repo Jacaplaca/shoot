@@ -7,7 +7,7 @@ const milliseconds = new Date().getTime();
 module.exports = {
   upload: (req, res, next) => {
     let uploadFile = req.files.file;
-    console.log(req.files);
+    console.log("controller upload file ");
     const fileName = req.files.file.name;
     const newFileName = `${milliseconds}.${fileName.split(".")[1]}`;
     uploadFile.mv(
@@ -17,12 +17,18 @@ module.exports = {
           console.log(err);
           return res.status(500).send(err);
         }
-
+        console.log("upload", newFileName);
+        // res.status(200).json({
+        //   file: `images/${newFileName}`
+        // });
         res.json({
           file: `images/${newFileName}`
         });
       }
     );
+    // res.status(200).json({
+    //   file: `images/${newFileName}`
+    // });
   },
 
   index: async (req, res, next) => {

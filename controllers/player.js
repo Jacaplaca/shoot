@@ -79,5 +79,61 @@ module.exports = {
     //   if (err) return handleError(err);
     //   console.log("The raw response from Mongo was ", raw);
     // });
+  },
+
+  update: async (req, res, next) => {
+    const { name, surname, judgeClass } = req.body;
+    const updatedPlayer = {
+      name,
+      surname,
+      judgeClass
+    };
+
+    try {
+      const result = await Player.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: updatedPlayer }
+      );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  pickTurnament: async (req, res, next) => {
+    console.log("pickTurnament", req.params.turnamentId);
+    try {
+      const result = await Player.find({
+        turnament: req.params.turnamentId
+      });
+      // .populate("turnament");
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  pickOne: async (req, res, next) => {
+    try {
+      const result = await Player.findById(req.params.id).populate("turnament");
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  remove: async (req, res, next) => {
+    console.log(req.params.id);
+
+    try {
+      const removedPlayer = await Player.findByIdAndRemove(req.params.id)
+        .remove()
+        .exec();
+      res.status(200).json({
+        message: removedPlayer
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 };

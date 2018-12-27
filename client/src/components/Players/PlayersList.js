@@ -1,44 +1,44 @@
-import React, { Component } from "react";
-import { compose } from "redux";
+import React from "react";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-// import man from '../../public'
+import PlayersRow from "./PlayersRow";
+import InputSelectBaza from "../../inputs/InputSelectBaza";
+import store from "../../store";
+import * as actions from "../../actions";
 
-class PlayersList extends Component {
-  render() {
-    const { classes, promoters, auth, promotersArr } = this.props;
-    console.log("promoter", promoters);
-    console.log("promoterArr", promotersArr);
-    console.log("user", auth);
-    return (
-      // <div style={{ overflow: "scroll", height: "400px" }}>
-      <div>
-        <h1>adfdf</h1>
-        {promotersArr.length > 0 &&
-          promotersArr.map(promoter => (
-            <div key={promoter.email}>
-              {promoter.name}
-              <img style={{ width: 80 }} src={require(`../${promoter.logo}`)} />
-            </div>
-          ))}
-      </div>
-    );
-  }
-}
+const PlayersList = ({ rows, collection, turnaments }) => {
+  return (
+    <div>
+      <InputSelectBaza
+        object={turnaments}
+        name="turnament"
+        type="string"
+        wybrano={e =>
+          store.dispatch(
+            actions.fetchFromDB(collection, "turnament", e.target.value)
+          )
+        }
+        // wybrano={handleChange}
+        // wybrano={e => onChange(e)}
+        // value={turnament}
+        label="Zawody"
+        // placeholder="Organizator"
+      />
+      {rows.length > 0 &&
+        rows.map(row => (
+          <PlayersRow key={row._id} row={row} collection={collection} />
+        ))}
+    </div>
+  );
+};
 
-const styles = {};
-
-function mapStateToProps({ auth, promoters }) {
-  return { promotersArr: promoters };
-}
-
-// export default compose(
-//   withStyles(styles, { withTheme: true }),
-//   // MainFrameHOC
-//   mapStateToProps
-// )(PlayersList);
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors,
+  rows: state.players,
+  turnaments: state.turnaments
+});
 
 export default connect(
-  mapStateToProps
-  // actions
+  mapStateToProps,
+  actions
 )(PlayersList);

@@ -2,13 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import PromotersRow from "./PromotersRow";
 
-const PromotersList = ({ rows, collection }) => {
+const PromotersList = ({ rows }) => {
   return (
     <div>
       {rows.length > 0 &&
-        rows.map(row => (
-          <PromotersRow key={row._id} row={row} collection={collection} />
-        ))}
+        rows.map(row => <PromotersRow key={row._id} row={row} />)}
     </div>
   );
 };
