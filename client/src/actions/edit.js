@@ -10,6 +10,7 @@ export const editFetch = (collection, id) => dispatch => {
     });
   } else {
     const url = `/api/${collection}/${id}`;
+    console.log("editFetch", url);
     axios
       .get(url)
       .then(res => {

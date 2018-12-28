@@ -17,6 +17,7 @@ export const deleteIdAndFetch = collection => async dispatch => {
   if (collection === "players") {
     fetch = fetchFromDB(collection, "turnament", player[0].turnament);
   } else {
+    console.log("deleteId not players");
     fetch = fetchFromDB(collection);
   }
 

@@ -263,11 +263,26 @@ const TurnamentsForm = withFormik({
       judgeRTS: values.judgeRTS,
       tech: values.tech
     };
-    let id;
-    if (values.toEdit) {
-      id = values.toEdit._id;
-    }
-    store.dispatch(actions.addToDB(values.collection, values, form, id));
+    const { collection, toEdit } = values;
+
+    const adding = {
+      post: `/api/${collection}/`,
+      values,
+      form,
+      // get: `/api/${collection}/`,
+      action: "add",
+      collection: collection
+    };
+
+    const updating = {
+      post: `/api/${collection}/update/${toEdit && toEdit._id}`,
+      values,
+      form,
+      // get: `/api/${collection}/`,
+      action: "update",
+      collection: collection
+    };
+    store.dispatch(actions.addToDB(toEdit ? updating : adding));
     resetForm();
   },
   validationSchema: Yup.object().shape({

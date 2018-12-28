@@ -15,6 +15,7 @@ const RowRowHOC = WrappedComponent => {
       theme,
       toDeleteAction
     } = props;
+    console.log("RowRowHOC", props);
     return (
       <React.Fragment>
         <div className={classNames(classes.rowTable, classes.table)}>

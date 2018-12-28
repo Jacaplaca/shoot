@@ -13,4 +13,8 @@ router.route("/:id").get(CompetitionController.pickOne);
 
 router.route("/update/:id").post(CompetitionController.update);
 
+router
+  .route("/turnament/:turnamentId")
+  .get(CompetitionController.pickTurnament);
+
 module.exports = router;

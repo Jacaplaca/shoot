@@ -238,14 +238,26 @@ const PromotersForm = withFormik({
       email: values.email,
       rola: "promoter"
     };
-    let id;
-    if (values.toEdit) {
-      id = values.toEdit._id;
-      store.dispatch(actions.addToDB(values.collection, values, form, id));
-    } else {
-      store.dispatch(actions.addToDB(values.collection, values, form));
-      // store.dispatch(actions.registerUser(form));
-    }
+    const { collection, toEdit } = values;
+
+    const adding = {
+      post: `/api/${collection}/`,
+      values,
+      form,
+      // get: `/api/${collection}/`,
+      action: "add",
+      collection: collection
+    };
+
+    const updating = {
+      post: `/api/${collection}/update/${toEdit && toEdit._id}`,
+      values,
+      form,
+      // get: `/api/${collection}/`,
+      action: "update",
+      collection: collection
+    };
+    store.dispatch(actions.addToDB(toEdit ? updating : adding));
     resetForm();
   },
   validationSchema: props =>

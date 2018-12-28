@@ -10,27 +10,33 @@ import {
 // import setAuthToken from "../setAuthToken";
 // import jwt_decode from "jwt-decode";
 
-export const fetchFromDB = (collection, filter, id) => dispatch => {
+export const fetchFromDB = (collection, get, id) => dispatch => {
   let url;
   let type;
 
-  console.log("fetchFromDB", collection, filter, id);
+  console.log("fetchFromDB", collection, get, id);
 
   switch (collection) {
     case "turnaments":
-      url = `/api/turnaments`;
+      url = get || `/api/turnaments`;
+      type = TURNAMENTS;
+      break;
+    case "competitions":
+      console.log("jest competitions?");
+      url = get || `/api/turnaments`;
       type = TURNAMENTS;
       break;
     case "judges":
-      url = `/api/judges`;
+      url = get || `/api/judges`;
       type = JUDGES;
+      // (url = get), (type = collection.toUpperCase());
       break;
     case "promoters":
-      url = `/api/promoters`;
+      url = get || `/api/promoters`;
       type = PROMOTERS;
       break;
     case "players":
-      url = `/api/players/turnament/${id}`;
+      url = get || `/api/players`;
       type = PLAYERS;
       break;
     default:

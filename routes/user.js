@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("users");
 
 router.get("/", function(req, res) {
-  console.log("user get /");
+  console.log("user get /", req.user);
   User.find()
     .populate("turnaments")
     // .populate("judges")
@@ -79,7 +79,7 @@ router.post("/register", function(req, res) {
 });
 
 router.post("/login", (req, res) => {
-  console.log("/loging", req.body);
+  console.log("/login", req.body);
   const { errors, isValid } = validateLoginInput(req.body);
 
   if (!isValid) {

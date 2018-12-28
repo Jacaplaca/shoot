@@ -5,6 +5,7 @@ const User = require("../models/user");
 
 module.exports = {
   index: async (req, res, next) => {
+    // console.log("promoters", req);
     User.find({
       rola: "promoter"
     }).then(response => res.status(200).json(response));

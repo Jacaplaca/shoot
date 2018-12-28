@@ -9,21 +9,24 @@ import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
 
 const CompetitionsRow = ({ row, classes }) => {
-  // const { name, surname, judgeClass } = row;
+  const { name, judge } = row;
   return (
-    <div>co pokaza</div>
-    // <React.Fragment>
-    //   <span className={classNames(classes.rowBlock, classes.rowName)}>
-    //     {`${name} ${surname}`}
-    //   </span>
-    //   <span className={classNames(classes.rowBlock)}>{judgeClass}</span>
-    // </React.Fragment>
+    <React.Fragment>
+      <span className={classNames(classes.rowBlock, classes.rowName)}>
+        {`${name}`}
+      </span>
+      <span className={classNames(classes.rowBlock)}>
+        {judge
+          ? `${judge.name} ${judge.surname} ${judge.judgeClass}`
+          : "usunięto sędziego"}
+      </span>
+    </React.Fragment>
   );
 };
 
 const styles = theme => ({
   table: {
-    gridTemplateColumns: "50px 1fr 1fr  60px"
+    gridTemplateColumns: "50px 1fr 3fr  60px"
   }
 });
 

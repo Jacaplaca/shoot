@@ -14,14 +14,13 @@ const PlayersList = ({ rows, collection, turnaments }) => {
         type="string"
         wybrano={e =>
           store.dispatch(
-            actions.fetchFromDB(collection, "turnament", e.target.value)
+            actions.fetchFromDB(
+              collection,
+              `/api/${collection}/turnament/${e.target.value}`
+            )
           )
         }
-        // wybrano={handleChange}
-        // wybrano={e => onChange(e)}
-        // value={turnament}
         label="Zawody"
-        // placeholder="Organizator"
       />
       {rows.length > 0 &&
         rows.map(row => (

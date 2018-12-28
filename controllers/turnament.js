@@ -9,12 +9,16 @@ const User = require("../models/user");
 
 module.exports = {
   index: async (req, res, next) => {
+    console.log("/api/turnament/");
     Turnament.find()
       // .select({"name" 'judgeMain'})
       .populate("promoter")
       .populate("judgeMain")
       .populate("judgeCounting")
       .populate("judgeRTS")
+      .populate("competitions.judge")
+      // .populate("judge")
+
       // .exec()
       // .populate("judgeMain")
       .then(response => {

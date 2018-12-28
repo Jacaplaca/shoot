@@ -8,6 +8,11 @@ const Judge = require("./judge");
 
 const Schema = mongoose.Schema;
 
+const CompetitionSchema = new Schema({
+  name: { type: String },
+  judge: { type: Schema.Types.ObjectId, ref: Judge }
+});
+
 const TurnamentSchema = new Schema({
   name: {
     type: String
@@ -38,12 +43,12 @@ const TurnamentSchema = new Schema({
   tech: {
     type: String
   },
-  competitions: [
-    {
-      name: { type: String },
-      judge: { type: Schema.Types.ObjectId, ref: Judge }
-    }
-  ]
+  competitions: [CompetitionSchema]
+  // {
+  //   name: { type: String },
+  //   judge: { type: Schema.Types.ObjectId, ref: Judge }
+  // }
+  // ]
 });
 
 // global.TurnamentSchema =

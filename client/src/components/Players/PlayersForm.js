@@ -233,11 +233,26 @@ const PlayersForm = withFormik({
       rank: values.rank,
       club: values.club
     };
-    let id;
-    if (values.toEdit) {
-      id = values.toEdit._id;
-    }
-    store.dispatch(actions.addToDB(values.collection, values, form, id));
+
+    const { collection, toEdit } = values;
+    const adding = {
+      post: `/api/${collection}/`,
+      values,
+      form,
+      get: `/api/${collection}/turnament/${values.turnament}`,
+      action: "add",
+      collection: collection
+    };
+
+    const updating = {
+      post: `/api/${collection}/update/${toEdit && toEdit._id}`,
+      values,
+      form,
+      get: `/api/${collection}/turnament/${values.turnament}`,
+      action: "update",
+      collection: collection
+    };
+    store.dispatch(actions.addToDB(toEdit ? updating : adding));
     resetForm();
   },
   validationSchema: Yup.object().shape({

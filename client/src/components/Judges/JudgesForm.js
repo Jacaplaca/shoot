@@ -111,7 +111,7 @@ const JudgesForm = withFormik({
       collection
     };
   },
-  handleSubmit(values, { resetForm, setErrors, setSubmitting, collection }) {
+  handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
     const form = {
       name: values.name,
       surname: values.surname,
@@ -119,11 +119,28 @@ const JudgesForm = withFormik({
     };
     // console.log("handleSubmit judges", values.collection);
     // console.log("handleSubmit toEdit", values.toEdit);
-    let id;
-    if (values.toEdit) {
-      id = values.toEdit._id;
-    }
-    store.dispatch(actions.addToDB(values.collection, values, form, id));
+
+    const { collection, toEdit } = values;
+
+    const adding = {
+      post: `/api/${collection}/`,
+      values,
+      form,
+      // get: `/api/${collection}/`,
+      action: "add",
+      collection: collection
+    };
+
+    const updating = {
+      post: `/api/${collection}/update/${toEdit && toEdit._id}`,
+      values,
+      form,
+      // get: `/api/${collection}/`,
+      action: "update",
+      collection: collection
+    };
+    store.dispatch(actions.addToDB(toEdit ? updating : adding));
+    // store.dispatch(actions.addToDB(values.collection, values, form, id));
     resetForm();
   },
   validationSchema: Yup.object().shape({
