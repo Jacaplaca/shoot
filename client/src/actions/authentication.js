@@ -59,23 +59,24 @@ export const loginUser = user => dispatch => {
 
 export const setCurrentUser = decoded => dispatch => {
   // console.log("decoded", decoded);
-  if (decoded.rola === "admin") {
-    // console.log("kto jest", decoded.rola);
-    dispatch(actions.fetchFromDB("promoters"));
-    dispatch(actions.fetchFromDB("judges"));
-    dispatch(actions.fetchFromDB("turnaments"));
-    // dispatch(fetchJudges());
-    // dispatch(fetchTurnaments());
-    // fetchJudges();
-    // fetchPromoters();
-    // axios
-    //   .get("/api/promoters/")
-    //   .then(response => {
-    //     // console.log(response);
-    //     dispatch({ type: PROMOTERS, payload: response.data });
-    //   })
-    //   .then(() => {});
-  }
+  // if (decoded.rola === "admin") {
+  // console.log("kto jest", decoded.rola);
+  dispatch(actions.fetchFromDB("promoters"));
+  dispatch(actions.fetchFromDB("judges"));
+  dispatch(actions.fetchFromDB("turnaments"));
+  // dispatch(actions.fetchFromDB("players"));
+  // dispatch(fetchJudges());
+  // dispatch(fetchTurnaments());
+  // fetchJudges();
+  // fetchPromoters();
+  // axios
+  //   .get("/api/promoters/")
+  //   .then(response => {
+  //     // console.log(response);
+  //     dispatch({ type: PROMOTERS, payload: response.data });
+  //   })
+  //   .then(() => {});
+  // }
   // console.log("setCurrentUser po adminie");
   dispatch({
     type: SET_CURRENT_USER,

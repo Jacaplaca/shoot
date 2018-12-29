@@ -36,7 +36,8 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
       type = PROMOTERS;
       break;
     case "players":
-      url = get || `/api/players`;
+      console.log("fetchFromDB");
+      url = get || `/api/${collection}/turnament/${id}`;
       type = PLAYERS;
       break;
     default:

@@ -9,10 +9,10 @@ import TurnamentsList from "./Turnaments/TurnamentsList";
 
 const collection = "turnaments";
 
-const Turnaments = () => {
+const Turnaments = ({ auth }) => {
   return (
     <React.Fragment>
-      <TurnamentsForm collection={collection} />
+      {auth.user.rola === "admin" && <TurnamentsForm collection={collection} />}
       <TurnamentsList collection={collection} />
     </React.Fragment>
   );

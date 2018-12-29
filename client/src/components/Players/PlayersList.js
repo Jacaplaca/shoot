@@ -12,14 +12,17 @@ const PlayersList = ({ rows, collection, turnaments }) => {
         object={turnaments}
         name="turnament"
         type="string"
-        wybrano={e =>
+        wybrano={e => {
+          store.dispatch(actions.showedTurnament(e.target.value));
+
           store.dispatch(
             actions.fetchFromDB(
               collection,
               `/api/${collection}/turnament/${e.target.value}`
             )
-          )
-        }
+          );
+        }}
+        // value={{ value: "st" }}
         label="Zawody"
       />
       {rows.length > 0 &&

@@ -12,6 +12,7 @@ const MainFrameHOC = moreProps => WrappedComponent => {
           flexWrap: "nowrap",
           padding: this.props.theme.spacing.unit * 3,
           paddingTop: 80
+          // background: "red"
         }
       };
       // console.log("mainfram", this.props);

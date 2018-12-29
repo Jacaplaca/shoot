@@ -103,9 +103,9 @@ class DrawerMy extends React.Component {
       {
         comp: "turnamets",
         text: "Zawody",
-        link: "/zawody",
+        link: "/",
         icon: "EventIcon",
-        rola: "admin"
+        rola: "admin,promoter"
       },
       {
         comp: "judges",
@@ -158,13 +158,16 @@ class DrawerMy extends React.Component {
             const { comp, text, link, icon, rola } = el;
             const userType = auth.user.rola;
             // console.log(userType);
-            if (userType === rola) {
-              return (
-                // <ShowLinkToComp key={i} comp={comp}>
-                <DrawerLink key={text} text={text} link={link} icon={icon} />
-                // </ShowLinkToComp>
-              );
-            }
+            return rola.split(",").map(x => {
+              console.log(x);
+              if (userType === x) {
+                return (
+                  // <ShowLinkToComp key={i} comp={comp}>
+                  <DrawerLink key={text} text={text} link={link} icon={icon} />
+                  // </ShowLinkToComp>
+                );
+              }
+            });
           })}
         </div>
       </Drawer>

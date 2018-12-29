@@ -8,3 +8,4 @@ export * from "./toDelete";
 export * from "./confirmation";
 export * from "./addToDB";
 export * from "./fetchFromDB";
+export * from "./showedTurnament";

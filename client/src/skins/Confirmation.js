@@ -15,7 +15,7 @@ const styles = {
   },
 
   paper: {
-    backgroundColor: "transparent",
+    // backgroundColor: "transparent",
     boxShadow: "none",
     overflow: "hidden"
   }

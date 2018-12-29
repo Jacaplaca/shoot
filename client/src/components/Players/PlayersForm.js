@@ -40,7 +40,8 @@ class PlayersFormik extends Component {
       onChange,
       collection,
       toEdit,
-      resetForm
+      resetForm,
+      turnamentId
     } = this.props;
     // setFieldValue("email", "ccc@ccc.com");
     return (
@@ -203,7 +204,8 @@ const PlayersForm = withFormik({
     rank,
     club,
     toEdit,
-    collection
+    collection,
+    turnamentId
   }) {
     // console.log("maps to props", toEdit);
     return {
@@ -217,7 +219,8 @@ const PlayersForm = withFormik({
       rank: toEdit ? toEdit.rank : rank || "rank",
       club: toEdit ? toEdit.club : club || "club",
       toEdit,
-      collection
+      collection,
+      turnamentId
     };
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
@@ -234,12 +237,12 @@ const PlayersForm = withFormik({
       club: values.club
     };
 
-    const { collection, toEdit } = values;
+    const { collection, toEdit, turnamentId } = values;
     const adding = {
       post: `/api/${collection}/`,
       values,
       form,
-      get: `/api/${collection}/turnament/${values.turnament}`,
+      get: `/api/${collection}/turnament/${turnamentId}`,
       action: "add",
       collection: collection
     };
@@ -248,7 +251,7 @@ const PlayersForm = withFormik({
       post: `/api/${collection}/update/${toEdit && toEdit._id}`,
       values,
       form,
-      get: `/api/${collection}/turnament/${values.turnament}`,
+      get: `/api/${collection}/turnament/${turnamentId}`,
       action: "update",
       collection: collection
     };
@@ -264,7 +267,8 @@ const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
   turnaments: state.turnaments,
-  toEdit: state.edit
+  toEdit: state.edit,
+  turnamentId: state.turnamentId
 });
 
 // export default connect(

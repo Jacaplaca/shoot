@@ -9,8 +9,20 @@ const User = require("../models/user");
 
 module.exports = {
   index: async (req, res, next) => {
-    console.log("/api/turnament/");
-    Turnament.find()
+    // console.log("/api/turnament/");
+
+    const loggedUser = req.user;
+    console.log("turnament req.user", loggedUser);
+
+    let query;
+
+    if (loggedUser.rola === "admin") {
+      query = {};
+    } else {
+      query = { promoter: { _id: loggedUser._id } };
+    }
+
+    Turnament.find(query)
       // .select({"name" 'judgeMain'})
       .populate("promoter")
       .populate("judgeMain")
@@ -19,7 +31,7 @@ module.exports = {
       .populate("competitions.judge")
       // .populate("judge")
 
-      // .exec()
+      .exec()
       // .populate("judgeMain")
       .then(response => {
         // console.log(response);

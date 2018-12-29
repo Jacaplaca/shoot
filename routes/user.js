@@ -11,22 +11,22 @@ const validateLoginInput = require("../validation/login");
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 
-router.get("/", function(req, res) {
-  console.log("user get /", req.user);
-  User.find()
-    .populate("turnaments")
-    // .populate("judges")
-    // .populate("contests")
-    // .populate("cont")
-    // .select("name")
-    // .populate({
-    //   path: "contests",
-    //   // Get friends of friends - populate the 'friends' array for every friend
-    //   populate: { path: "judges" }
-    // })
-    .then(resp => res.status(200).json(resp))
-    .catch(e => console.log(e));
-});
+// router.get("/", function(req, res) {
+//   console.log("user get /", req.user);
+//   User.find()
+//     .populate("turnaments")
+//     // .populate("judges")
+//     // .populate("contests")
+//     // .populate("cont")
+//     // .select("name")
+//     // .populate({
+//     //   path: "contests",
+//     //   // Get friends of friends - populate the 'friends' array for every friend
+//     //   populate: { path: "judges" }
+//     // })
+//     .then(resp => res.status(200).json(resp))
+//     .catch(e => console.log(e));
+// });
 
 router.post("/register", function(req, res) {
   // const { errors, isValid } = validateRegisterInput(req.body);
@@ -106,7 +106,7 @@ router.post("/login", (req, res) => {
           payload,
           "secret",
           {
-            expiresIn: 3600
+            expiresIn: 3600 * 24 * 30
           },
           (err, token) => {
             if (err) console.error("There is some error in token", err);

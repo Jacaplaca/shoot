@@ -10,14 +10,27 @@ const User = require("../models/user");
 
 module.exports = {
   index: async (req, res, next) => {
-    Player.find()
+    const loggedUser = req.user;
+    console.log("turnament req.user", loggedUser);
+
+    let query;
+
+    if (loggedUser.rola === "admin") {
+      query = {};
+    } else {
+      // query = { turnament: { promoter: loggedUser._id } };
+      query = {};
+    }
+
+    Player.find(query)
+      .populate("turnament")
       // .select({"name" 'judgeMain'})
       // .populate("promoter")
       // .populate("judgeMain")
       // .populate("judgeCounting")
       // .populate("judgeRTS")
-      // .exec()
       // .populate("judgeMain")
+      .exec()
       .then(response => {
         // console.log(response);
         res.status(200).json(response);

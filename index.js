@@ -45,25 +45,22 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(fileUpload());
 
+const protectedRoute = passport.authenticate("jwt", { session: false });
+
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/api/users", users);
 // app.use("/api/contests", contest);
-app.use("/api/judges", judge);
+app.use("/api/judges", protectedRoute, judge);
 app.use("/api/competitions", competition);
-app.use("/api/turnaments", turnament);
-app.use("/api/promoters", promoter);
-app.use("/api/players", player);
-app.use("/api/email", email);
-app.use("/api/upload", upload);
-// app.use("/public", express.static(__dirname + "/public"));
-// app.use("/static", express.static("public"));
-// app.use(express.static("public"));
-// app.use(express.static("static"));
-// require("./routes/promoter")(app);
+app.use("/api/turnaments", protectedRoute, turnament);
+app.use("/api/promoters", protectedRoute, promoter);
+app.use("/api/players", protectedRoute, player);
+app.use("/api/email", protectedRoute, email);
+app.use("/api/upload", protectedRoute, upload);
 
-app.get("/", function(req, res) {
-  res.send("hello");
-});
+// app.get("/", function(req, res) {
+//   res.send("hello");
+// });
 
 const PORT = process.env.PORT || 5001;
 

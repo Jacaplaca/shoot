@@ -9,5 +9,7 @@ export const PLAYERS = "PLAYERS";
 export const EDIT = "EDIT";
 export const DELETE = "DELETE";
 export const TODELETE = "TODELETE";
+export const SHOWEDTURNAMENT = "SHOWEDTURNAMENT";
+
 export const CONFIRMATION = "CONFIRMATION";
 export const ADDTODB = "ADDTODB";

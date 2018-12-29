@@ -135,20 +135,20 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-          {auth.user.rola === "admin" && (
-            <Route
-              exact
-              path="/zawody"
-              render={() => (
-                <MainContainer
-                  open={this.state.open}
-                  handleDrawerOpen={this.handleDrawerOpen}
-                >
-                  <Turnaments title="Zawody" />
-                </MainContainer>
-              )}
-            />
-          )}
+          {/* {auth.user.rola === "admin" && ( */}
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <MainContainer
+                open={this.state.open}
+                handleDrawerOpen={this.handleDrawerOpen}
+              >
+                <Turnaments title="Zawody" />
+              </MainContainer>
+            )}
+          />
+          {/* )} */}
           {auth.user.rola === "admin" && (
             <Route
               exact
