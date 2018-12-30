@@ -13,6 +13,7 @@ class Thumb extends Component {
     }
     if (nextProps.file !== this.props.file) {
       if (typeof nextProps.file.name == "string") {
+        console.log("thumb type", nextProps.file);
         this.setState({ loading: true }, () => {
           let reader = new FileReader();
 
@@ -35,8 +36,8 @@ class Thumb extends Component {
   render() {
     const { file } = this.props;
     const { loading, thumb } = this.state;
-    // console.log("thumb file", file);
-    // console.log("thumb thumb", thumb);
+    console.log("thumb file", file);
+    console.log("thumb thumb", thumb);
 
     if (!file) {
       return null;

@@ -18,6 +18,7 @@ const RowRowHOC = WrappedComponent => {
     };
 
     handleClose = () => {
+      // console.log("handluje closa na menu");
       this.setState({ anchorEl: null });
     };
 
@@ -33,8 +34,8 @@ const RowRowHOC = WrappedComponent => {
         auth: { user }
       } = this.props;
       const { anchorEl } = this.state;
-      console.log("RowRowHOC", this.props);
-      console.log("RowRowHOC", user);
+      // console.log("RowRowHOC", this.props);
+      // console.log("RowRowHOC", user);
       return (
         <React.Fragment>
           <div className={classNames(classes.rowTable, classes.table)}>
@@ -79,6 +80,7 @@ const RowRowHOC = WrappedComponent => {
             </span>
           </div>
           <MenuContextTurnament
+            turnamentId={_id}
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={this.handleClose}
