@@ -20,7 +20,7 @@ const comps = (competitions, classes, playerId, turnament) => {
         // classes={classes}
         label={competition}
         id={competitionId}
-        score={score.toString()}
+        score={score ? score.toString() : "0"}
         player={playerId}
         turnament={turnament}
       />

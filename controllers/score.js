@@ -38,14 +38,87 @@ module.exports = {
     //   playerId,
     //   turnament
     // });
-
+    const score = { compId, score: value };
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true };
     console.log(req.body);
 
+    try {
+      const player = await Player.findOne({ _id: playerId });
+      const competitions = player.competitions;
+      const compInDB = competitions.filter(x => x.compId === compId);
+      if (compInDB.length === 0) {
+        try {
+          const compCreated = await Player.update(
+            { _id: playerId },
+            { $push: { competitions: score } }
+          );
+
+          res.status(200).json({
+            message: compCreated
+          });
+        } catch (e) {
+          console.log("The raw response from Mongo was ", e);
+        }
+      } else {
+        console.log(compInDB);
+
+        try {
+          const competitionUpdated = Player.findOneAndUpdate(
+            // {
+            //   _id: playerId,
+            //   "comments.compId": compId
+            // },
+            // {
+            //   $set: { "comments.$.score": score.score }
+            // },
+            // false
+            // true
+            { _id: playerId, "competitions.compId": compId },
+            {
+              $set: {
+                "competitions.$.score": score.score
+              }
+            }
+          ).exec();
+
+          res.status(200).json({
+            message: competitionUpdated
+          });
+        } catch (e) {
+          console.log("The raw response from Mongo was ", e);
+        }
+      }
+    } catch (e) {}
+
     // try {
-    //   const result = await Player.findById(req.params.playerId);
-    //   res.status(200).json(result);
+    //   const competitionUpdated = await Player.find(
+    //     { _id: playerId, competitions: { compId } }
+    //     // {
+    //     //   $set: {
+    //     //     "competitions.$": score
+    //     //   }
+    //     // },
+    //     // options
+    //   );
+    //   console.log(competitionUpdated);
+    //   res.status(200).json({
+    //     message: competitionUpdated
+    //   });
     // } catch (e) {
-    //   console.log(e);
+    //   console.log("The raw response from Mongo was ", e);
+    // }
+
+    // try {
+    //   const turnamentUpdated = await Player.update(
+    //     { _id: playerId },
+    //     { $push: { competitions: score } }
+    //   );
+    //
+    //   res.status(200).json({
+    //     message: turnamentUpdated
+    //   });
+    // } catch (e) {
+    //   console.log("The raw response from Mongo was ", e);
     // }
 
     // try {

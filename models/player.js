@@ -38,8 +38,8 @@ const PlayerSchema = new Schema({
   },
   competitions: [
     {
-      competition: { type: String },
-      competitionId: { type: String },
+      // competition: { type: String },
+      compId: { type: String },
       score: { type: Number }
     }
   ]

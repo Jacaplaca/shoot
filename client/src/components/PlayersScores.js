@@ -41,11 +41,14 @@ class PlayersScores extends Component {
       const thePlayers = players.filter(x => x.turnament === turnamentId);
       const theTurnament = turnaments.filter(x => x._id === turnamentId);
       const competitions = theTurnament[0].competitions;
+
       // console.log("every players", players);
       // console.log("turnamentId", turnamentId);
       // console.log("makeImprints", thePlayers, competitions);
+      let playerCompetitions = [];
 
       for (let player of thePlayers) {
+        playerCompetitions = player.competitions;
         const playerRow = {
           player: `${player.name} ${player.surname}`,
           playerId: player._id,
@@ -53,10 +56,17 @@ class PlayersScores extends Component {
         };
 
         for (let competition of competitions) {
+          let thisComp = { compId: "", score: 0 };
+          if (playerCompetitions.length > 0) {
+            const comp = playerCompetitions.filter(
+              x => x.compId === competition._id
+            );
+            thisComp = comp.length > 0 ? comp[0] : { compId: "", score: 0 };
+          }
           const playerCompetition = {
             competition: competition.name,
             competitionId: competition._id,
-            score: 0
+            score: thisComp.score
           };
           playerRow.competitions.push(playerCompetition);
         }
