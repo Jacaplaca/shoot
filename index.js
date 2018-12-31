@@ -18,6 +18,7 @@ const competition = require("./routes/competition");
 // const contest = require("./routes/contest");
 const email = require("./routes/email");
 const upload = require("./routes/upload");
+const score = require("./routes/score");
 
 mongoose
   .connect(
@@ -57,6 +58,7 @@ app.use("/api/promoters", protectedRoute, promoter);
 app.use("/api/players", protectedRoute, player);
 app.use("/api/email", protectedRoute, email);
 app.use("/api/upload", protectedRoute, upload);
+app.use("/api/score", score);
 
 // app.get("/", function(req, res) {
 //   res.send("hello");

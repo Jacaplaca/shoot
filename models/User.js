@@ -40,6 +40,7 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   }
+
   // turnaments: [{ type: Schema.Types.ObjectId, ref: Turnament }]
   // judges: [{ type: Schema.Types.ObjectId, ref: Judge }]
 });

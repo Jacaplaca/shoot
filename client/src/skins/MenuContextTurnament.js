@@ -1,6 +1,7 @@
 import React from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import { Link } from "react-router-dom";
 import { makeImprints } from "../functions/playersImprints";
 const fs = require("fs");
 
@@ -23,8 +24,15 @@ const MenuContextTurnament = ({ anchorEl, onClose, turnamentId }) => {
       <MenuItem onClick={() => handleImprints(onClose, turnamentId)}>
         Metryczki zawodników
       </MenuItem>
-      <MenuItem onClick={this.handleClose}>Zobacz zawodników</MenuItem>
-      <MenuItem onClick={this.handleClose}>Zobacz wyniki</MenuItem>
+      <Link
+        to={{
+          pathname: `/wyniki_zawodnikow/${turnamentId}`,
+          state: { turnamentId }
+        }}
+      >
+        <MenuItem onClick={this.handleClose}>Wyniki zawodników</MenuItem>
+      </Link>
+      {/* <MenuItem onClick={this.handleClose}>Zobacz wyniki</MenuItem> */}
       <MenuItem onClick={this.handleClose}>Pobierz raport do drugu</MenuItem>
     </Menu>
   );

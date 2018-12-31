@@ -35,7 +35,14 @@ const PlayerSchema = new Schema({
   ],
   club: {
     type: String
-  }
+  },
+  competitions: [
+    {
+      competition: { type: String },
+      competitionId: { type: String },
+      score: { type: Number }
+    }
+  ]
 });
 
 // global.TurnamentSchema =

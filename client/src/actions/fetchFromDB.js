@@ -40,6 +40,11 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
       url = get || `/api/${collection}/turnament/${id}`;
       type = PLAYERS;
       break;
+    case "score":
+      console.log("fetchFromDB");
+      url = get;
+      type = PLAYERS;
+      break;
     default:
   }
   // console.log("fetchFromDB()", collection, url, type);

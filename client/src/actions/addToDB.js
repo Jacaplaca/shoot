@@ -34,51 +34,54 @@ export const addToDB = ({
   // } else {
   // fetch = fetchFromDB(collection, get);
   // }
-
-  if (values.logo && typeof values.logo.name == "string") {
-    const data = new FormData();
-    data.append("file", values.logo, values.logo.name);
-    axios
-      .post(endpoint, data, {
-        onUploadProgress: ProgressEvent => {
-          console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-        }
-      })
-      .then(res => {
-        Object.assign(form, { logo: res.data.file });
-        if (collection === "promoters" && action === "add") {
-          dispatch(registerUser(form));
-        } else {
-          console.log(form);
-          axios.post(post, form).then(resp => dispatch(fetch));
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-  } else if (values.logo && typeof values.logo.name !== "string") {
-    Object.assign(form, { logo: values.logo });
-    if (collection === "promoters" && action === "add") {
-      dispatch(registerUser(form));
-    } else {
-      axios
-        .post(post, form)
-        .then(resp => dispatch(fetch))
-        .catch(function(error) {
-          console.log(error);
-        });
-    }
+  if (!values) {
+    axios.post(post, form).then(resp => dispatch(fetch));
   } else {
-    if (collection === "promoters" && action === "add") {
-      dispatch(registerUser(form));
-    } else {
-      console.log(form);
+    if (values.logo && typeof values.logo.name == "string") {
+      const data = new FormData();
+      data.append("file", values.logo, values.logo.name);
       axios
-        .post(post, form)
-        .then(resp => dispatch(fetch))
+        .post(endpoint, data, {
+          onUploadProgress: ProgressEvent => {
+            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
+          }
+        })
+        .then(res => {
+          Object.assign(form, { logo: res.data.file });
+          if (collection === "promoters" && action === "add") {
+            dispatch(registerUser(form));
+          } else {
+            console.log(form);
+            axios.post(post, form).then(resp => dispatch(fetch));
+          }
+        })
         .catch(function(error) {
           console.log(error);
         });
+    } else if (values.logo && typeof values.logo.name !== "string") {
+      Object.assign(form, { logo: values.logo });
+      if (collection === "promoters" && action === "add") {
+        dispatch(registerUser(form));
+      } else {
+        axios
+          .post(post, form)
+          .then(resp => dispatch(fetch))
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    } else {
+      if (collection === "promoters" && action === "add") {
+        dispatch(registerUser(form));
+      } else {
+        console.log(form);
+        axios
+          .post(post, form)
+          .then(resp => dispatch(fetch))
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     }
   }
 };

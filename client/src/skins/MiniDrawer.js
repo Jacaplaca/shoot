@@ -18,6 +18,7 @@ import Turnaments from "../components/Turnaments";
 import Judges from "../components/Judges";
 import Competitions from "../components/Competitions";
 import Players from "../components/Players";
+import PlayersScores from "../components/PlayersScores";
 // import Players from "../components/Players";
 //
 // import Costs from "./Costs";
@@ -135,20 +136,34 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-          {/* {auth.user.rola === "admin" && ( */}
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <MainContainer
-                open={this.state.open}
-                handleDrawerOpen={this.handleDrawerOpen}
-              >
-                <Turnaments title="Zawody" />
-              </MainContainer>
-            )}
-          />
-          {/* )} */}
+          {/* {auth.user.rola === "admin" && (
+            <Route
+              exact
+              path="/zawody"
+              render={() => (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Turnaments title="Zawody" />
+                </MainContainer>
+              )}
+            />
+          )} */}
+          {(auth.user.rola === "admin" || auth.user.rola === "promoter") && (
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Turnaments title="Zawody" />
+                </MainContainer>
+              )}
+            />
+          )}
           {auth.user.rola === "admin" && (
             <Route
               exact
@@ -161,6 +176,26 @@ class MiniDrawer extends React.Component {
                   <Judges title="Sędziowie" />
                 </MainContainer>
               )}
+            />
+          )}
+          {auth.user.rola === "promoter" && (
+            <Route
+              exact
+              path="/wyniki_zawodnikow/:id"
+              render={props => {
+                console.log("route", props);
+                return (
+                  <MainContainer
+                    open={this.state.open}
+                    handleDrawerOpen={this.handleDrawerOpen}
+                  >
+                    <PlayersScores
+                      title={props.match.params.id}
+                      add={props.location.state}
+                    />
+                  </MainContainer>
+                );
+              }}
             />
           )}
           {auth.user.rola === "admin" && (
