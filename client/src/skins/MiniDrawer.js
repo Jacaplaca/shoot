@@ -18,7 +18,7 @@ import Turnaments from "../components/Turnaments";
 import Judges from "../components/Judges";
 import Competitions from "../components/Competitions";
 import Players from "../components/Players";
-import PlayersScores from "../components/PlayersScores";
+import PlayersScoresMain from "../components/PlayersScoresMain";
 // import Players from "../components/Players";
 //
 // import Costs from "./Costs";
@@ -189,7 +189,7 @@ class MiniDrawer extends React.Component {
                     open={this.state.open}
                     handleDrawerOpen={this.handleDrawerOpen}
                   >
-                    <PlayersScores
+                    <PlayersScoresMain
                       title={props.match.params.id}
                       add={props.location.state}
                     />

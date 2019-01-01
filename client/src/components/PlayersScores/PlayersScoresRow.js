@@ -29,7 +29,14 @@ const comps = (competitions, classes, playerId, turnament) => {
 };
 
 const PlayersScoresRow = ({ row, classes, turnament }) => {
-  const { player, playerId, competitions } = row;
+  const {
+    playerName,
+    playerSurname,
+    playerId,
+    competitions,
+    rank,
+    totalScore
+  } = row;
   // console.log(turnament);
 
   return (
@@ -37,13 +44,16 @@ const PlayersScoresRow = ({ row, classes, turnament }) => {
       <div
         className={classNames(classes.rowTable, classes.table)}
         style={{
-          gridTemplateColumns: `1fr 1fr repeat(${competitions.length}, 100px)`
+          gridTemplateColumns: `50px 1fr 50px repeat(${
+            competitions.length
+          }, 100px)`
         }}
       >
+        <span className={classNames(classes.rowBlock)}>{rank}</span>
         <span className={classNames(classes.rowBlock, classes.rowName)}>
-          {`${player}`}
+          {`${playerName} ${playerSurname}`}
         </span>
-        <span className={classNames(classes.rowBlock)}>{playerId}</span>
+        <span className={classNames(classes.rowBlock)}>{totalScore}</span>
         {comps(competitions, classes, playerId, turnament)}
       </div>
     </React.Fragment>

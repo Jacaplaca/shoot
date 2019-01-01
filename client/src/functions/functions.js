@@ -10,7 +10,20 @@ import {
 } from "date-fns";
 import axios from "axios";
 // import store from "../store";
-// import * as actions from "../actions";
+// impot * as actions from "../actions";
+
+// export const dynamicSort = property => {
+//   let sortOrder = 1;
+//   if (property[0] === "-") {
+//     sortOrder = -1;
+//     property = property.substr(1);
+//   }
+//   return function(a, b) {
+//     const result =
+//       a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+//     return result * sortOrder;
+//   };
+// };
 
 export const combineStyles = (...styles) => {
   // console.log("combineStyles()", styles);
@@ -192,11 +205,95 @@ export const dynamicSort = property => {
     sortOrder = -1;
     property = property.substr(1);
   }
+
   return function(a, b) {
-    const result =
-      a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
-    return result * sortOrder;
+    if (typeof a[property] === "string") {
+      const aPL = a[property]
+        .toLowerCase()
+        .replace(/[ąęśćółńżź]/g, function(s) {
+          return (
+            (s == "ą"
+              ? "a"
+              : s == "ę"
+              ? "e"
+              : s == "ś"
+              ? "s"
+              : s == "ć"
+              ? "c"
+              : s == "ó"
+              ? "o"
+              : s == "ł"
+              ? "l"
+              : s == "ń"
+              ? "n"
+              : s == "ż"
+              ? "z"
+              : "zż") + "ż"
+          );
+        });
+
+      const bPL = b[property]
+        .toLowerCase()
+        .replace(/[ąęśćółńżź]/g, function(s) {
+          return (
+            (s == "ą"
+              ? "a"
+              : s == "ę"
+              ? "e"
+              : s == "ś"
+              ? "s"
+              : s == "ć"
+              ? "c"
+              : s == "ó"
+              ? "o"
+              : s == "ł"
+              ? "l"
+              : s == "ń"
+              ? "n"
+              : s == "ż"
+              ? "z"
+              : "zż") + "ż"
+          );
+        });
+
+      const result = aPL < bPL ? -1 : aPL > bPL ? 1 : 0;
+      // console.log(result);
+      // console.log(sortOrder);
+      return result * sortOrder;
+    } else {
+      const aPL = a[property];
+      const bPL = b[property];
+      const result = aPL < bPL ? -1 : aPL > bPL ? 1 : 0;
+      // console.log(result);
+      // console.log(sortOrder);
+      return result * sortOrder;
+    }
   };
+};
+
+export const sortNumber = (a, b) => {
+  return a - b;
+};
+
+export const addRank = (array, property) => {
+  let onlyProperties = [];
+  for (let elem of array) {
+    onlyProperties.push(elem[property]);
+  }
+  const sortedProperties = onlyProperties.sort(sortNumber).reverse();
+  // console.log(sortedProperties);
+
+  const rankedArray = array.map(x => {
+    let rank = 0;
+    for (var i = 0; i < sortedProperties.length; i++) {
+      if (sortedProperties[i] === x[property]) {
+        rank = i + 1;
+      }
+    }
+    return Object.assign(x, { rank });
+  });
+
+  return rankedArray;
 };
 
 export const defineds = {

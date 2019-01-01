@@ -18,7 +18,7 @@ export const addToDB = ({
   collection,
   id
 }) => async dispatch => {
-  console.log("addToDB get", get);
+  // console.log("addToDB get", get);
   // let url;
   // let fetch;
   const fetch = fetchFromDB(collection, get);
