@@ -13,7 +13,7 @@ const handleImprints = (onClose, turnamentId) => {
 };
 
 const MenuContextTurnament = ({ anchorEl, onClose, turnamentId }) => {
-  console.log("fs menu", fs);
+  // console.log("fs menu", fs);
   return (
     <Menu
       id="simple-menu"

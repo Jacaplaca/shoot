@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
-import * as actions from "../../actions";
-import { rowStyles } from "../../skins/mainStyles";
-import { combineStyles } from "../../functions/functions";
-import PlayersScoresForm from "./PlayersScoresForm";
-import SortButtons from "../../skins/SortButtons";
-import PaginationButtons from "../../skins/PaginationButtons";
-import ButtonMy from "../../skins/ButtonMy";
-import RowHOC from "../RowHOC";
+import * as actions from "../actions";
+import { rowStyles } from "./mainStyles";
+import { combineStyles } from "../functions/functions";
+// import PlayersScoresForm from "./PlayersScoresForm";
+import SortButtons from "./SortButtons";
+import PaginationButtons from "./PaginationButtons";
+import PagingJump from "./PagingJump";
+// import ButtonMy from "../skins/ButtonMy";
+// import Menu from "@material-ui/core/Menu";
+// import MenuItem from "@material-ui/core/MenuItem";
+// import RowHOC from "../RowHOC";
 
 let value = "";
 
@@ -47,13 +52,22 @@ let value = "";
 //   });
 // };
 class PaginationRow extends Component {
-  state = { search: "" };
+  state = { search: "", anchorEl: null };
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    // console.log("handluje closa na menu");
+    this.setState({ anchorEl: null });
+  };
 
   handleSearching = () => {
     this.props.searching(["playerName", "playerSurname"], this.state.searching);
   };
   render() {
-    const { row, classes, changePageNumber, page, pages } = this.props;
+    const { row, classes, changePageNumber, page, pages, size } = this.props;
     // const { totalScore, competitions } = row;
     // console.log("summaryRow", row);
 
@@ -63,7 +77,7 @@ class PaginationRow extends Component {
         <div
           className={classNames(classes.rowTable, classes.table)}
           style={{
-            gridTemplateColumns: `50px 50px 50px`,
+            gridTemplateColumns: `50px 50px 50px 50px`,
             justifyContent: "end",
             // marginLeft: "auto"
             alignItems: "center"
@@ -73,6 +87,18 @@ class PaginationRow extends Component {
               <span className={classNames(classes.rowBlock, classes.rowName)}>
               {`${playerName} ${playerSurname}`}
             </span> */}
+
+          <span className={classNames(classes.rowBlock)}>
+            {/* <SortButtons click={e => sorting("rank", e)} /> */}
+            <IconButton
+              color="primary"
+              aria-owns={this.state.anchorEl ? "simple-menu" : undefined}
+              aria-haspopup="true"
+              onClick={this.handleClick}
+            >
+              <MenuIcon />
+            </IconButton>
+          </span>
           <span className={classNames(classes.rowBlock)}>
             {/* <SortButtons click={e => sorting("rank", e)} /> */}
             <PaginationButtons left click={e => changePageNumber(e)} />
@@ -119,6 +145,15 @@ class PaginationRow extends Component {
           {/* </span> */}
         </div>
         {/* ) : null} */}
+        <PagingJump
+          // turnamentId={_id}
+          anchorEl={this.state.anchorEl}
+          open={Boolean(this.state.anchorEl)}
+          onClose={this.handleClose}
+          action={e => {
+            size(e), this.handleClose();
+          }}
+        />
       </React.Fragment>
     );
   }

@@ -157,7 +157,7 @@ class InputSelectBaza extends React.Component {
     // console.log("onChange2", e);
     let newValue = "";
     if (e.type === "click") {
-      console.log(e.target);
+      // console.log(e.target);
       newValue = e.target.textContent;
       // this.setState({ openSuggestions: false });
     } else if (e.type === "change") {
@@ -271,7 +271,7 @@ class InputSelectBaza extends React.Component {
   };
 
   onSuggestionsClearRequested = () => {
-    // console.log("onSuggestionsClearRequested");
+    console.log("onSuggestionsClearRequested");
     this.setState({
       suggestions: [],
       offset: 0

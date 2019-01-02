@@ -1,10 +1,12 @@
 // const User = require("../models/user");
 // const bcrypt = require("bcrypt");
 // const saltRounds = 10;
+async = require("async");
 // const Player = require("../models/contest");
 const Turnament = require("../models/turnament");
 const Player = require("../models/player");
 const User = require("../models/user");
+
 // console.log("controller Turnament");
 // const Judge = require("../models/judge");
 
@@ -121,6 +123,29 @@ module.exports = {
         { _id: req.params.id },
         { $set: updatedPlayer }
       );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  updateAll: async (req, res, next) => {
+    // console.log("updateAll");
+    const updates = req.body;
+
+    try {
+      const result = await async.each(updates, async (item, callback) => {
+        const updatuj = await Player.updateOne(
+          {
+            _id: item._id
+          },
+          {
+            $set: { order: item.order }
+          }
+        );
+        console.log(item);
+      }); // done is call when all items are updated!
+
       res.status(200).json(result);
     } catch (e) {
       console.log(e);

@@ -36,60 +36,75 @@ class LoginFormik extends Component {
       handleBlur
     } = this.props;
     return (
-      <div>
-        <div>sdfasdf</div>
-        <Paper
+      <div
+        style={{
+          display: "grid",
+          gridTemplateAreas:
+            '"not not not" "sideleft login sideright" "foot foot foot"',
+          gridTemplateRows: "1fr 300px 1fr",
+          gridTemplateColumns: "1fr 500px 1fr",
+          height: "100vh"
+        }}
+      >
+        <span style={{ gridArea: "not", ...styles }} />
+        <span style={{ gridArea: "sideleft", ...styles }} />
+        <span style={{ gridArea: "sideright", ...styles }} />
+        <span style={{ gridArea: "foot", ...styles }} />
+
+        <span
           style={{
+            gridArea: "login",
             textAlign: "center",
-            width: 500,
-            padding: 30,
-            margin: 0,
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-40%, -50%)"
+            padding: 10,
+            ...styles
           }}
         >
-          <form onSubmit={handleSubmit}>
-            <InputComponent
-              name="email"
-              label="Adres e-mail"
-              type="email"
-              // edytuj={change.bind(null, "email")}
-              edytuj={handleChange}
-              value={email}
-              error={touched.email && Boolean(errors.email)}
-              helperText={touched.email && errors.email ? errors.email : " "}
-              onBlur={handleBlur}
-            />
-            <InputComponent
-              name="password"
-              label="Hasło"
-              type="password"
-              edytuj={handleChange}
-              // edytuj={change.bind(null, "password")}
-              value={password}
-              error={touched.password && Boolean(errors.password)}
-              helperText={
-                touched.password && errors.password ? errors.password : " "
-              }
-              onBlur={handleBlur}
-            />
-            <ButtonMy
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={!isValid}
-            >
-              Zaloguj się
-              <Key style={{ marginLeft: 10 }} />
-            </ButtonMy>
-          </form>
-        </Paper>
+          <Paper style={{ padding: 20 }}>
+            <form onSubmit={handleSubmit}>
+              <InputComponent
+                name="email"
+                label="Adres e-mail"
+                type="email"
+                // edytuj={change.bind(null, "email")}
+                edytuj={handleChange}
+                value={email}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email ? errors.email : " "}
+                onBlur={handleBlur}
+              />
+              <InputComponent
+                name="password"
+                label="Hasło"
+                type="password"
+                edytuj={handleChange}
+                // edytuj={change.bind(null, "password")}
+                value={password}
+                error={touched.password && Boolean(errors.password)}
+                helperText={
+                  touched.password && errors.password ? errors.password : " "
+                }
+                onBlur={handleBlur}
+              />
+              <ButtonMy
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={!isValid}
+              >
+                Zaloguj się
+                <Key style={{ marginLeft: 10 }} />
+              </ButtonMy>
+            </form>
+          </Paper>
+        </span>
       </div>
     );
   }
 }
+
+const styles = {
+  background: "white"
+};
 
 const Login = withFormik({
   mapPropsToValue({ email, password }) {

@@ -85,7 +85,7 @@ class SummaryRow extends Component {
               gridTemplateColumns: "25px 1fr 2fr 25px"
             }}
           >
-            <SortButtons click={e => sorting("playerName", e)} />
+            <SortButtons click={e => sorting("playerSurname", e)} />
             <span>Zawodnik</span>
             <PlayersScoresForm
               // key={}

@@ -12,6 +12,7 @@ router.route("/remove/:id").post(PlayerController.remove);
 router.route("/:id").get(PlayerController.pickOne);
 
 router.route("/update/:id").post(PlayerController.update);
+router.route("/update_all/").post(PlayerController.updateAll);
 
 router.route("/turnament/:turnamentId").get(PlayerController.pickTurnament);
 

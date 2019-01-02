@@ -4,6 +4,7 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+require("dotenv").config();
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 
@@ -104,7 +105,7 @@ router.post("/login", (req, res) => {
         };
         jwt.sign(
           payload,
-          "secret",
+          process.env.SECRET_COOKIE,
           {
             expiresIn: 3600 * 24 * 30
           },

@@ -10,6 +10,7 @@ import PlayersScoresForm from "./PlayersScoresForm";
 import RowHOC from "../RowHOC";
 
 const comps = (competitions, classes, playerId, turnament) => {
+  console.log("comps", turnament);
   return competitions.map(comp => {
     const { competition, competitionId, score } = comp;
     return (
@@ -49,7 +50,16 @@ const PlayersScoresRow = ({ row, classes, turnament }) => {
           }, 100px)`
         }}
       >
-        <span className={classNames(classes.rowBlock)}>{rank}</span>
+        <span
+          className={classNames(
+            classes.rank,
+            rank === 1 && classes.gold,
+            rank === 2 && classes.silver,
+            rank === 3 && classes.brown
+          )}
+        >
+          {rank}
+        </span>
         <span className={classNames(classes.rowBlock, classes.rowName)}>
           {`${playerName} ${playerSurname}`}
         </span>
@@ -63,6 +73,28 @@ const PlayersScoresRow = ({ row, classes, turnament }) => {
 const styles = theme => ({
   table: {
     // gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+  },
+  rank: {
+    background: "white",
+    fontWeight: "800",
+    alignSelf: "center",
+    justifySelf: "center",
+    textAlign: "center",
+    borderRadius: 30,
+    width: 30,
+    maxHeight: 30,
+    fontSize: 20,
+    color: theme.palette.menu
+  },
+  gold: {
+    background: "gold"
+  },
+  silver: {
+    background: "silver"
+  },
+  brown: {
+    background: "brown",
+    color: "white"
   }
 });
 

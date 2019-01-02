@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { withTheme } from "@material-ui/core/styles";
 import { compose } from "redux";
+import axios from "axios";
 import { connect } from "react-redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
 import * as actions from "../actions";
 import PlayersScoresRow from "../components/PlayersScores/PlayersScoresRow";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
 import { dynamicSort, addRank } from "../functions/functions";
-import PaginationScores from "../components/PlayersScores/PaginationScores";
+import Pagination from "../skins/Pagination";
 // import PlayersScoresForm from "./PlayersScores/PlayersScoresForm";
 // import PlayersScoresList from "./PlayersScores/PlayersScoresList";
 
@@ -56,6 +57,7 @@ class PlayersScoresMain extends Component {
       // console.log("makeImprints", thePlayers, competitions);
       let playerCompetitions = [];
       let summaryRow = { totalScore: 0, competitions: [] };
+      let orderIsUnd = "no";
       for (let competition of competitions) {
         const playerCompetition = {
           competition: competition.name,
@@ -68,11 +70,15 @@ class PlayersScoresMain extends Component {
       for (let player of thePlayers) {
         playerCompetitions = player.competitions;
         let playerTotalScore = 0;
+        if (typeof player.order !== "number") {
+          orderIsUnd = "yes";
+        }
         const playerRow = {
           playerName: player.name,
           playerSurname: player.surname,
           playerId: player._id,
-          competitions: []
+          competitions: [],
+          order: player.order
         };
 
         for (let competition of competitions) {
@@ -104,9 +110,17 @@ class PlayersScoresMain extends Component {
       }
       // console.log("matrix", matrix);
       // console.log("SummaryRow", summaryRow);
-      const matrixSorted = addRank(matrix, "totalScore").sort(
-        dynamicSort("playerSurname")
-      );
+      console.log("orderIsUnd", orderIsUnd);
+      let matrixSorted = [];
+      if (orderIsUnd === "yes") {
+        matrixSorted = addRank(matrix, "totalScore").sort(dynamicSort("order"));
+      } else {
+        matrixSorted = addRank(matrix, "totalScore").sort(
+          dynamicSort("playerSurname")
+        );
+      }
+
+      console.log(matrixSorted);
       // matrixSorted.push(summaryRow);
       this.setState({
         matrix: matrixSorted,
@@ -120,7 +134,7 @@ class PlayersScoresMain extends Component {
   };
 
   sorting = (what, how, id) => {
-    console.log(what, how, id);
+    console.log("sortkin", what, how, id);
 
     let matrix = [];
 
@@ -140,12 +154,18 @@ class PlayersScoresMain extends Component {
 
     if (how === "up") {
       console.log("up");
-      this.setState({ matrix });
+      // this.setState({ matrix });
     } else if (how === "down") {
       console.log("down");
       // return sortingDown;
-      this.setState({ matrix: matrix.reverse() });
+      matrix = matrix.reverse();
     }
+    this.setState({ matrix });
+    const matrixOrdered = matrix.map((x, i) =>
+      Object.assign({}, { _id: x.playerId, order: i })
+    );
+    console.log(matrix);
+    axios.post("/api/players/update_all", matrixOrdered);
   };
 
   searching = (array, names, value) => {
@@ -175,6 +195,7 @@ class PlayersScoresMain extends Component {
 
   render() {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
+    const zmienna = this.state.filter;
     return (
       <React.Fragment>
         {this.state.summaryRow && this.state.summaryRow.competitions ? (
@@ -186,14 +207,29 @@ class PlayersScoresMain extends Component {
             }
           />
         ) : null}
-        <PaginationScores
+        <Pagination
           data={this.state.matrix}
-          turnament={this.props.add.turnamentId}
-        />
+          // turnament={this.props.add.turnamentId}
+        >
+          <PlayersScoresRows
+            rows={this.state.matrix}
+            turnament={this.props.add.turnamentId}
+          />
+          {/* <h1 style={{ color: "white" }}>{zmienna}</h1>/> */}
+        </Pagination>
       </React.Fragment>
     );
   }
 }
+
+const PlayersScoresRows = ({ rows, turnament }) =>
+  rows.map(player => (
+    <PlayersScoresRow
+      key={player.playerId}
+      row={player}
+      turnament={turnament}
+    />
+  ));
 
 const mapStateToProps = state => ({
   auth: state.auth,

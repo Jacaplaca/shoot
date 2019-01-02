@@ -36,17 +36,20 @@ class PlayersScoresForm extends React.Component {
       action: "add",
       collection: "score"
     };
-
+    console.log(adding);
     this.props.addToDB(adding);
 
     console.log("save", value, compId, playerId, turnament);
   };
 
-  handleKeyPress = event => {
-    if (event.key == "Enter") {
-      console.log("enter press here! ");
-    }
-  };
+  // handleKeyPress = event => {
+  //   const { id, player, turnament, button } = this.props;
+  //   if (event.key == "Enter") {
+  //     console.log("enter press here! ");
+  //   } else if (event.key == 9) {
+  //     !button && this.save(this.state.value, id, player, turnament);
+  //   }
+  // };
 
   render() {
     const {
@@ -98,7 +101,7 @@ class PlayersScoresForm extends React.Component {
             // margin="normal"
             variant="outlined"
             className={classes.textField}
-            onKeyPress={this.handleKeyPress}
+            // onKeyPress={this.handleKeyPress}
           />
         </form>
       </React.Fragment>

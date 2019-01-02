@@ -28,6 +28,7 @@ class PlayersFormik extends Component {
         rank,
         club
       },
+      turnaments,
       errors,
       touched,
       handleSubmit,
@@ -54,7 +55,7 @@ class PlayersFormik extends Component {
           <Grid container spacing={24}>
             <Grid item xs={12} sm={6} md={4}>
               <InputSelectBaza
-                object={this.props.turnaments}
+                object={turnaments}
                 name="turnament"
                 type="string"
                 wybrano={handleChange}
@@ -205,9 +206,12 @@ const PlayersForm = withFormik({
     club,
     toEdit,
     collection,
-    turnamentId
+    turnamentId,
+    turnaments
   }) {
     // console.log("maps to props", toEdit);
+    // console.log("maps to props", turnament);
+    // console.log("maps to props turnaments", turnaments);
     return {
       turnament: toEdit ? toEdit.turnament : turnament || "",
       name: toEdit ? toEdit.name : name || "",
@@ -220,10 +224,11 @@ const PlayersForm = withFormik({
       club: toEdit ? toEdit.club : club || "club",
       toEdit,
       collection,
-      turnamentId
+      turnamentId,
+      turnaments
     };
   },
-  handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
+  handleSubmit(values, { resetForm, setErrors, setSubmitting, setFieldValue }) {
     // console.log("handleSubmit", values);
     const form = {
       turnament: values.turnament,
@@ -237,7 +242,7 @@ const PlayersForm = withFormik({
       club: values.club
     };
 
-    const { collection, toEdit, turnamentId } = values;
+    const { collection, toEdit, turnamentId, turnaments } = values;
     const adding = {
       post: `/api/${collection}/`,
       values,
@@ -255,8 +260,16 @@ const PlayersForm = withFormik({
       action: "update",
       collection: collection
     };
+    // console.log("form", form);
+    // console.log("values", values);
+    console.log("turnaments", turnaments);
+    const turnamentFormer = {
+      _id: form.turnament,
+      name: turnaments.filter(x => x._id === form.turnament)[0].name
+    };
     store.dispatch(actions.addToDB(toEdit ? updating : adding));
     resetForm();
+    setFieldValue("turnament", turnamentFormer);
   },
   validationSchema: Yup.object().shape({
     name: Yup.string().required("Podaj imię")

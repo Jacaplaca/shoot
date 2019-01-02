@@ -42,7 +42,10 @@ const PlayerSchema = new Schema({
       compId: { type: String },
       score: { type: Number }
     }
-  ]
+  ],
+  order: {
+    type: Number
+  }
 });
 
 // global.TurnamentSchema =
