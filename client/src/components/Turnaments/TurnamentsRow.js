@@ -8,7 +8,7 @@ import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
 
-const TurnamentsRow = ({ row, classes }) => {
+const TurnamentsRow = ({ row, classes, grid }) => {
   const {
     date,
     name,
@@ -20,6 +20,7 @@ const TurnamentsRow = ({ row, classes }) => {
     tech,
     logo
   } = row;
+  // console.log("image", require(`../../${logo}`));
   return (
     <React.Fragment>
       <span className={classNames(classes.rowBlock, classes.date)}>{date}</span>
@@ -28,7 +29,7 @@ const TurnamentsRow = ({ row, classes }) => {
       </span>
       <span className={classNames(classes.rowBlock)}>{facility}</span>
       <span className={classNames(classes.rowBlock)}>
-        {judgeMain ? `${judgeMain.name} ${judgeMain.surname}` : "usnięto"}
+        {judgeMain ? `${judgeMain.name} ${judgeMain.surname}` : "usunięto"}
       </span>
       <span className={classNames(classes.rowBlock)}>
         {judgeCounting
@@ -36,7 +37,7 @@ const TurnamentsRow = ({ row, classes }) => {
           : "usnięto"}
       </span>
       <span className={classNames(classes.rowBlock)}>
-        {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surname}` : "usnięto"}
+        {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surname}` : "usunięto"}
       </span>
       <span className={classNames(classes.rowBlock)}>{lzss}</span>
       <span className={classNames(classes.rowBlock)}>{tech}</span>
@@ -49,8 +50,9 @@ const TurnamentsRow = ({ row, classes }) => {
 
 const styles = theme => ({
   table: {
-    gridTemplateColumns:
-      "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px"
+    // gridTemplateColumns: grid
+    // gridTemplateColumns:
+    //   "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px"
   }
 });
 

@@ -286,7 +286,13 @@ const TurnamentsForm = withFormik({
     resetForm();
   },
   validationSchema: Yup.object().shape({
-    name: Yup.string().required("Podaj nazwę organizatora")
+    name: Yup.string().required("Podaj nazwę imprezy"),
+    promoter: Yup.string().required("Podaj nazwę organizatora"),
+    judgeMain: Yup.string().required("Podaj sędziego głównego"),
+    // facility: Yup.string().required("Podaj nazwę organizatora"),
+    // lzss: Yup.string().required("Podaj nazwę organizatora"),
+    judgeCounting: Yup.string().required("Podaj sędziego liczącego"),
+    judgeRTS: Yup.string().required("Podaj sędziego RTS")
   })
 })(TurnamentsFormik);
 

@@ -19,10 +19,10 @@ const styles = theme => ({
   }
 });
 
-const UploadFile = ({ onChange, classes, title }) => (
+const UploadFile = ({ onChange, classes, title, accept }) => (
   <React.Fragment>
     <input
-      accept="image/*"
+      accept={accept}
       // className={classes.input}
       style={{ display: "none" }}
       id="raised-button-file"
@@ -44,5 +44,7 @@ const UploadFile = ({ onChange, classes, title }) => (
     </label>
   </React.Fragment>
 );
+
+UploadFile.defaultProps = { accept: "image/*" };
 
 export default withStyles(styles, { withTheme: true })(UploadFile);

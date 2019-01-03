@@ -8,7 +8,7 @@ import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
 
-const PromotersRow = ({ row, classes }) => {
+const PromotersRow = ({ row, classes, grid }) => {
   const { name, email, adres, www, logo } = row;
   return (
     <React.Fragment>
@@ -26,9 +26,9 @@ const PromotersRow = ({ row, classes }) => {
 };
 
 const styles = theme => ({
-  table: {
-    gridTemplateColumns: "50px 1fr 1fr 1fr 1fr 70px 60px"
-  }
+  // table: {
+  //   gridTemplateColumns: "50px 1fr 1fr 1fr 1fr 70px 60px"
+  // }
 });
 
 const mapStateToProps = state => ({

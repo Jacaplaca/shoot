@@ -14,6 +14,8 @@ router.route("/:id").get(PlayerController.pickOne);
 router.route("/update/:id").post(PlayerController.update);
 router.route("/update_all/").post(PlayerController.updateAll);
 
+router.route("/upload_many/").post(PlayerController.uploadMany);
+
 router.route("/turnament/:turnamentId").get(PlayerController.pickTurnament);
 
 module.exports = router;

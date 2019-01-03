@@ -103,7 +103,7 @@ class DrawerMy extends React.Component {
       {
         comp: "turnamets",
         text: "Zawody",
-        link: "/",
+        link: "/zawody",
         icon: "EventIcon",
         rola: "admin,promoter"
       },

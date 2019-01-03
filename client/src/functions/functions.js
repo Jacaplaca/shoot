@@ -25,6 +25,27 @@ import axios from "axios";
 //   };
 // };
 
+export const simpleSortUpDown = (array, what, how) => {
+  let rows = [];
+  rows = array.sort(dynamicSort(what));
+  if (how === "down") {
+    rows = rows.reverse();
+  }
+  return rows;
+};
+
+export const searchingInArray = (value, array, names) => {
+  const regex = new RegExp(value.toLowerCase());
+  let filtered = [];
+
+  for (let field of names) {
+    filtered.push(
+      ...array.filter(suggestion => regex.test(suggestion[field].toLowerCase()))
+    );
+  }
+  return filtered.reduce((x, y) => (x.includes(y) ? x : [...x, y]), []);
+};
+
 export const combineStyles = (...styles) => {
   // console.log("combineStyles()", styles);
   return function CombineStyles(theme) {

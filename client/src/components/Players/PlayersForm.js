@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import XLSX from "xlsx";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
 import store from "../../store";
@@ -9,12 +10,61 @@ import * as actions from "../../actions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
+import UploadFile from "../../inputs/UploadFile";
+import axios from "axios";
 
 import InputComponent from "../../inputs/InputComponent";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
 import FormButtons from "../../skins/FormButtons";
 
 class PlayersFormik extends Component {
+  importExcel = (file, turnament, collection) => {
+    console.log(file, turnament);
+
+    var reader = new FileReader();
+    console.log(reader);
+
+    reader.onload = function(e) {
+      var data = e.target.result;
+      var workbook = XLSX.read(data, {
+        type: "binary"
+      });
+
+      workbook.SheetNames.forEach(function(sheetName) {
+        // Here is your object
+        var XL_row_object = XLSX.utils.sheet_to_row_object_array(
+          workbook.Sheets[sheetName]
+        );
+        XL_row_object.map(x => {
+          Object.assign(x, { turnament });
+        });
+
+        const adding = {
+          post: `/api/${collection}/upload_many`,
+          values: null,
+          form: XL_row_object,
+          get: `/api/${collection}/turnament/${turnament}`,
+          action: "add",
+          collection: collection
+        };
+        console.log("add", adding);
+        store.dispatch(actions.addToDB(adding));
+
+        // console.log("XL_row_object", XL_row_object);
+        // axios.post("/api/players/upload_many", XL_row_object);
+        // console.log("wihtTurnament", wihtTurnament);
+        // var json_object = JSON.stringify(XL_row_object);
+        // console.log(json_object);
+      });
+    };
+
+    reader.onerror = function(ex) {
+      console.log(ex);
+    };
+
+    reader.readAsBinaryString(file);
+  };
+
   render() {
     const {
       values: {
@@ -44,6 +94,7 @@ class PlayersFormik extends Component {
       resetForm,
       turnamentId
     } = this.props;
+    console.log("turn", turnament.length);
     // setFieldValue("email", "ccc@ccc.com");
     return (
       <Paper
@@ -173,9 +224,28 @@ class PlayersFormik extends Component {
                 helperText={touched.club && errors.club ? errors.club : " "}
                 onBlur={handleBlur}
               />
+              {/* <span
+                style={{ color: "white" }}
+                onClick={() => console.log("import")}
+              >
+                Importuj zawodników z pliku EXCELa
+              </span> */}
             </Grid>
           </Grid>
-
+          {turnament.length > 0 && (
+            <UploadFile
+              title="Importuj zawodników"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              onChange={event => {
+                // setFieldValue("logo", event.currentTarget.files[0]);
+                this.importExcel(
+                  event.currentTarget.files[0],
+                  turnament,
+                  collection
+                );
+              }}
+            />
+          )}
           <FormButtons
             subDisable={!isValid}
             subLabel={toEdit ? "Edytuj Zawodnika" : "Dodaj Zawodnika"}
@@ -209,7 +279,7 @@ const PlayersForm = withFormik({
     turnamentId,
     turnaments
   }) {
-    // console.log("maps to props", toEdit);
+    console.log("maps to props", turnament);
     // console.log("maps to props", turnament);
     // console.log("maps to props turnaments", turnaments);
     return {

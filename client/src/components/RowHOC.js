@@ -31,14 +31,18 @@ const RowRowHOC = WrappedComponent => {
         editFetch,
         theme,
         toDeleteAction,
-        auth: { user }
+        auth: { user },
+        grid
       } = this.props;
       const { anchorEl } = this.state;
-      // console.log("RowRowHOC", this.props);
+      console.log("RowRowHOC", this.props);
       // console.log("RowRowHOC", user);
       return (
         <React.Fragment>
-          <div className={classNames(classes.rowTable, classes.table)}>
+          <div
+            className={classNames(classes.rowTable, classes.table)}
+            style={{ gridTemplateColumns: grid }}
+          >
             <span className={classNames(classes.rowBlock)}>
               {user.rola === "admin" ? (
                 <IconButton

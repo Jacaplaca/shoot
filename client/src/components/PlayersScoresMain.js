@@ -7,7 +7,7 @@ import MainFrameHOC from "../skins/MainFrameHOC";
 import * as actions from "../actions";
 import PlayersScoresRow from "../components/PlayersScores/PlayersScoresRow";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
-import { dynamicSort, addRank } from "../functions/functions";
+import { dynamicSort, addRank, searchingInArray } from "../functions/functions";
 import Pagination from "../skins/Pagination";
 // import PlayersScoresForm from "./PlayersScores/PlayersScoresForm";
 // import PlayersScoresList from "./PlayersScores/PlayersScoresList";
@@ -113,11 +113,19 @@ class PlayersScoresMain extends Component {
       console.log("orderIsUnd", orderIsUnd);
       let matrixSorted = [];
       if (orderIsUnd === "yes") {
-        matrixSorted = addRank(matrix, "totalScore").sort(dynamicSort("order"));
-      } else {
-        matrixSorted = addRank(matrix, "totalScore").sort(
-          dynamicSort("playerSurname")
+        console.log("sort via order", orderIsUnd);
+        matrixSorted = addRank(matrix, "totalScore");
+        this.setState(
+          {
+            matrix: matrixSorted,
+            summaryRow,
+            matrixUnifilltered: matrixSorted
+          },
+          () => this.sorting("playerSurname", "up")
         );
+      } else {
+        console.log("sort via surname", orderIsUnd);
+        matrixSorted = addRank(matrix, "totalScore").sort(dynamicSort("order"));
       }
 
       console.log(matrixSorted);
@@ -172,24 +180,11 @@ class PlayersScoresMain extends Component {
     if (value === "") {
       this.setState({ matrix: array, filter: value, filterNames: names });
     } else {
-      // console.log("searching", typeof value);
-      // console.log("getSuggestions", value, fetchowane, names);
-      // const names = ["playerName", "playerSurname"];
-      const regex = new RegExp(value.toLowerCase());
-      let filtered = [];
-
-      for (let field of names) {
-        filtered.push(
-          ...array.filter(suggestion =>
-            regex.test(suggestion[field].toLowerCase())
-          )
-        );
-      }
-      const result = filtered.reduce(
-        (x, y) => (x.includes(y) ? x : [...x, y]),
-        []
-      );
-      this.setState({ matrix: result, filter: value, filterNames: names });
+      this.setState({
+        matrix: searchingInArray(value, array, names),
+        filter: value,
+        filterNames: names
+      });
     }
   };
 

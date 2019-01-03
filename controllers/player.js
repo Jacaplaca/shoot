@@ -152,6 +152,46 @@ module.exports = {
     }
   },
 
+  uploadMany: async (req, res, next) => {
+    console.log("upload_many");
+    const upload = req.body;
+
+    try {
+      const result = await async.each(upload, async (item, callback) => {
+        const {
+          turnament,
+          name,
+          surname,
+          caliber,
+          gun,
+          scope,
+          team,
+          rank,
+          club
+        } = item;
+
+        const newPlayer = new Player({
+          turnament,
+          name,
+          surname,
+          caliber,
+          gun,
+          scope,
+          team,
+          rank: rank.split(","),
+          club
+        });
+
+        const updatuj = await Player.create(newPlayer);
+        console.log(item);
+      }); // done is call when all items are updated!
+
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
   pickTurnament: async (req, res, next) => {
     console.log("pickTurnament", req.params.turnamentId);
     try {

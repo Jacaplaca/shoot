@@ -153,7 +153,7 @@ class MiniDrawer extends React.Component {
           {(auth.user.rola === "admin" || auth.user.rola === "promoter") && (
             <Route
               exact
-              path="/"
+              path="/zawody"
               render={() => (
                 <MainContainer
                   open={this.state.open}

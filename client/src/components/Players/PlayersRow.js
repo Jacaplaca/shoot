@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
-import * as actions from "../../actions";
 import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
+import * as actions from "../../actions";
 import RowHOC from "../RowHOC";
 
-const PlayersRow = ({ row, classes }) => {
+const PlayersRow = ({ row, classes, grid }) => {
   const { name, surname, caliber, gun, scope, team, club, rank } = row;
   return (
     <React.Fragment>
@@ -28,9 +28,9 @@ const PlayersRow = ({ row, classes }) => {
 };
 
 const styles = theme => ({
-  table: {
-    gridTemplateColumns: "50px 1fr 1fr 1fr 1fr 1fr 1fr 1fr  60px"
-  }
+  // table: {
+  //   gridTemplateColumns: "50px 1fr 1fr 1fr 1fr 1fr 1fr 1fr  60px"
+  // }
 });
 
 const mapStateToProps = state => ({
