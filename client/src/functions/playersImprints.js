@@ -15,7 +15,7 @@ const resizebase64 = require("resize-base64");
 // const fetch64 = require("fetch-base64");
 
 export const makeImprints = async turnamentId => {
-  // console.log("fs", fs);
+  console.log("make makeImprints");
   const unsubscribe = store.subscribe(async () => {
     console.log("subscribe");
     const myStore = await store.getState();
@@ -33,79 +33,41 @@ export const makeImprints = async turnamentId => {
 };
 
 const generatePDFs = async (theTurnament, thePlayers, competitions) => {
-  const obrazek = require(`../${theTurnament.logo}`);
+  console.log("generatepdf");
 
-  const read = async obrazek => {
-    const reader = new FileReader();
-    await reader.readAsDataURL(obrazek);
-    // const img = new Image();
-    // img.src = event.target.result;
-    const elem = document.createElement("canvas");
-    console.log(elem);
-  };
+  let arrayToPdf = [];
 
-  read(obrazek);
+  for (let player of thePlayers) {
+    for (let competition of competitions) {
+      const object = {
+        playerName: player.name,
+        playerSurname: player.surname,
+        competition: competition.name,
+        judgeName: competition.judge.name,
+        judgeSurname: competition.judge.surname,
+        turnament: theTurnament.name,
+        // turnamentLogo: theTurnament.logo,
+        // promoter: theTurnament.promoter.name,
+        // promoterLogo: theTurnament.promoter.logo,
+        date: theTurnament.date
+      };
+      arrayToPdf.push(object);
+    }
+  }
 
-  const base64 = await axios
-    .get(obrazek, {
-      responseType: "arraybuffer"
-    })
-    .then(response => {
-      console.log(response);
-      console.log(Buffer.from(response.data, "binary").toString("base64"));
-      const image = Buffer.from(response.data, "binary").toString("base64");
-      // console.log(resizebase64(image, 50, 50));
-      // return resizebase64(image, 50, 50);
-      return image;
-    });
-
-  // const image = await axios
-  //   .get(obrazek, "base64")
-  //   .then(res => console.log(res));
-
-  // function readFile(obrazek) {
-  //   var FR = new FileReader();
-  //
-  //   // FR.addEventListener("load", function(e) {
-  //   //   document.getElementById("img").src       = e.target.result;
-  //   //   document.getElementById("b64").innerHTML = e.target.result;
-  //   // });
-  //
-  //   FR.readAsDataURL(obrazek);
-  //   console.log(obrazek);
-  // }
-  //
-  // readFile(obrazek);
-
-  // base64Img.base64(obrazek, function(err, data) {
-  //   console.log(data);
-  // });
-
-  // fetch64
-  //   .local(obrazek)
-  //   .then(data => {
-  //     // data[0] contains the raw base64-encoded jpg
-  //     console.log(data);
-  //   })
-  //   .catch(reason => {
-  //     console.log(reason);
-  //   });
-
-  // console.log(obrazek);
-  // getBase64(
-  //   "http://localhost:3001/static/media/1546013745197.84a98441.png"
-  // ).then(data => console.log(data));
-  //
-  // function getBase64(file) {
-  //   console.log("file");
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     console.log("reader", reader);
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = error => reject(error);
-  //   });
-  // }
+  function dotted(xStart, yStart, xStop, yStop, prog) {
+    const odlegloscX = xStop - xStart;
+    const iloscProgow = odlegloscX / prog / 2;
+    let start = xStart - prog;
+    let stop = xStart;
+    for (var i = 0; i < iloscProgow - 1; i++) {
+      start = start + prog * 2;
+      stop = stop + prog * 2;
+      doc.setLineWidth(0.3);
+      doc.line(start, yStart, stop, yStop);
+    }
+  }
+  console.log(arrayToPdf);
 
   var doc = new jsPDF({
     //   orientation: 'landscape',
@@ -121,29 +83,28 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
   ttt2 = ttt2.replace("}", "");
   ttt2 = ttt2.split("],");
 
-  console.log("generate", theTurnament, thePlayers, competitions);
-
-  let arrayToPdf = [];
-
-  for (let player of thePlayers) {
-    for (let competition of competitions) {
-      const object = {
-        name: `${player.name} ${player.surname}`,
-        competition: competition.name,
-        judge: `${competition.judge.name} ${competition.judge.surname}`,
-        turnament: theTurnament.name,
-        turnamentLogo: theTurnament.logo,
-        promoter: theTurnament.promoter.name,
-        promoterLogo: theTurnament.promoter.logo
-      };
-      arrayToPdf.push(object);
-    }
-  }
+  // console.log("generate", theTurnament, thePlayers, competitions);
 
   rend();
 
   function rend() {
     for (var i = 0; i < arrayToPdf.length; i++) {
+      const zawody = `<font size='5' ><p>${arrayToPdf[i].turnament}</p></font>`;
+      const zawodnik = `<font size='5' ><p>${arrayToPdf[i].playerName} ${
+        arrayToPdf[i].playerSurname
+      }</p></font>`;
+      const sedzia = `<font size='5' ><p>${arrayToPdf[i].judgeName} ${
+        arrayToPdf[i].judgeSurname
+      }</p></font>`;
+      const konkurencja = `<font size='5' ><p>Konkurencja: ${
+        arrayToPdf[i].competition
+      }</p></font>`;
+
+      const margins = {
+        top: 5,
+        width: 200
+      };
+
       let rest = (i + 1) % 4;
       function a() {
         if (rest === 0) {
@@ -156,12 +117,55 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
           return 148;
         }
       }
+
       doc.setFont("PTSans");
-      doc.addImage(base64, "jpeg", 15, 40 + a(), 10, 10, "alias", "SLOW");
-      doc.text(`${arrayToPdf[i].name}`, 10, 10 + a());
-      doc.text(`tel: ${arrayToPdf[i].competition}`, 10, 20 + a());
-      doc.setLineWidth(0.5);
-      rest !== 1 && doc.line(5, a(), 205, a());
+      // doc.setFontStyle("bold");
+      doc.setFontSize(14);
+      doc.text(arrayToPdf[i].turnament, 105, 10 + a(), "center");
+      doc.setFontSize(13);
+      doc.text(arrayToPdf[i].competition, 10, 18 + a());
+
+      // doc.setFontStyle("italic");
+      doc.setFontSize(13);
+      doc.text(arrayToPdf[i].playerName, 50, 38 + a(), "center");
+      doc.text(arrayToPdf[i].playerSurname, 50, 43 + a(), "center");
+
+      doc.setFontSize(13);
+      doc.text(arrayToPdf[i].judgeName, 150, 38 + a(), "center");
+      doc.text(arrayToPdf[i].judgeSurname, 150, 43 + a(), "center");
+
+      // doc.text(
+      //   "This is centred text asdf ąśsafa sdfADSF asdfasdf adfasd fasdflk óżźą asdfasadf sadsdf asdfsdf sdfasdf.",
+      //   105,
+      //   80,
+      //   null,
+      //   null,
+      //   "center"
+      // );
+      // doc.setFontStyle("normal");
+
+      // doc.fromHTML(zawody, 10, 0 + a(), { width: 130 }, margins);
+      //
+      // doc.fromHTML(zawodnik, 10, 28 + a(), { width: 90 }, margins);
+      // doc.fromHTML(sedzia, 110, 28 + a(), { width: 90 }, margins);
+      // doc.fromHTML(konkurencja, 135, 10 + a(), { width: 60 }, margins);
+
+      // doc.text(arrayToPdf[i].playerName, 10, 15 + a());
+      // doc.text(arrayToPdf[i].playerSurname, 10, 15 + a());
+      doc.setFontSize(13);
+      doc.text(arrayToPdf[i].date, 170, 18 + a());
+      doc.setFontSize(11);
+      doc.text("(podpis zawodnika)", 50, 66 + a(), "center");
+      doc.text("(podpis sędziego)", 150, 66 + a(), "center");
+      doc.setLineWidth(0.3);
+      dotted(10, 60 + a(), 100, 60 + a(), 0.5);
+      dotted(110, 60 + a(), 200, 60 + a(), 0.5);
+
+      // doc.addImage(base64, "jpeg", 15, 40 + a(), 10, 10, "alias", "SLOW");
+      // doc.text(`${arrayToPdf[i].name}`, 10, 10 + a());
+      // doc.text(`tel: ${arrayToPdf[i].competition}`, 10, 20 + a());
+      // doc.setLineWidth(0.3);
+      rest !== 1 && dotted(5, a(), 205, a(), 3);
       i < arrayToPdf.length - 1 && rest === 0 && doc.addPage();
     }
   }

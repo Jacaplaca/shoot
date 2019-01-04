@@ -19,6 +19,7 @@ import Judges from "../components/Judges";
 import Competitions from "../components/Competitions";
 import Players from "../components/Players";
 import PlayersScoresMain from "../components/PlayersScoresMain";
+import MetryczkiMain from "../components/MetryczkiMain";
 // import Players from "../components/Players";
 //
 // import Costs from "./Costs";
@@ -190,6 +191,26 @@ class MiniDrawer extends React.Component {
                     handleDrawerOpen={this.handleDrawerOpen}
                   >
                     <PlayersScoresMain
+                      title={props.match.params.id}
+                      add={props.location.state}
+                    />
+                  </MainContainer>
+                );
+              }}
+            />
+          )}
+          {auth.user.rola === "promoter" && (
+            <Route
+              exact
+              path="/metryczki_zawodnikow/:id"
+              render={props => {
+                console.log("route", props);
+                return (
+                  <MainContainer
+                    open={this.state.open}
+                    handleDrawerOpen={this.handleDrawerOpen}
+                  >
+                    <MetryczkiMain
                       title={props.match.params.id}
                       add={props.location.state}
                     />

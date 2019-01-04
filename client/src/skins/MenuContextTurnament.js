@@ -21,6 +21,14 @@ const MenuContextTurnament = ({ anchorEl, onClose, turnamentId }) => {
       open={Boolean(anchorEl)}
       onClose={onClose}
     >
+      {/* <Link
+        to={{
+          pathname: `/metryczki_zawodnikow/${turnamentId}`,
+          state: { turnamentId }
+        }}
+      >
+        <MenuItem onClick={this.handleClose}>Metryczki zawodników</MenuItem>
+      </Link> */}
       <MenuItem onClick={() => handleImprints(onClose, turnamentId)}>
         Metryczki zawodników
       </MenuItem>
