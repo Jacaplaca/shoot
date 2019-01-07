@@ -9,7 +9,9 @@ module.exports = {
     let uploadFile = req.files.file;
     console.log("controller upload file ");
     const fileName = req.files.file.name;
-    const newFileName = `${milliseconds}.${fileName.split(".")[1]}`;
+    const newFileName = `${milliseconds}_${fileName.split(".")[0]}.${
+      fileName.split(".")[1]
+    }`;
     uploadFile.mv(
       path.join(__dirname, `/../client/src/images/${newFileName}`),
       function(err) {

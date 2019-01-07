@@ -40,11 +40,36 @@ module.exports = {
   },
 
   update: async (req, res, next) => {
-    const { name, surname, judgeClass } = req.body;
+    const {
+      name,
+      date,
+      logo,
+      promoter,
+      facility,
+      judgeMain,
+      lzss,
+      judgeCounting,
+      judgeRTS,
+      tech,
+      sponsor1,
+      sponsor2,
+      sponsor3
+    } = req.body;
+    console.log(req.body);
     const updatedTurnament = {
       name,
-      surname,
-      judgeClass
+      date,
+      logo,
+      promoter,
+      facility,
+      judgeMain,
+      lzss,
+      judgeCounting,
+      judgeRTS,
+      tech,
+      sponsor1,
+      sponsor2,
+      sponsor3
     };
 
     try {
@@ -97,7 +122,10 @@ module.exports = {
       lzss,
       judgeCounting,
       judgeRTS,
-      tech
+      tech,
+      sponsor1,
+      sponsor2,
+      sponsor3
     } = req.body;
 
     const newTurnament = new Turnament({
@@ -110,7 +138,10 @@ module.exports = {
       lzss,
       judgeCounting,
       judgeRTS,
-      tech
+      tech,
+      sponsor1,
+      sponsor2,
+      sponsor3
     });
 
     try {

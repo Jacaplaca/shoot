@@ -19,23 +19,26 @@ const styles = theme => ({
   }
 });
 
-const UploadFile = ({ onChange, classes, title, accept }) => (
+const UploadFile = ({ onChange, classes, title, accept, name }) => (
   <React.Fragment>
     <input
       accept={accept}
       // className={classes.input}
       style={{ display: "none" }}
-      id="raised-button-file"
+      id={`uploadbutton${name}`}
       multiple
       type="file"
       onChange={onChange}
     />
-    <label htmlFor="raised-button-file">
+    <label htmlFor={`uploadbutton${name}`}>
       <Button
+        // key={name}
+        // id={`uploadbutton${name}`}
+        // name={`uploadbutton${name}`}
         variant="contained"
         color="default"
         component="span"
-        style={{}}
+        // style={{ display: "block", width: "100%" }}
         className={classes.button}
       >
         {title}

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import IconButton from "@material-ui/core/IconButton";
+import Clear from "@material-ui/icons/Clear";
 
 class Thumb extends Component {
   state = {
@@ -13,7 +15,7 @@ class Thumb extends Component {
     }
     if (nextProps.file !== this.props.file) {
       if (typeof nextProps.file.name == "string") {
-        console.log("thumb type", nextProps.file);
+        // console.log("thumb type", nextProps.file);
         this.setState({ loading: true }, () => {
           let reader = new FileReader();
 
@@ -34,10 +36,11 @@ class Thumb extends Component {
   }
 
   render() {
-    const { file } = this.props;
+    // console.log(`${this.props.name}, ${this.props.file}`);
+    const { file, clear } = this.props;
     const { loading, thumb } = this.state;
-    console.log("thumb file", file);
-    console.log("thumb thumb", thumb);
+    // console.log("thumb file", file);
+    // console.log("thumb thumb", thumb);
 
     if (!file) {
       return null;
@@ -48,13 +51,22 @@ class Thumb extends Component {
     }
 
     return (
-      <img
-        src={thumb}
-        alt={file.name}
-        className="img-thumbnail mt-2"
-        height={200}
-        width={200}
-      />
+      <div>
+        <img
+          src={thumb}
+          alt={file.name}
+          className="img-thumbnail mt-2"
+          height={200}
+          width={200}
+        />
+        <IconButton
+          onClick={clear}
+          color="primary"
+          aria-label="Add to shopping cart"
+        >
+          <Clear />
+        </IconButton>
+      </div>
     );
   }
 }

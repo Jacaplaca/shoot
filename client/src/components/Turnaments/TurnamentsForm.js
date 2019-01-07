@@ -35,9 +35,9 @@ class TurnamentsFormik extends Component {
         judgeCounting,
         judgeRTS,
         tech,
-        add1,
-        add2,
-        add3
+        sponsor1,
+        sponsor2,
+        sponsor3
       },
       collection,
       errors,
@@ -58,7 +58,7 @@ class TurnamentsFormik extends Component {
     // const { prepopulate } = this.state;
     // setFieldValue("name", "asdfsadf");
     // console.log(toEdit);
-
+    // console.log("TurnamentsForm", this.props.values);
     return (
       <Paper
         style={{
@@ -190,17 +190,92 @@ class TurnamentsFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              // style={{ display: "grid", gridTemplateRows: "1fr 1fr" }}
+            >
               <UploadFile
+                name="0"
                 title="Załącz logo zawodów"
                 onChange={event => {
                   setFieldValue("logo", event.currentTarget.files[0]);
                 }}
               />
+              <Thumb
+                key={1}
+                file={logo}
+                name="0"
+                clear={() => setFieldValue("logo", "")}
+              />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Thumb file={logo} />
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              // style={{ display: "grid", gridTemplateRows: "1fr 1fr" }}
+              // style={{ display: "block" }}
+            >
+              <UploadFile
+                name="1"
+                title="Logo sponsora nr 1"
+                onChange={event => {
+                  setFieldValue("sponsor1", event.currentTarget.files[0]);
+                }}
+              />
+              <Thumb
+                key={2}
+                file={sponsor1}
+                name="1"
+                clear={() => setFieldValue("sponsor1", "")}
+              />
             </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              // style={{ display: "grid", gridTemplateRows: "1fr 1fr" }}
+            >
+              <UploadFile
+                name="2"
+                title="Logo sponsora nr 2"
+                onChange={event => {
+                  setFieldValue("sponsor2", event.currentTarget.files[0]);
+                }}
+              />
+              <Thumb
+                key={3}
+                file={sponsor2}
+                name="2"
+                clear={() => setFieldValue("sponsor2", "")}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              // style={{ display: "grid", gridTemplateRows: "1fr 1fr" }}
+            >
+              <UploadFile
+                name="3"
+                title="Logo sponsora nr 3"
+                onChange={event => {
+                  setFieldValue("sponsor3", event.currentTarget.files[0]);
+                }}
+              />
+              <Thumb
+                key={4}
+                file={sponsor3}
+                name="3"
+                clear={() => setFieldValue("sponsor3", "")}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} />
           </Grid>
 
           <FormButtons
@@ -233,19 +308,33 @@ const TurnamentsForm = withFormik({
     judgeRTS,
     tech,
     toEdit,
-    collection
+    collection,
+    sponsor1,
+    sponsor2,
+    sponsor3
   }) => {
     return {
-      name: toEdit ? toEdit.name : name || "",
-      date: toEdit ? toEdit.date : date || "",
+      name: toEdit ? toEdit.name : name || "zzzzz",
+      date: toEdit ? toEdit.date : date || "2019-01-17",
       logo: toEdit ? toEdit.logo : logo || "",
-      promoter: toEdit ? toEdit.promoter : promoter || "",
-      facility: toEdit ? toEdit.facility : facility || "",
-      judgeMain: toEdit ? toEdit.judgeMain : judgeMain || "",
-      lzss: toEdit ? toEdit.lzss : lzss || "",
-      judgeCounting: toEdit ? toEdit.judgeCounting : judgeCounting || "",
-      judgeRTS: toEdit ? toEdit.judgeRTS : judgeRTS || "",
-      tech: toEdit ? toEdit.tech : tech || "",
+      sponsor1: toEdit ? toEdit.sponsor1 : sponsor1 || "",
+      sponsor2: toEdit ? toEdit.sponsor2 : sponsor2 || "",
+      sponsor3: toEdit ? toEdit.sponsor3 : sponsor3 || "",
+      promoter: toEdit
+        ? toEdit.promoter
+        : promoter || "5c1ebd2a00a26550d4767de6",
+      facility: toEdit ? toEdit.facility : facility || "zzzzz",
+      judgeMain: toEdit
+        ? toEdit.judgeMain
+        : judgeMain || "5c224f69e9915f2670e5f9ad",
+      lzss: toEdit ? toEdit.lzss : lzss || "zzzzzz",
+      judgeCounting: toEdit
+        ? toEdit.judgeCounting
+        : judgeCounting || "5c224f69e9915f2670e5f9ad",
+      judgeRTS: toEdit
+        ? toEdit.judgeRTS
+        : judgeRTS || "5c224f69e9915f2670e5f9ad",
+      tech: toEdit ? toEdit.tech : tech || "zzzzzzz",
       collection,
       toEdit
     };
@@ -254,14 +343,17 @@ const TurnamentsForm = withFormik({
     const form = {
       name: values.name,
       date: values.date,
-      logo: "",
+      logo: values.logo,
       promoter: values.promoter,
       judgeMain: values.judgeMain,
       facility: values.facility,
       lzss: values.lzss,
       judgeCounting: values.judgeCounting,
       judgeRTS: values.judgeRTS,
-      tech: values.tech
+      tech: values.tech,
+      sponsor1: values.sponsor1,
+      sponsor2: values.sponsor2,
+      sponsor3: values.sponsor3
     };
     const { collection, toEdit } = values;
 

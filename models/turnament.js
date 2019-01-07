@@ -26,6 +26,15 @@ const TurnamentSchema = new Schema({
   logo: {
     type: String
   },
+  sponsor1: {
+    type: String
+  },
+  sponsor2: {
+    type: String
+  },
+  sponsor3: {
+    type: String
+  },
   promoter: {
     // type: String
     type: Schema.Types.ObjectId,

@@ -7,7 +7,7 @@ import { registerUser } from "./authentication";
 // import store from "../store";
 // import setAuthToken from "../setAuthToken";
 // import jwt_decode from "jwt-decode";
-const endpoint = "/api/upload";
+const uploadFile = "/api/upload";
 
 export const addToDB = ({
   post,
@@ -18,134 +18,164 @@ export const addToDB = ({
   collection,
   id
 }) => async dispatch => {
-  // console.log("addToDB get", get);
+  console.log("addToDB vaelues", values);
+  console.log("addToDB form", form);
   // let url;
   // let fetch;
   const fetch = fetchFromDB(collection, get);
-  // if (id) {
-  //   url = `/api/${collection}/update/${id}`;
-  // } else {
-  //   url = `/api/${collection}/`;
-  // }
-  // console.log("addToDBurl", url);
 
-  // if (collection === "players") {
-  //   fetch = fetchFromDB(collection, "turnament", values.turnament);
-  // } else {
-  // fetch = fetchFromDB(collection, get);
-  // }
-  if (!values) {
-    axios.post(post, form).then(resp => dispatch(fetch));
-  } else {
-    if (values.logo && typeof values.logo.name == "string") {
-      const data = new FormData();
-      data.append("file", values.logo, values.logo.name);
-      axios
-        .post(endpoint, data, {
-          onUploadProgress: ProgressEvent => {
-            console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-          }
-        })
-        .then(res => {
-          Object.assign(form, { logo: res.data.file });
-          if (collection === "promoters" && action === "add") {
-            dispatch(registerUser(form));
-          } else {
-            console.log(form);
-            axios.post(post, form).then(resp => dispatch(fetch));
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    } else if (values.logo && typeof values.logo.name !== "string") {
-      Object.assign(form, { logo: values.logo });
-      if (collection === "promoters" && action === "add") {
-        dispatch(registerUser(form));
-      } else {
-        axios
-          .post(post, form)
-          .then(resp => dispatch(fetch))
-          .catch(function(error) {
-            console.log(error);
-          });
+  let fieldName = "";
+  let promises = [];
+
+  // proce();
+
+  function delay() {
+    return new Promise(resolve => setTimeout(resolve, 0));
+  }
+
+  async function delayedLog(data) {
+    // notice that we can await a function
+    // that returns a promise
+
+    const res = await axios.post(uploadFile, data, {
+      onUploadProgress: ProgressEvent => {
+        console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
       }
-    } else {
-      if (collection === "promoters" && action === "add") {
-        dispatch(registerUser(form));
-      } else {
-        console.log(form);
-        axios
-          .post(post, form)
-          .then(resp => dispatch(fetch))
-          .catch(function(error) {
-            console.log(error);
-          });
+    });
+
+    Object.assign(form, { [fieldName]: res.data.file });
+    console.log(res.data.file);
+
+    await delay();
+    // console.log(item);
+  }
+
+  async function processArray(array) {
+    for (var variable in form) {
+      if (values.hasOwnProperty(variable)) {
+        if (
+          values[variable] &&
+          typeof values[variable].name == "string" &&
+          variable !== "toEdit"
+        ) {
+          console.log(
+            `to jest nazwa pola ${variable} a to name ${values[variable].name}`
+          );
+          fieldName = variable;
+          const data = new FormData();
+          data.append("file", values[variable], values[variable].name);
+          await delayedLog(data);
+        }
       }
     }
+    console.log("bede dispatchowal bo juz po promisach");
+    console.log(form);
+    if (collection === "promoters" && action === "add") {
+      console.log("bede dispatchowal usera");
+      dispatch(registerUser(form));
+    } else {
+      console.log("bede dispatchowal ogolnie do bazy");
+      axios.post(post, form).then(resp => dispatch(fetch));
+    }
+    console.log("Done!");
   }
+
+  processArray([1, 2, 3]);
+
+  // for (var variable in form) {
+  //   if (values.hasOwnProperty(variable)) {
+  //     if (
+  //       values[variable] &&
+  //       typeof values[variable].name == "string" &&
+  //       variable !== "toEdit"
+  //     ) {
+  //       console.log(
+  //         `to jest nazwa pola ${variable} a to name ${values[variable].name}`
+  //       );
+  //       fieldName = variable;
+  //       const data = new FormData();
+  //       data.append("file", values[variable], values[variable].name);
+  //       promises.push(
+  //         axios
+  //           .post(uploadFile, data, {
+  //             onUploadProgress: ProgressEvent => {
+  //               console.log(
+  //                 (ProgressEvent.loaded / ProgressEvent.total) * 100
+  //               );
+  //             }
+  //           })
+  //           .then(res => {
+  //             Object.assign(form, { [fieldName]: res.data.file });
+  //             console.log(form);
+  //           })
+  //           .catch(function(error) {
+  //             console.log(error);
+  //           })
+  //       );
+  //     }
+  //   }
+  // }
+  //
+  // Promise.all(promises).then(() => {
+  //   console.log("bede dispatchowal bo juz po promisach");
+  //   console.log(form);
+  //   if (collection === "promoters" && action === "add") {
+  //     console.log("bede dispatchowal usera");
+  //     dispatch(registerUser(form));
+  //   } else {
+  //     console.log("bede dispatchowal ogolnie do bazy");
+  //     axios.post(post, form).then(resp => dispatch(fetch));
+  //   }
+  // });
+
+  // if (!values) {
+  //   axios.post(post, form).then(resp => dispatch(fetch));
+  // } else {
+  //   if (values.logo && typeof values.logo.name == "string") {
+  //     const data = new FormData();
+  //     data.append("file", values.logo, values.logo.name);
+  //     axios
+  //       .post(uploadFile, data, {
+  //         onUploadProgress: ProgressEvent => {
+  //           console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
+  //         }
+  //       })
+  //       .then(res => {
+  //         Object.assign(form, { logo: res.data.file });
+  //         if (collection === "promoters" && action === "add") {
+  //           dispatch(registerUser(form));
+  //         } else {
+  //           console.log(form);
+  //           axios.post(post, form).then(resp => dispatch(fetch));
+  //         }
+  //       })
+  //       .catch(function(error) {
+  //         console.log(error);
+  //       });
+  //   } else if (values.logo && typeof values.logo.name !== "string") {
+  //     Object.assign(form, { logo: values.logo });
+  //     if (collection === "promoters" && action === "add") {
+  //       dispatch(registerUser(form));
+  //     } else {
+  //       axios
+  //         .post(post, form)
+  //         .then(resp => dispatch(fetch))
+  //         .catch(function(error) {
+  //           console.log(error);
+  //         });
+  //     }
+  //   } else {
+  //     if (collection === "promoters" && action === "add") {
+  //       dispatch(registerUser(form));
+  //     } else {
+  //       console.log(form);
+  //       axios
+  //         .post(post, form)
+  //         .then(resp => dispatch(fetch))
+  //         .catch(function(error) {
+  //           console.log(error);
+  //         });
+  //     }
+  //   }
+  // }
 };
-// export const addToDB = (collection, values, form, id) => async dispatch => {
-//   console.log("addToDB", values, form, id);
-//   let url;
-//   let fetch;
-//   if (id) {
-//     url = `/api/${collection}/update/${id}`;
-//   } else {
-//     url = `/api/${collection}/`;
-//   }
-//   console.log("addToDBurl", url);
-//
-//   if (collection === "players") {
-//     fetch = fetchFromDB(collection, "turnament", values.turnament);
-//   } else {
-//     fetch = fetchFromDB(collection);
-//   }
-//
-//   if (values.logo && typeof values.logo.name == "string") {
-//     const data = new FormData();
-//     data.append("file", values.logo, values.logo.name);
-//     axios
-//       .post(endpoint, data, {
-//         onUploadProgress: ProgressEvent => {
-//           console.log((ProgressEvent.loaded / ProgressEvent.total) * 100);
-//         }
-//       })
-//       .then(res => {
-//         Object.assign(form, { logo: res.data.file });
-//         if (collection === "promoters" && !id) {
-//           dispatch(registerUser(form));
-//         } else {
-//           console.log(form);
-//           axios.post(url, form).then(resp => dispatch(fetch));
-//         }
-//       })
-//       .catch(function(error) {
-//         console.log(error);
-//       });
-//   } else if (values.logo && typeof values.logo.name !== "string") {
-//     Object.assign(form, { logo: values.logo });
-//     if (collection === "promoters" && !id) {
-//       dispatch(registerUser(form));
-//     } else {
-//       axios
-//         .post(url, form)
-//         .then(resp => dispatch(fetch))
-//         .catch(function(error) {
-//           console.log(error);
-//         });
-//     }
-//   } else {
-//     if (collection === "promoters" && !id) {
-//       dispatch(registerUser(form));
-//     } else {
-//       console.log(form);
-//       axios
-//         .post(url, form)
-//         .then(resp => dispatch(fetch))
-//         .catch(function(error) {
-//           console.log(error);
-//         });
-//     }
-//   }
-// };

@@ -35,7 +35,7 @@ const RowRowHOC = WrappedComponent => {
         grid
       } = this.props;
       const { anchorEl } = this.state;
-      console.log("RowRowHOC", this.props);
+      // console.log("RowRowHOC", this.props);
       // console.log("RowRowHOC", user);
       return (
         <React.Fragment>

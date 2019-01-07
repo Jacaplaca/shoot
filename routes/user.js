@@ -30,6 +30,7 @@ const User = mongoose.model("users");
 // });
 
 router.post("/register", function(req, res) {
+  console.log("register", req.body);
   // const { errors, isValid } = validateRegisterInput(req.body);
   console.log(req.body);
 
