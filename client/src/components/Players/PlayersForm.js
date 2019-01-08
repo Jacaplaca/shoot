@@ -94,7 +94,7 @@ class PlayersFormik extends Component {
       resetForm,
       turnamentId
     } = this.props;
-    console.log("turn", turnament.length);
+    // console.log("turn", turnament.length);
     // setFieldValue("email", "ccc@ccc.com");
     return (
       <Paper
