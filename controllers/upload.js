@@ -3,7 +3,7 @@
 // const saltRounds = 10;
 const path = require("path");
 const milliseconds = new Date().getTime();
-var im = require("imagemagick");
+// var im = require("imagemagick");
 var sizeOf = require("image-size");
 // var Image = require("node-webgl").Image;
 
