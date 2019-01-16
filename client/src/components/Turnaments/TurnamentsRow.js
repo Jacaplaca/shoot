@@ -21,6 +21,7 @@ const TurnamentsRow = ({ row, classes, grid }) => {
     logo
   } = row;
   // console.log("image", require(`../../${logo}`));
+  // console.log('image', !!require(`../../${logo}`));
   return (
     <React.Fragment>
       <span className={classNames(classes.rowBlock, classes.date)}>{date}</span>

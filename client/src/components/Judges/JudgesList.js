@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import JudgesHeadRow from "./JudgesHeadRow";
 import { simpleSortUpDown } from "../../functions/functions";
 import JudgesRow from "./JudgesRow";
+import Search from '../../inputs/Search'
 
 class JudgesList extends Component {
   state = {
@@ -23,12 +24,18 @@ class JudgesList extends Component {
     this.setState({ rows: simpleSortUpDown(this.state.rows, what, how) });
   };
 
+  searching = (search) => {
+    console.log('search', search);
+    this.setState({rows: search})
+  }
+
   render() {
     const grid = "50px 1fr 1fr  60px";
     const { collection } = this.props;
     const { rows } = this.state;
     return (
       <div>
+      <Search data={this.props.rows} handleSearch={this.searching} columns={['name', 'surname', 'judgeClass' ]}/>
         {rows.length > 0 && (
           <div>
             <JudgesHeadRow grid={grid} row={rows[0]} sorting={this.sorting} />

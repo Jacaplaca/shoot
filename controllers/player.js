@@ -60,7 +60,7 @@ module.exports = {
       gun,
       scope,
       team,
-      rank: rank.split(","),
+      rank: rank.split(", "),
       club
     });
 
@@ -105,7 +105,8 @@ module.exports = {
       gun,
       scope,
       team,
-      club
+      club,
+      rank
     } = req.body;
     const updatedPlayer = {
       name,
@@ -115,7 +116,8 @@ module.exports = {
       gun,
       scope,
       team,
-      club
+      club,
+      rank: rank.split(", ")
     };
 
     try {

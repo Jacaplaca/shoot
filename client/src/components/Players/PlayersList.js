@@ -7,34 +7,46 @@ import * as actions from "../../actions";
 import Pagination from "../../skins/Pagination";
 import PlayersHeadRow from "./PlayersHeadRow";
 import { simpleSortUpDown } from "../../functions/functions";
+import Search from '../../inputs/Search'
 
 class PlayersList extends Component {
   state = {
-    rows: []
+    rows: [],
+    players: []
   };
 
   componentWillReceiveProps(nextProps) {
     if (this.state.rows !== nextProps.rows) {
-      this.setState({ rows: nextProps.rows });
+      this.setState({ rows: nextProps.rows, players: nextProps.rows  });
     }
   }
 
   sorting = (what, how) => {
-    this.setState({ rows: simpleSortUpDown(this.state.rows, what, how) });
+    this.setState({ rows: simpleSortUpDown(this.state.players, what, how) });
   };
+
+  searching = (search) => {
+    console.log('search', search);
+    this.setState({players: search})
+  }
+
 
   render() {
     const { rows, collection, turnaments } = this.props;
+    const {players} = this.state
     const grid = "50px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 60px";
     return (
       <div>
-        <div style={{ marginBottom: 15 }}>
+        <div style={{ marginBottom: 15,
+          display: 'grid',
+          gridTemplateColumns: "50% 50%" }}>
           <InputSelectBaza
             object={turnaments}
             name="turnament"
             type="string"
             wybrano={e => {
-              store.dispatch(actions.showedTurnament(e.target.value));
+              // console.log('eplyers list', e.target.value);
+              store.dispatch(actions.showedTurnament(e.target.value || null));
 
               store.dispatch(
                 actions.fetchFromDB(
@@ -46,12 +58,13 @@ class PlayersList extends Component {
             // value={{ value: "st" }}
             label="Zawody"
           />
+          <Search data={rows} handleSearch={this.searching} columns={['name', 'surname', 'caliber', 'club', 'gun', 'scope', 'team', 'rank' ]}/>
         </div>
-        {rows.length > 0 && (
-          <PlayersHeadRow grid={grid} row={rows[0]} sorting={this.sorting} />
+        {players.length > 0 && (
+          <PlayersHeadRow grid={grid} row={players[0]} sorting={this.sorting} />
         )}
-        <Pagination data={rows}>
-          <PlayersRows rows={rows} collection={collection} grid={grid} />
+        <Pagination data={players}>
+          <PlayersRows rows={players} collection={collection} grid={grid} />
         </Pagination>
       </div>
     );

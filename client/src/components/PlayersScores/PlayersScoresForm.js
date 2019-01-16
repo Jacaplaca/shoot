@@ -90,7 +90,7 @@ class PlayersScoresForm extends React.Component {
             value={this.state.value}
             InputLabelProps={{ shrink: true, className: classes.label }}
             id="outlined-name"
-            label={label}
+            label={label.slice(0,12)}
             // className={classes.textField}
             // value={this.state.value}
             // placeholder={score}

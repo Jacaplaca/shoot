@@ -52,7 +52,7 @@ export const addToDB = ({
 
   async function processArray(array) {
     for (var variable in form) {
-      if (values.hasOwnProperty(variable)) {
+      if (values && values.hasOwnProperty(variable)) {
         if (
           values[variable] &&
           typeof values[variable].name == "string" &&

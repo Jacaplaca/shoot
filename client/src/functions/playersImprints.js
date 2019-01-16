@@ -373,15 +373,15 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
 
         doc.setFontSize(10);
         doc.text("1", 6, 60 + a());
-        doc.text("1", 41, 60 + a());
+        doc.text("6", 41, 60 + a());
         doc.text("2", 6, 69 + a());
-        doc.text("2", 41, 69 + a());
+        doc.text("7", 41, 69 + a());
         doc.text("3", 6, 78 + a());
-        doc.text("3", 41, 78 + a());
+        doc.text("8", 41, 78 + a());
         doc.text("4", 6, 87 + a());
-        doc.text("4", 41, 87 + a());
+        doc.text("9", 41, 87 + a());
         doc.text("5", 6, 96 + a());
-        doc.text("5", 41, 96 + a());
+        doc.text("10", 41, 96 + a());
 
         // doc.text(`${arrayToPdf[i].competition}`, 3, 15 + a());
         doc.setFontSize(11);

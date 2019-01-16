@@ -17,7 +17,14 @@ class Pagination extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    this.paginate(nextProps.data, this.state.page_size, this.state.page_number);
+    console.log('pagination', nextProps);
+    if (nextProps && nextProps.data && nextProps.data[0] && nextProps.data.length !== this.props && this.props.data && this.props.data[0] ) {
+      this.setState({page_number:1}, () => {
+        this.paginate(nextProps.data, this.state.page_size, this.state.page_number);
+      })
+    } else {
+      this.paginate(nextProps.data, this.state.page_size, this.state.page_number);
+    }
   }
 
   changePageSize = size => {

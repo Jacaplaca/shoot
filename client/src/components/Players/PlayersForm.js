@@ -232,7 +232,7 @@ class PlayersFormik extends Component {
               </span> */}
             </Grid>
           </Grid>
-          {turnament.length > 0 && (
+          {turnament && turnament.length > 0 && (
             <UploadFile
               title="Importuj zawodników"
               accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
