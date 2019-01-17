@@ -46,6 +46,7 @@ const InputComponent = props => {
     ref,
     fullWidth,
     kwota,
+    autoComplete,
     ...other
   } = props;
 
@@ -76,6 +77,7 @@ const InputComponent = props => {
             }}
             kwota={kwota}
             fullWidth={fullWidth}
+            autoComplete={autoComplete}
           />
         )}
       </InputMask>

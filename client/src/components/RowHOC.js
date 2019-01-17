@@ -44,7 +44,7 @@ const RowRowHOC = WrappedComponent => {
             style={{ gridTemplateColumns: grid }}
           >
             <span className={classNames(classes.rowBlock)}>
-              {user.rola === "admin" ? (
+              {user.rola === "admin" || collection === 'players'? (
                 <IconButton
                   onClick={() => editFetch(collection, _id)}
                   color="primary"
@@ -53,37 +53,25 @@ const RowRowHOC = WrappedComponent => {
                   <Edit />
                 </IconButton>
               ) : (
-                <IconButton
-                  onClick={() => editFetch(collection, _id)}
-                  color="primary"
-                  aria-label="Add to shopping cart"
-                >
-                  <Search />
-                </IconButton>
+null
               )}
             </span>
             <WrappedComponent {...this.props} />
             <span className={classNames(classes.rowBlock)}>
-              {user.rola === "admin" ? (
-                <IconButton
-                  aria-label="Delete"
-                  onClick={() => toDeleteAction(_id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              ) : (
-                <IconButton
-                  color="primary"
-                  aria-owns={anchorEl ? "simple-menu" : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleClick}
-                >
-                  <MenuIcon />
-                </IconButton>
-              )}
+            <IconButton
+              color="primary"
+              aria-owns={anchorEl ? "simple-menu" : undefined}
+              aria-haspopup="true"
+              onClick={this.handleClick}
+            >
+              <MenuIcon />
+            </IconButton>
             </span>
           </div>
           <MenuContextTurnament
+            user={user}
+            deleteAction={(id) => {toDeleteAction(id)
+            this.handleClose()}}
             turnamentId={_id}
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}

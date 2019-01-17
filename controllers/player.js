@@ -108,6 +108,7 @@ module.exports = {
       club,
       rank
     } = req.body;
+    console.log('rank',rank);
     const updatedPlayer = {
       name,
       surname,
@@ -117,7 +118,8 @@ module.exports = {
       scope,
       team,
       club,
-      rank: rank.split(", ")
+      rank
+      // rank: rank.split(", ")
     };
 
     try {

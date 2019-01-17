@@ -71,6 +71,7 @@ class LoginFormik extends Component {
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email ? errors.email : " "}
                 onBlur={handleBlur}
+                autoComplete="on"
               />
               <InputComponent
                 name="password"
@@ -84,6 +85,7 @@ class LoginFormik extends Component {
                   touched.password && errors.password ? errors.password : " "
                 }
                 onBlur={handleBlur}
+                autoComplete="on"
               />
               <ButtonMy
                 type="submit"

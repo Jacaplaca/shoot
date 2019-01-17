@@ -78,6 +78,7 @@ class PlayersFormik extends Component {
         rank,
         club
       },
+      auth: {user},
       turnaments,
       errors,
       touched,
@@ -232,7 +233,7 @@ class PlayersFormik extends Component {
               </span> */}
             </Grid>
           </Grid>
-          {turnament && turnament.length > 0 && (
+          {user.rola === "admin" && turnament && turnament.length > 0 && (
             <UploadFile
               title="Importuj zawodników"
               accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"

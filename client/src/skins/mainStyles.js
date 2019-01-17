@@ -12,7 +12,8 @@ export const rowStyles = theme => ({
     paddingLeft: 5,
     paddingTop: 2,
     paddingBottom: 2,
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: 15
   },
   rowTable: {
     display: "grid",

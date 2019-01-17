@@ -126,7 +126,7 @@ class DrawerMy extends React.Component {
         text: "Zawodnicy",
         link: "/zawodnicy",
         icon: "InsertChartOutlined",
-        rola: "admin"
+        rola: "admin,promoter"
       }
     ];
     return (

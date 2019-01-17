@@ -179,7 +179,6 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-          {auth.user.rola === "promoter" && (
             <Route
               exact
               path="/wyniki_zawodnikow/:id"
@@ -198,8 +197,6 @@ class MiniDrawer extends React.Component {
                 );
               }}
             />
-          )}
-          {auth.user.rola === "promoter" && (
             <Route
               exact
               path="/metryczki_zawodnikow/:id"
@@ -218,7 +215,6 @@ class MiniDrawer extends React.Component {
                 );
               }}
             />
-          )}
           {auth.user.rola === "admin" && (
             <Route
               exact
@@ -233,7 +229,6 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-          {auth.user.rola === "admin" && (
             <Route
               exact
               path="/zawodnicy"
@@ -246,7 +241,6 @@ class MiniDrawer extends React.Component {
                 </MainContainer>
               )}
             />
-          )}
           {/* <main className={classes.content}>
             <div className={classes.toolbar} /> */}
           {/* {!auth ? (

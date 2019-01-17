@@ -60,7 +60,8 @@ class PlayersScoresForm extends React.Component {
       player,
       turnament,
       button,
-      enterAction
+      enterAction,
+      auth: {user}
     } = this.props;
 
     return (
@@ -79,6 +80,7 @@ class PlayersScoresForm extends React.Component {
         >
           <TextField
             // inputStyle={{ backgroundColor: "red" }}
+            disabled={user.rola === 'admin' ? true : false}
             InputProps={{ className: classes.input }}
             inputProps={{ className: classes.inputNative }}
             style={{

@@ -17,6 +17,11 @@ import { PTSans } from "../skins/PTSans";
 
 // const fetch64 = require("fetch-base64");
 
+
+
+
+
+
 export const makeImprints = async turnamentId => {
   console.log("make makeImprints");
   const unsubscribe = store.subscribe(async () => {
@@ -44,27 +49,6 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
 
   for (let player of thePlayers) {
     let team = player.team;
-    // for (let competition of competitions) {
-    //   const object = {
-    //     playerId: player._id,
-    //     playerName: player.name,
-    //     playerTeam: player.team,
-    //     playerSurname: player.surname,
-    //     competition: competition.name,
-    //     // judgeName: competition.judge.name,
-    //     // judgeSurname: competition.judge.surname,
-    //     // turnament: theTurnament.name,
-    //     turnamentLogo: theTurnament.logo,
-    //     turnamentSponsor1: theTurnament.sponsor1,
-    //     turnamentSponsor2: theTurnament.sponsor2,
-    //     turnamentSponsor3: theTurnament.sponsor3
-    //     // promoter: theTurnament.promoter.name,
-    //     // promoterLogo: theTurnament.promoter.logo,
-    //     // date: theTurnament.date
-    //   };
-    //   playerCompetition.push(object);
-    // }
-
     if (team in teams) {
       teams[team].push({
         playerName: player.name,
@@ -87,22 +71,12 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     if (teams.hasOwnProperty(element)) {
       for (let competition of competitions) {
         const object = {
-          // playerId: player._id,
-          // playerName: player.name,
-          // playerTeam: player.team,
-          // playerSurname: player.surname,
           competition: competition.name,
           names: teams[element],
-          // // judgeName: competition.judge.name,
-          // // judgeSurname: competition.judge.surname,
-          // // turnament: theTurnament.name,
           turnamentLogo: theTurnament.logo,
           turnamentSponsor1: theTurnament.sponsor1,
           turnamentSponsor2: theTurnament.sponsor2,
           turnamentSponsor3: theTurnament.sponsor3
-          // // promoter: theTurnament.promoter.name,
-          // // promoterLogo: theTurnament.promoter.logo,
-          // // date: theTurnament.date
         };
         // console.log("team elemen", teams[element][0].team);
         if (teams[element][0].team === "") {
@@ -144,77 +118,6 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     }
   }
 
-  // for (let player of playerCompetition) {
-  //   const newPlayer = Object.assign(player, {
-  //     names: teams[player.playerTeam]
-  //   });
-  //   arrayToPdf.push(newPlayer);
-  // }
-
-  console.log("playerCompetition", playerCompetition);
-  console.log("teams", teams);
-  console.log("arrayToPdf", arrayToPdf);
-
-  function delay() {
-    return new Promise(resolve => setTimeout(resolve, 0));
-  }
-
-  let picArray = [];
-
-  async function processArray() {
-    const addresses = [
-      theTurnament.logo,
-      theTurnament.sponsor1,
-      theTurnament.sponsor2,
-      theTurnament.sponsor3
-    ];
-
-    for (let pic of addresses) {
-      if (pic) {
-        if (pic !== "") {
-          const obrazek = require(`../${pic}`);
-          const base64 = await axios.get(obrazek, {
-            responseType: "arraybuffer"
-          });
-          const nazwa = pic.split("/")[1];
-          const dim = nazwa.split("_")[0];
-          const width = dim.split("x")[0];
-          const height = dim.split("x")[1];
-          // console.log(nazwa);
-          // console.log(dim);
-          // console.log("base64", base64);
-          // console.log("obrazek", obrazek);
-          const image = Buffer.from(base64.data, "binary").toString("base64");
-          // console.log("image", image);
-
-          // var image = document.createElement("img");
-          //
-          // await image.addEventListener("load", function() {
-          //   // image.width × image.height
-          // });
-          //
-          // image.src = await obrazek;
-          // console.log(image);
-
-          // const i = await new Image();
-          // i.src = obrazek;
-          // console.log("imaaaaaaage new IMAGE", i);
-          await picArray.push({
-            image,
-            width,
-            height,
-            ratio: height / width
-          });
-          await delay();
-        }
-      }
-    }
-    console.log(picArray);
-    console.log("Done!");
-    makePDF();
-  }
-
-  processArray();
 
   const makePDF = () => {
     var doc = new jsPDF({
@@ -238,26 +141,10 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
 
     async function imagesLine(array, xStart, yStart, height, space) {
       console.log("images in ", array);
-      // imagesLine(picArray, 73, 80, 20, 3);
-
-      // const odlegloscX = xStop - xStart;
-      // const iloscProgow = odlegloscX / prog / 2;
-      // let start = xStart - prog;
-      // let stop = xStart;
-      // for (var i = 0; i < iloscProgow - 1; i++) {
-      //   start = start + prog * 2;
-      //   stop = stop + prog * 2;
-      //   doc.setLineWidth(0.3);
-      //   doc.line(start, yStart, stop, yStop);
-      // }
 
       let newXstart = xStart;
 
       for (var i = 0; i < array.length; i++) {
-        // console.log("images in line", i);
-        // console.log("images in ratio", array[i].ratio);
-        // let width = height / array[i].ratio;
-        // console.log(array[i].ratio);
         doc.addImage(
           array[i].image,
           "png",
@@ -268,34 +155,8 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
           `alias${i}`,
           "FAST"
         );
-        // doc.addImage(
-        //   array[i].image,
-        //   "jpg",
-        //   newXstart,
-        //   yStart,
-        //   width,
-        //   height,
-        //   `alias${i}`,
-        //   "FAST"
-        // );
-        // doc.line(20, 20, 20, 20);
         newXstart = newXstart + height / array[i].ratio + space;
       }
-
-      // for (let image of array) {
-      //   doc.addImage(
-      //     array[1].image,
-      //     "jpeg",
-      //     newXstart,
-      //     yStart,
-      //     height,
-      //     height * array[1].ratio,
-      //     "alias",
-      //     "SLOW"
-      //   );
-      //
-      //   newXstart = newXstart + height * image.ratio + space;
-      // }
     }
 
     doc.addFileToVFS("PTSans.ttf", PTSans);
@@ -305,8 +166,6 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     ttt2 = ttt2.replace("{", "");
     ttt2 = ttt2.replace("}", "");
     ttt2 = ttt2.split("],");
-
-    // console.log("generate", theTurnament, thePlayers, competitions);
 
     rend();
 
@@ -438,4 +297,55 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     doc.save(`${theTurnament.name}_metryczki_zawodnikow.pdf`);
     console.log(arrayToPdf);
   };
+
+
+
+  console.log("playerCompetition", playerCompetition);
+  console.log("teams", teams);
+  console.log("arrayToPdf", arrayToPdf);
+
+  function delay() {
+    return new Promise(resolve => setTimeout(resolve, 0));
+  }
+
+  let picArray = [];
+
+  async function processArray() {
+    const addresses = [
+      theTurnament.logo,
+      theTurnament.sponsor1,
+      theTurnament.sponsor2,
+      theTurnament.sponsor3
+    ];
+
+    for (let pic of addresses) {
+      if (pic) {
+        if (pic !== "") {
+          const obrazek = require(`../${pic}`);
+          const base64 = await axios.get(obrazek, {
+            responseType: "arraybuffer"
+          });
+          const nazwa = pic.split("/")[1];
+          const dim = nazwa.split("_")[0];
+          const width = dim.split("x")[0];
+          const height = dim.split("x")[1];
+          const image = Buffer.from(base64.data, "binary").toString("base64");
+          await picArray.push({
+            image,
+            width,
+            height,
+            ratio: height / width
+          });
+          await delay();
+        }
+      }
+    }
+    console.log(picArray);
+    console.log("Done!");
+    makePDF();
+  }
+
+  processArray();
+
+
 };

@@ -3,6 +3,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Link } from "react-router-dom";
 import { makeImprints } from "../functions/playersImprints";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 const fs = require("fs");
 
 const handleImprints = (onClose, turnamentId) => {
@@ -12,7 +14,7 @@ const handleImprints = (onClose, turnamentId) => {
   // return onClose;
 };
 
-const MenuContextTurnament = ({ anchorEl, onClose, turnamentId }) => {
+const MenuContextTurnament = ({ anchorEl, onClose, turnamentId, deleteAction, user }) => {
   // console.log("fs menu", fs);
   return (
     <Menu
@@ -42,6 +44,7 @@ const MenuContextTurnament = ({ anchorEl, onClose, turnamentId }) => {
       </Link>
       {/* <MenuItem onClick={this.handleClose}>Zobacz wyniki</MenuItem> */}
       <MenuItem onClick={this.handleClose}>Pobierz raport do drugu</MenuItem>
+      {user.rola === "admin" && <MenuItem onClick={() => deleteAction(turnamentId)}><DeleteIcon /> Usuń zawody</MenuItem>}
     </Menu>
   );
 };

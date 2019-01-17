@@ -115,6 +115,7 @@ class InputSelectTextField extends Component {
       inputRef = () => {},
       ref,
       kwota,
+      autoComplete,
       // isloading,
       ...other
     } = this.props;
@@ -135,10 +136,15 @@ class InputSelectTextField extends Component {
             : this.props.type
         }
         name={name}
+        autoComplete={autoComplete}
       />
     );
   }
 }
+
+InputSelectTextField.defaultProps = {
+  autoComplete: "off"
+};
 // const InputSelectTextFieldOld = props => {
 //   const {
 //     // //value
