@@ -16,6 +16,7 @@ const collection = "playersScores";
 
 class PlayersScoresMain extends Component {
   state = {
+    finished: false,
     matrix: [],
     summaryRow: [],
     matrixUnifilltered: [],
@@ -51,6 +52,7 @@ class PlayersScoresMain extends Component {
       const thePlayers = players.filter(x => x.turnament === turnamentId);
       const theTurnament = turnaments.filter(x => x._id === turnamentId);
       const competitions = theTurnament[0].competitions;
+      const finished = theTurnament[0].finished;
 
       // console.log("every players", players);
       // console.log("turnamentId", turnamentId);
@@ -119,7 +121,8 @@ class PlayersScoresMain extends Component {
           {
             matrix: matrixSorted,
             summaryRow,
-            matrixUnifilltered: matrixSorted
+            matrixUnifilltered: matrixSorted,
+            finished
           },
           () => this.sorting("playerSurname", "up")
         );
@@ -133,7 +136,8 @@ class PlayersScoresMain extends Component {
       this.setState({
         matrix: matrixSorted,
         summaryRow,
-        matrixUnifilltered: matrixSorted
+        matrixUnifilltered: matrixSorted,
+        finished
       });
       if (this.state.filter !== "") {
         this.searching(matrixSorted, this.state.filterNames, this.state.filter);
@@ -209,6 +213,7 @@ class PlayersScoresMain extends Component {
           <PlayersScoresRows
             rows={this.state.matrix}
             turnament={this.props.add.turnamentId}
+            finished={this.state.finished}
           />
           {/* <h1 style={{ color: "white" }}>{zmienna}</h1>/> */}
         </Pagination>

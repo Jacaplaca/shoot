@@ -111,6 +111,32 @@ module.exports = {
     }
   },
 
+  finish: async (req, res, next) => {
+    console.log("jestem w finish", req.params.id);
+    try {
+      const result = await Turnament.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { finished: true } }
+      );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  cancel: async (req, res, next) => {
+    console.log("jestem w cancel finish", req.params.id);
+    try {
+      const result = await Turnament.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { finished: false } }
+      );
+      res.status(200).json(result);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
   add: async (req, res, next) => {
     const {
       name,

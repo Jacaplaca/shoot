@@ -10,8 +10,8 @@ export const rowStyles = theme => ({
     alignSelf: "center",
     justifySelf: "center",
     paddingLeft: 5,
-    paddingTop: 2,
-    paddingBottom: 2,
+    // paddingTop: 2,
+    // paddingBottom: 2,
     textAlign: "center",
     fontSize: 15
   },
@@ -29,6 +29,13 @@ export const rowStyles = theme => ({
     maxWidth: 60,
     maxHeight: 60,
     padding: 5
+  },
+  rowFinished: {
+    display: "grid",
+    minWidth: 900,
+    color: theme.palette.text.primary,
+    background: lighten(theme.palette.menu, 0.3),
+    marginBottom: 6
   }
 });
 

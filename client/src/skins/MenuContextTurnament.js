@@ -1,11 +1,15 @@
 import React from "react";
+import axios from "axios";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Link } from "react-router-dom";
 import { makeImprints } from "../functions/playersImprints";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-const fs = require("fs");
+import * as actions from "../actions";
+// const fs = require("fs");
 
 const handleImprints = (onClose, turnamentId) => {
   // console.log("MenuContextTurnament handleImprints()", turnamentId);
@@ -14,8 +18,33 @@ const handleImprints = (onClose, turnamentId) => {
   // return onClose;
 };
 
-const MenuContextTurnament = ({ anchorEl, onClose, turnamentId, deleteAction, user }) => {
+const MenuContextTurnament = ({
+  anchorEl,
+  onClose,
+  turnamentId,
+  deleteAction,
+  user,
+  fetchFromDB,
+  finished
+}) => {
   // console.log("fs menu", fs);
+
+  const finishTurnament = turnamentId => {
+    axios
+      .get(`/api/turnaments/finish/${turnamentId}`)
+      .then(result => console.log("finished", result))
+      .then(() => fetchFromDB("turnaments"))
+      .then(() => onClose());
+  };
+
+  const cancelFinish = turnamentId => {
+    axios
+      .get(`/api/turnaments/cancel/${turnamentId}`)
+      .then(result => console.log("canceled finis", result))
+      .then(() => fetchFromDB("turnaments"))
+      .then(() => onClose());
+  };
+
   return (
     <Menu
       id="simple-menu"
@@ -29,7 +58,7 @@ const MenuContextTurnament = ({ anchorEl, onClose, turnamentId, deleteAction, us
           state: { turnamentId }
         }}
       >
-        <MenuItem onClick={this.handleClose}>Metryczki zawodników</MenuItem>
+        <MenuItem onClick={onClose}>Metryczki zawodników</MenuItem>
       </Link> */}
       <MenuItem onClick={() => handleImprints(onClose, turnamentId)}>
         Metryczki zawodników
@@ -40,13 +69,39 @@ const MenuContextTurnament = ({ anchorEl, onClose, turnamentId, deleteAction, us
           state: { turnamentId }
         }}
       >
-        <MenuItem onClick={this.handleClose}>Wyniki zawodników</MenuItem>
+        <MenuItem onClick={onClose}>Wyniki zawodników</MenuItem>
       </Link>
-      {/* <MenuItem onClick={this.handleClose}>Zobacz wyniki</MenuItem> */}
-      <MenuItem onClick={this.handleClose}>Pobierz raport do drugu</MenuItem>
-      {user.rola === "admin" && <MenuItem onClick={() => deleteAction(turnamentId)}><DeleteIcon /> Usuń zawody</MenuItem>}
+      {/* <MenuItem onClick={onClose}>Zobacz wyniki</MenuItem> */}
+      <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
+      {user.rola === "admin" && (
+        <MenuItem onClick={() => deleteAction(turnamentId)}>
+          <DeleteIcon /> Usuń zawody
+        </MenuItem>
+      )}
+      {finished ? (
+        <MenuItem onClick={() => cancelFinish(turnamentId)}>
+          Anuluj zakończenie zawodów
+        </MenuItem>
+      ) : (
+        <MenuItem onClick={() => finishTurnament(turnamentId)}>
+          Zakończ zawody
+        </MenuItem>
+      )}
     </Menu>
   );
 };
 
-export default MenuContextTurnament;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+const enhance = compose(
+  // withRouter,
+  connect(
+    mapStateToProps,
+    actions
+  )
+);
+
+export default enhance(MenuContextTurnament);

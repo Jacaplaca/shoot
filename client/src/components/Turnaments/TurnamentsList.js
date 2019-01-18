@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import TurnamentsRow from "./TurnamentsRow";
 import TurnamentsHeadRow from "./TurnamentsHeadRow";
 import { simpleSortUpDown } from "../../functions/functions";
-import Search from '../../inputs/Search'
+import Search from "../../inputs/Search";
 
 class TurnamentsList extends Component {
   state = {
-    rows: []
+    rows: [],
+    zaplanowane: true,
+    zakonczone: true
   };
 
   componentDidMount() {
@@ -20,14 +25,72 @@ class TurnamentsList extends Component {
     }
   }
 
+  handleChange = name => event => {
+    const { zaplanowane, zakonczone } = this.state;
+    let rows = [];
+    if (zaplanowane && zakonczone) {
+      if (name === "zaplanowane") {
+        rows = this.props.rows.filter(row => row.finished === true);
+      } else if (name === "zakonczone") {
+        rows = this.props.rows.filter(row => row.finished === false);
+      }
+    } else if (zaplanowane && !zakonczone) {
+      if (name === "zaplanowane") {
+        rows = [];
+      } else if (name === "zakonczone") {
+        rows = this.props.rows;
+      }
+    } else if (!zaplanowane && zakonczone) {
+      if (name === "zaplanowane") {
+        rows = this.props.rows;
+      } else if (name === "zakonczone") {
+        rows = [];
+      }
+    } else if (!zaplanowane && !zakonczone) {
+      if (name === "zaplanowane") {
+        rows = this.props.rows.filter(row => row.finished === false);
+      } else if (name === "zakonczone") {
+        rows = this.props.rows.filter(row => row.finished === true);
+      }
+    }
+
+    // if (!zaplanowane && !zakonczone) {
+    //   if (name === "zaplanowane") {
+    //     rows = this.props.rows.filter(
+    //       row => row.finished === !event.target.checked
+    //     );
+    //   } else if (name === "zakonczone") {
+    //     rows = this.props.rows.filter(
+    //       row => row.finished === event.target.checked
+    //     );
+    //   }
+    // } else if ((zaplanowane && !zakonczone) && ()) {
+    //   if (name === 'zaplanowane') {
+    //     rows = []
+    //   } else {
+    //     rows = this.props.rows
+    //   }
+    // } else if (!zaplanowane && zakonczone) {
+    //   if (name === 'zaplanowane') {
+    //     rows = this.props.rows
+    //   } else {
+    //     rows = []
+    //   }
+    // } else if (true) {
+    //
+    // }
+
+    this.setState({ [name]: event.target.checked, rows });
+  };
+
   sorting = (what, how) => {
     this.setState({ rows: simpleSortUpDown(this.state.rows, what, how) });
   };
 
-  searching = (search) => {
-    console.log('search', search);
-    this.setState({rows: search})
-  }
+  searching = search => {
+    console.log("search", search);
+    this.setState({ rows: search });
+  };
 
   render() {
     const grid =
@@ -36,7 +99,45 @@ class TurnamentsList extends Component {
     const { rows } = this.state;
     return (
       <div>
-        <Search data={this.props.rows} handleSearch={this.searching} columns={['name', 'facility', 'date', 'lzss', 'tech', 'judgeMain[name,surname]',  'judgeCounting[name,surname]',  'judgeRTS[name,surname]' ]}/>
+        <div style={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
+          <FormGroup row>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.zaplanowane}
+                  onChange={this.handleChange("zaplanowane")}
+                  value="zaplanowane"
+                />
+              }
+              label="Zaplanowane"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.zakonczone}
+                  onChange={this.handleChange("zakonczone")}
+                  value="zakonczone"
+                  // color="primary"
+                />
+              }
+              label="Zakończone"
+            />
+          </FormGroup>
+          <Search
+            data={this.props.rows}
+            handleSearch={this.searching}
+            columns={[
+              "name",
+              "facility",
+              "date",
+              "lzss",
+              "tech",
+              "judgeMain[name,surname]",
+              "judgeCounting[name,surname]",
+              "judgeRTS[name,surname]"
+            ]}
+          />
+        </div>
         <TurnamentsHeadRow grid={grid} row={rows[0]} sorting={this.sorting} />
         {rows.length > 0 &&
           rows.map(row => (

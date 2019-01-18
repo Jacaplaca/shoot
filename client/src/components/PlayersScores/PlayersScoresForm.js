@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+
+import NumberFormat from "react-number-format";
+
 import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
@@ -11,11 +14,20 @@ import * as actions from "../../actions";
 
 class PlayersScoresForm extends React.Component {
   state = {
-    value: ""
+    value: "",
+    finished: false
   };
 
   componentDidMount() {
     this.setState({ value: this.props.score });
+    const thisTurnament = this.props.turnaments.filter(
+      turnam => turnam._id === this.props.turnament
+    );
+    console.log("players scores form", thisTurnament);
+    const finished =
+      thisTurnament && thisTurnament[0] && thisTurnament[0].finished;
+    console.log("players scores form", finished);
+    this.setState({ finished });
   }
 
   handleChange = name => event => {
@@ -51,6 +63,10 @@ class PlayersScoresForm extends React.Component {
   //   }
   // };
 
+  // finished = () => {
+  //
+  // }
+
   render() {
     const {
       classes,
@@ -61,8 +77,12 @@ class PlayersScoresForm extends React.Component {
       turnament,
       button,
       enterAction,
-      auth: {user}
+      // finished,
+      turnaments,
+      auth: { user }
     } = this.props;
+
+    console.log("PlayersScoresForm", typeof this.state.value);
 
     return (
       <React.Fragment>
@@ -80,9 +100,11 @@ class PlayersScoresForm extends React.Component {
         >
           <TextField
             // inputStyle={{ backgroundColor: "red" }}
-            disabled={user.rola === 'admin' ? true : false}
-            InputProps={{ className: classes.input }}
-            inputProps={{ className: classes.inputNative }}
+            // type="number"
+            disabled={
+              user.rola === "admin" || this.state.finished ? true : false
+            }
+            // InputProps={{ className: classes.input }}
             style={{
               marginTop: 10,
               marginBottom: 3,
@@ -92,7 +114,7 @@ class PlayersScoresForm extends React.Component {
             value={this.state.value}
             InputLabelProps={{ shrink: true, className: classes.label }}
             id="outlined-name"
-            label={label.slice(0,12)}
+            label={label.slice(0, 12)}
             // className={classes.textField}
             // value={this.state.value}
             // placeholder={score}
@@ -104,6 +126,10 @@ class PlayersScoresForm extends React.Component {
             variant="outlined"
             className={classes.textField}
             // onKeyPress={this.handleKeyPress}
+            InputProps={{
+              className: classes.input,
+              inputComponent: NumberFormatCustom
+            }}
           />
         </form>
       </React.Fragment>
@@ -134,9 +160,32 @@ const styles = theme => ({
   }
 });
 
+function NumberFormatCustom(props) {
+  console.log("NumberFormatCustom", props);
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value
+          }
+        });
+      }}
+      decimalScale={2}
+      // thousandSeparator
+      // prefix="$"
+    />
+  );
+}
+
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  turnaments: state.turnaments
 });
 
 // export default withStyles(styles, { withTheme: true })(PlayersScoresForm);

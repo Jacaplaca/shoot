@@ -9,8 +9,8 @@ import { combineStyles } from "../../functions/functions";
 import PlayersScoresForm from "./PlayersScoresForm";
 import RowHOC from "../RowHOC";
 
-const comps = (competitions, classes, playerId, turnament) => {
-  console.log("comps", turnament);
+const comps = (competitions, classes, playerId, turnament, finished) => {
+  console.log("comps", turnament, finished);
   return competitions.map(comp => {
     const { competition, competitionId, score } = comp;
     return (
@@ -24,12 +24,14 @@ const comps = (competitions, classes, playerId, turnament) => {
         score={score ? score.toString() : "0"}
         player={playerId}
         turnament={turnament}
+        // finished={finished}
+        // aaa={finished}
       />
     );
   });
 };
 
-const PlayersScoresRow = ({ row, classes, turnament }) => {
+const PlayersScoresRow = ({ row, classes, turnament, finished }) => {
   const {
     playerName,
     playerSurname,
@@ -38,10 +40,10 @@ const PlayersScoresRow = ({ row, classes, turnament }) => {
     rank,
     totalScore
   } = row;
-  // console.log(turnament);
 
   return (
     <React.Fragment>
+      {console.log("playersscoresrow", row, finished)}
       <div
         className={classNames(classes.rowTable, classes.table)}
         style={{
@@ -63,8 +65,10 @@ const PlayersScoresRow = ({ row, classes, turnament }) => {
         <span className={classNames(classes.rowBlock, classes.rowName)}>
           {`${playerName} ${playerSurname}`}
         </span>
-        <span className={classNames(classes.rowBlock)}>{totalScore}</span>
-        {comps(competitions, classes, playerId, turnament)}
+        <span className={classNames(classes.rowBlock)}>
+          {Math.floor(totalScore)}
+        </span>
+        {comps(competitions, classes, playerId, turnament, finished)}
       </div>
     </React.Fragment>
   );

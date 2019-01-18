@@ -5,6 +5,8 @@ import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authentication";
+//testowanie
+// import localStorage from "./localStorage";
 // import { fetchPromoters } from "./actions/promoters";
 // import * as actions from './actions'
 
@@ -14,13 +16,26 @@ import { setCurrentUser, logoutUser } from "./actions/authentication";
 // import Home from "./components/Home";
 // import Promoters from "./components/Promoters";
 
+// window.localStorage = localStorage;
+//koniec testowania
+
 import MiniDrawer from "./skins/MiniDrawer";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// const token =
+//   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMWI4YzFiMGNjZTdiMmY2MDIzMzJhYyIsIm5hbWUiOiJhYWEiLCJyb2xhIjoiYWRtaW4iLCJpYXQiOjE1NDc4MDk4OTgsImV4cCI6MTU1MDQwMTg5OH0.k3jObuPvEFu9MJm5nx06qOoN2gBigCyn6r9tjFUKR6I";
 if (localStorage.jwtToken) {
-  setAuthToken(localStorage.jwtToken);
-  const decoded = jwt_decode(localStorage.jwtToken);
+  const token = localStorage.jwtToken;
+  //dobre 2 linijki
+  setAuthToken(token);
+  const decoded = jwt_decode(token);
+  //testowanie
+  // setAuthToken(localStorage.jwtToken);
+  // const decoded = jwt_decode(localStorage.jwtToken);
+  //koniec testu
+  console.log(decoded);
+
   store.dispatch(setCurrentUser(decoded));
   // store.dispatch(fetchPromoters(decoded));
 

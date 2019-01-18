@@ -29,7 +29,7 @@ const comps = (competitions, classes, sorting) => {
         }}
       >
         <SortButtons click={e => sorting("competitions", e, competitionId)} />
-        <span>{score}</span>
+        <span>{Math.floor(score)}</span>
       </span>
       // <PlayersScoresForm
       //   key={competitionId}
@@ -105,7 +105,9 @@ class SummaryRow extends Component {
               OK
             </ButtonMy>
           </span>
-          <span className={classNames(classes.rowBlock)}>{totalScore}</span>
+          <span className={classNames(classes.rowBlock)}>
+            {Math.floor(totalScore)}
+          </span>
           {/* <span className={classNames(classes.rowBlock)}> */}
           {row.competitions.length !== 0
             ? comps(competitions, classes, sorting)

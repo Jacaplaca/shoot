@@ -52,7 +52,8 @@ const TurnamentSchema = new Schema({
   tech: {
     type: String
   },
-  competitions: [CompetitionSchema]
+  competitions: [CompetitionSchema],
+  finished: { type: Boolean, default: false }
   // {
   //   name: { type: String },
   //   judge: { type: Schema.Types.ObjectId, ref: Judge }

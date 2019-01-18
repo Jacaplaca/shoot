@@ -179,42 +179,42 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-            <Route
-              exact
-              path="/wyniki_zawodnikow/:id"
-              render={props => {
-                console.log("route", props);
-                return (
-                  <MainContainer
-                    open={this.state.open}
-                    handleDrawerOpen={this.handleDrawerOpen}
-                  >
-                    <PlayersScoresMain
-                      title={props.match.params.id}
-                      add={props.location.state}
-                    />
-                  </MainContainer>
-                );
-              }}
-            />
-            <Route
-              exact
-              path="/metryczki_zawodnikow/:id"
-              render={props => {
-                console.log("route", props);
-                return (
-                  <MainContainer
-                    open={this.state.open}
-                    handleDrawerOpen={this.handleDrawerOpen}
-                  >
-                    <MetryczkiMain
-                      title={props.match.params.id}
-                      add={props.location.state}
-                    />
-                  </MainContainer>
-                );
-              }}
-            />
+          <Route
+            exact
+            path="/wyniki_zawodnikow/:id"
+            render={props => {
+              console.log("route", props);
+              return (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <PlayersScoresMain
+                    // title={props.match.params.id}
+                    add={props.location.state}
+                  />
+                </MainContainer>
+              );
+            }}
+          />
+          <Route
+            exact
+            path="/metryczki_zawodnikow/:id"
+            render={props => {
+              console.log("route", props);
+              return (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <MetryczkiMain
+                    title={props.match.params.id}
+                    add={props.location.state}
+                  />
+                </MainContainer>
+              );
+            }}
+          />
           {auth.user.rola === "admin" && (
             <Route
               exact
@@ -229,18 +229,18 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-            <Route
-              exact
-              path="/zawodnicy"
-              render={() => (
-                <MainContainer
-                  open={this.state.open}
-                  handleDrawerOpen={this.handleDrawerOpen}
-                >
-                  <Players title="Zawodnicy" />
-                </MainContainer>
-              )}
-            />
+          <Route
+            exact
+            path="/zawodnicy"
+            render={() => (
+              <MainContainer
+                open={this.state.open}
+                handleDrawerOpen={this.handleDrawerOpen}
+              >
+                <Players title="Zawodnicy" />
+              </MainContainer>
+            )}
+          />
           {/* <main className={classes.content}>
             <div className={classes.toolbar} /> */}
           {/* {!auth ? (

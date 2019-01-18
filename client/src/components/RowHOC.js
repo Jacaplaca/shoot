@@ -24,7 +24,7 @@ const RowRowHOC = WrappedComponent => {
 
     render() {
       const {
-        row: { _id },
+        row: { _id, finished },
         collection,
         classes,
         edit,
@@ -40,11 +40,14 @@ const RowRowHOC = WrappedComponent => {
       return (
         <React.Fragment>
           <div
-            className={classNames(classes.rowTable, classes.table)}
+            className={classNames(
+              finished ? classes.rowFinished : classes.rowTable,
+              classes.table
+            )}
             style={{ gridTemplateColumns: grid }}
           >
             <span className={classNames(classes.rowBlock)}>
-              {user.rola === "admin" || collection === 'players'? (
+              {user.rola === "admin" || collection === "players" ? (
                 <IconButton
                   onClick={() => editFetch(collection, _id)}
                   color="primary"
@@ -52,30 +55,31 @@ const RowRowHOC = WrappedComponent => {
                 >
                   <Edit />
                 </IconButton>
-              ) : (
-null
-              )}
+              ) : null}
             </span>
             <WrappedComponent {...this.props} />
             <span className={classNames(classes.rowBlock)}>
-            <IconButton
-              color="primary"
-              aria-owns={anchorEl ? "simple-menu" : undefined}
-              aria-haspopup="true"
-              onClick={this.handleClick}
-            >
-              <MenuIcon />
-            </IconButton>
+              <IconButton
+                color="primary"
+                aria-owns={anchorEl ? "simple-menu" : undefined}
+                aria-haspopup="true"
+                onClick={this.handleClick}
+              >
+                <MenuIcon />
+              </IconButton>
             </span>
           </div>
           <MenuContextTurnament
             user={user}
-            deleteAction={(id) => {toDeleteAction(id)
-            this.handleClose()}}
+            deleteAction={id => {
+              toDeleteAction(id);
+              this.handleClose();
+            }}
             turnamentId={_id}
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={this.handleClose}
+            finished={finished}
           />
         </React.Fragment>
       );

@@ -159,7 +159,7 @@ class DrawerMy extends React.Component {
             const userType = auth.user.rola;
             // console.log(userType);
             return rola.split(",").map(x => {
-              console.log(x);
+              // console.log(x);
               if (userType === x) {
                 return (
                   // <ShowLinkToComp key={i} comp={comp}>
