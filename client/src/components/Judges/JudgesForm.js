@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { compose } from "redux";
+import { withStyles } from "@material-ui/core/styles";
+import { combineStyles } from "../../functions/functions";
 import store from "../../store";
 import * as actions from "../../actions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
+import { formStyles } from "../../skins/mainStyles";
 
 import InputComponent from "../../inputs/InputComponent";
 import FormButtons from "../../skins/FormButtons";
@@ -33,15 +37,12 @@ const JudgesFormik = props => {
   console.log("judges", props);
   // setFieldValue("email", "ccc@ccc.com");
   return (
-    <Paper
-      style={{
-        padding: 30
-      }}
-    >
+    <Paper className={classes.paper}>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={24}>
+        <Grid container spacing={0}>
           <Grid item xs={12} sm={6} md={4}>
             <InputComponent
+              clear={() => setFieldValue("name", "")}
               name="name"
               label="Imię"
               type="string"
@@ -54,6 +55,7 @@ const JudgesFormik = props => {
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <InputComponent
+              clear={() => setFieldValue("surname", "")}
               name="surname"
               label="nazwisko"
               type="string"
@@ -154,7 +156,20 @@ const mapStateToProps = state => ({
   toEdit: state.edit
 });
 
-export default connect(
-  mapStateToProps,
-  actions
-)(withRouter(JudgesForm));
+const combinedStyles = combineStyles(formStyles);
+
+const enhance = compose(
+  withRouter,
+  withStyles(combinedStyles, { withTheme: true }),
+  connect(
+    mapStateToProps,
+    actions
+  )
+);
+
+export default enhance(JudgesForm);
+
+// export default connect(
+//   mapStateToProps,
+//   actions
+// )(withRouter(JudgesForm));

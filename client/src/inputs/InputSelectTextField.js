@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,6 +9,8 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import NumberFormat from "react-number-format";
 import ClearButton from "./ClearButton";
+import { textFieldStyles } from "../skins/mainStyles";
+import { combineStyles } from "../functions/functions";
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, name, ...other } = props;
@@ -49,7 +54,9 @@ class InputSelectTextField extends Component {
       onChange,
       password,
       passwordVisibility,
-      type
+      type,
+      clear,
+      classes
     } = this.props;
     const endAdornment = () => {
       if (value.length > 0 && type !== "password") {
@@ -59,7 +66,8 @@ class InputSelectTextField extends Component {
               value={value}
               isloading={isloading}
               name={name}
-              onChange={onChange}
+              // onChange={onChange}
+              clear={clear}
             />
           </InputAdornment>
         );
@@ -116,6 +124,8 @@ class InputSelectTextField extends Component {
       ref,
       kwota,
       autoComplete,
+      // type,
+      // classes,
       // isloading,
       ...other
     } = this.props;
@@ -127,7 +137,9 @@ class InputSelectTextField extends Component {
             ref && ref(node);
             inputRef(node);
           },
-          ...thisCompInputProps
+          ...thisCompInputProps,
+          // style: { color: "red" }
+          className: classes.input
         }}
         {...other}
         type={
@@ -137,6 +149,14 @@ class InputSelectTextField extends Component {
         }
         name={name}
         autoComplete={autoComplete}
+        // margin="none"
+        // style={{ margin: 0, padding: 0, backgroundColor: "red" }}
+        // inputProps={{ style: { fontSize: 50 } }}
+        InputLabelProps={{
+          className: classes.label,
+          shrink: type === "date" || value !== "" ? true : false
+        }}
+        // className={classes.input}
       />
     );
   }
@@ -226,4 +246,18 @@ InputSelectTextField.defaultProps = {
 //   );
 // };
 
-export default InputSelectTextField;
+const combinedStyles = combineStyles(textFieldStyles);
+
+const enhance = compose(
+  // withRouter,
+  withStyles(combinedStyles, { withTheme: true })
+  // connect(
+  //   mapStateToProps,
+  //   actions
+  // ),
+  // RowHOC
+);
+
+export default enhance(InputSelectTextField);
+
+// export default InputSelectTextField;

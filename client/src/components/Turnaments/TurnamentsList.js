@@ -93,10 +93,15 @@ class TurnamentsList extends Component {
   };
 
   render() {
-    const grid =
-      "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px";
-    const { collection } = this.props;
+    const {
+      collection,
+      auth: { user }
+    } = this.props;
     const { rows } = this.state;
+    const grid =
+      user.rola === "admin"
+        ? "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 70px 60px"
+        : "5px minmax(80px, 100px) 1fr 1fr 1fr 1fr 70px 60px";
     return (
       <div>
         <div style={{ display: "grid", gridTemplateColumns: "50% 50%" }}>

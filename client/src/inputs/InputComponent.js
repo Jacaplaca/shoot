@@ -14,7 +14,7 @@ const styles = theme => ({
   },
   formControl: {
     //marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    marginBottom: 5,
     minWidth: 120,
     width: "100%"
   },
@@ -22,7 +22,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2
   },
   textField: {
-    marginBottom: theme.spacing.unit
+    marginBottom: 0
   }
 });
 
@@ -47,6 +47,7 @@ const InputComponent = props => {
     fullWidth,
     kwota,
     autoComplete,
+    clear,
     ...other
   } = props;
 
@@ -54,6 +55,7 @@ const InputComponent = props => {
     <FormControl
       className={classes.formControl}
       aria-describedby="name-helper-text"
+      style={{ width: "90%" }}
     >
       <InputMask mask={mask} value={value} onChange={edytuj} {...other}>
         {() => (
@@ -63,6 +65,7 @@ const InputComponent = props => {
             //   console.log(props);
             // }}
             //refy={props.refy}
+            clear={clear}
             helperText={helperText}
             error={error}
             label={label}
@@ -72,9 +75,9 @@ const InputComponent = props => {
             onChange={edytuj}
             type={type}
             // type={password ? "password" : type}
-            InputLabelProps={{
-              shrink: type === "date" || value !== "" ? true : false
-            }}
+            // InputLabelProps={{
+            //   shrink: type === "date" || value !== "" ? true : false
+            // }}
             kwota={kwota}
             fullWidth={fullWidth}
             autoComplete={autoComplete}

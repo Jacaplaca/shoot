@@ -14,7 +14,8 @@ const styles = theme => ({
     //height: 22,
     padding: "0 20px",
     //margin: "10px 10px 0 0 "
-    margin: theme.spacing.unit
+    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing.unit
   },
   buttonMain: {
     background: `linear-gradient(45deg, ${theme.palette.button.start} 30%, ${

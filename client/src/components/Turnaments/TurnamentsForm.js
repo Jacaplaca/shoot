@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { compose } from "redux";
+import { withStyles } from "@material-ui/core/styles";
+import { combineStyles } from "../../functions/functions";
 // import { loginUser } from "../actions/authentication";
 import * as actions from "../../actions";
 import store from "../../store";
-import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
+
+import { formStyles } from "../../skins/mainStyles";
 
 import InputComponent from "../../inputs/InputComponent";
 import ButtonMy from "../../skins/ButtonMy";
@@ -61,15 +65,15 @@ class TurnamentsFormik extends Component {
     // console.log("TurnamentsForm", this.props.values);
     return (
       <Paper
-        style={{
-          padding: 30
-        }}
+        // style={formStyles.paper}
+        className={classes.paper}
       >
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={24}>
+          <Grid container spacing={0}>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="date"
+                clear={() => setFieldValue("date", "")}
                 label="Data"
                 type="date"
                 // edytuj={change.bind(null, "email")}
@@ -83,6 +87,7 @@ class TurnamentsFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 // initialValues="asdfsadfasdf"
+                clear={() => setFieldValue("name", "")}
                 name="name"
                 label="Nazwa"
                 type="string"
@@ -108,6 +113,7 @@ class TurnamentsFormik extends Component {
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
+                clear={() => setFieldValue("facility", "")}
                 name="facility"
                 label="Strzelnica"
                 type="string"
@@ -138,6 +144,7 @@ class TurnamentsFormik extends Component {
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
+                clear={() => setFieldValue("lzss", "")}
                 name="lzss"
                 label="Obserwator LZSS"
                 type="string"
@@ -180,6 +187,7 @@ class TurnamentsFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="tech"
+                clear={() => setFieldValue("tech", "")}
                 label="Kontrola technicza"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -314,27 +322,19 @@ const TurnamentsForm = withFormik({
     sponsor3
   }) => {
     return {
-      name: toEdit ? toEdit.name : name || "zzzzz",
-      date: toEdit ? toEdit.date : date || "2019-01-17",
+      name: toEdit ? toEdit.name : name || "",
+      date: toEdit ? toEdit.date : date || "",
       logo: toEdit ? toEdit.logo : logo || "",
       sponsor1: toEdit ? toEdit.sponsor1 : sponsor1 || "",
       sponsor2: toEdit ? toEdit.sponsor2 : sponsor2 || "",
       sponsor3: toEdit ? toEdit.sponsor3 : sponsor3 || "",
-      promoter: toEdit
-        ? toEdit.promoter
-        : promoter || "5c1ebd2a00a26550d4767de6",
-      facility: toEdit ? toEdit.facility : facility || "zzzzz",
-      judgeMain: toEdit
-        ? toEdit.judgeMain
-        : judgeMain || "5c224f69e9915f2670e5f9ad",
-      lzss: toEdit ? toEdit.lzss : lzss || "zzzzzz",
-      judgeCounting: toEdit
-        ? toEdit.judgeCounting
-        : judgeCounting || "5c224f69e9915f2670e5f9ad",
-      judgeRTS: toEdit
-        ? toEdit.judgeRTS
-        : judgeRTS || "5c224f69e9915f2670e5f9ad",
-      tech: toEdit ? toEdit.tech : tech || "zzzzzzz",
+      promoter: toEdit ? toEdit.promoter : promoter || "",
+      facility: toEdit ? toEdit.facility : facility || "",
+      judgeMain: toEdit ? toEdit.judgeMain : judgeMain || "",
+      lzss: toEdit ? toEdit.lzss : lzss || "",
+      judgeCounting: toEdit ? toEdit.judgeCounting : judgeCounting || "",
+      judgeRTS: toEdit ? toEdit.judgeRTS : judgeRTS || "",
+      tech: toEdit ? toEdit.tech : tech || "",
       collection,
       toEdit
     };
@@ -396,8 +396,21 @@ const mapStateToProps = state => ({
   toEdit: state.edit
 });
 
-export default connect(
-  mapStateToProps,
-  // { fetchTurnaments }
-  actions
-)(withRouter(TurnamentsForm));
+const combinedStyles = combineStyles(formStyles);
+
+const enhance = compose(
+  withRouter,
+  withStyles(combinedStyles, { withTheme: true }),
+  connect(
+    mapStateToProps,
+    actions
+  )
+);
+
+export default enhance(TurnamentsForm);
+
+// export default connect(
+//   mapStateToProps,
+//   // { fetchTurnaments }
+//   actions
+// )(withRouter(TurnamentsForm));

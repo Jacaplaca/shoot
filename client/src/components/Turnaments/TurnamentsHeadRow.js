@@ -10,7 +10,7 @@ import { tableHeadStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
 
-const TurnamentsHeadRow = ({ classes, grid, sorting }) => {
+const TurnamentsHeadRow = ({ classes, grid, sorting, auth: { user } }) => {
   return (
     <div
       className={classNames(classes.headTable, classes.table)}
@@ -24,6 +24,15 @@ const TurnamentsHeadRow = ({ classes, grid, sorting }) => {
         click={e => sorting("date", e)}
         sort
       />
+      {/* <span className={classNames(classes.headBlock)}>Organizacja</span> */}
+      {user.rola === "admin" && (
+        <HeadRowField
+          title="Organizacja"
+          classes={classes}
+          click={e => sorting("promoterName", e)}
+          sort
+        />
+      )}
 
       <HeadRowField
         title="Nazwa"
@@ -38,10 +47,10 @@ const TurnamentsHeadRow = ({ classes, grid, sorting }) => {
         sort
       />
       <span className={classNames(classes.headBlock)}>Sędzia główny</span>
-      <span className={classNames(classes.headBlock)}>Sędzia liczący</span>
-      <span className={classNames(classes.headBlock)}>Sędzia RTS</span>
+      {/* <span className={classNames(classes.headBlock)}>Sędzia liczący</span> */}
+      {/* <span className={classNames(classes.headBlock)}>Sędzia RTS</span> */}
       <span className={classNames(classes.headBlock)}>Obserwator lzss</span>
-      <span className={classNames(classes.headBlock)}>Techniczny</span>
+      {/* <span className={classNames(classes.headBlock)}>Techniczny</span> */}
       <span className={classNames(classes.headBlock)}>
         {/* <img className={classes.rowImg} src={require(`../../${logo}`)} /> */}
       </span>

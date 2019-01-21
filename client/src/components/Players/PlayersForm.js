@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { compose } from "redux";
+import { withStyles } from "@material-ui/core/styles";
+import { combineStyles } from "../../functions/functions";
 import XLSX from "xlsx";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
@@ -13,6 +16,7 @@ import * as Yup from "yup";
 import UploadFile from "../../inputs/UploadFile";
 import axios from "axios";
 
+import { formStyles } from "../../skins/mainStyles";
 import InputComponent from "../../inputs/InputComponent";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
 import FormButtons from "../../skins/FormButtons";
@@ -78,7 +82,7 @@ class PlayersFormik extends Component {
         rank,
         club
       },
-      auth: {user},
+      auth: { user },
       turnaments,
       errors,
       touched,
@@ -98,13 +102,9 @@ class PlayersFormik extends Component {
     // console.log("turn", turnament.length);
     // setFieldValue("email", "ccc@ccc.com");
     return (
-      <Paper
-        style={{
-          padding: 30
-        }}
-      >
+      <Paper className={classes.paper}>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={24}>
+          <Grid container spacing={0}>
             <Grid item xs={12} sm={6} md={4}>
               <InputSelectBaza
                 object={turnaments}
@@ -119,6 +119,21 @@ class PlayersFormik extends Component {
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
+                name="rank"
+                clear={() => setFieldValue("rank", "")}
+                label="Numer startowy"
+                type="string"
+                // edytuj={change.bind(null, "email")}
+                edytuj={handleChange}
+                value={rank}
+                error={touched.rank && Boolean(errors.rank)}
+                helperText={touched.rank && errors.rank ? errors.rank : " "}
+                onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <InputComponent
+                clear={() => setFieldValue("name", "")}
                 name="name"
                 label="Imię"
                 type="string"
@@ -133,6 +148,7 @@ class PlayersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="surname"
+                clear={() => setFieldValue("surname", "")}
                 label="nazwisko"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -149,6 +165,7 @@ class PlayersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="caliber"
+                clear={() => setFieldValue("caliber", "")}
                 label="Kaliber"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -164,6 +181,7 @@ class PlayersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="gun"
+                clear={() => setFieldValue("gun", "")}
                 label="Broń"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -177,6 +195,7 @@ class PlayersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="scope"
+                clear={() => setFieldValue("scope", "")}
                 label="Luneta"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -190,6 +209,7 @@ class PlayersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="team"
+                clear={() => setFieldValue("team", "")}
                 label="Team"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -200,22 +220,11 @@ class PlayersFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <InputComponent
-                name="rank"
-                label="Klasa"
-                type="string"
-                // edytuj={change.bind(null, "email")}
-                edytuj={handleChange}
-                value={rank}
-                error={touched.rank && Boolean(errors.rank)}
-                helperText={touched.rank && errors.rank ? errors.rank : " "}
-                onBlur={handleBlur}
-              />
-            </Grid>
+
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="club"
+                clear={() => setFieldValue("club", "")}
                 label="Klub"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -286,13 +295,13 @@ const PlayersForm = withFormik({
     return {
       turnament: toEdit ? toEdit.turnament : turnament || "",
       name: toEdit ? toEdit.name : name || "",
-      surname: toEdit ? toEdit.surname : surname || "surname",
-      caliber: toEdit ? toEdit.caliber : caliber || "caliber",
-      gun: toEdit ? toEdit.gun : gun || "gun",
-      scope: toEdit ? toEdit.scope : scope || "scope",
-      team: toEdit ? toEdit.team : team || "team",
-      rank: toEdit ? toEdit.rank : rank || "rank",
-      club: toEdit ? toEdit.club : club || "club",
+      surname: toEdit ? toEdit.surname : surname || "",
+      caliber: toEdit ? toEdit.caliber : caliber || "",
+      gun: toEdit ? toEdit.gun : gun || "",
+      scope: toEdit ? toEdit.scope : scope || "",
+      team: toEdit ? toEdit.team : team || "",
+      rank: toEdit ? toEdit.rank : rank || "",
+      club: toEdit ? toEdit.club : club || "",
       toEdit,
       collection,
       turnamentId,
@@ -360,7 +369,20 @@ const mapStateToProps = state => ({
 //   { loginUser }
 // )(withRouter(PlayersForm));
 
-export default connect(
-  mapStateToProps,
-  actions
-)(withRouter(PlayersForm));
+const combinedStyles = combineStyles(formStyles);
+
+const enhance = compose(
+  withRouter,
+  withStyles(combinedStyles, { withTheme: true }),
+  connect(
+    mapStateToProps,
+    actions
+  )
+);
+
+export default enhance(PlayersForm);
+
+// export default connect(
+//   mapStateToProps,
+//   actions
+// )(withRouter(PlayersForm));

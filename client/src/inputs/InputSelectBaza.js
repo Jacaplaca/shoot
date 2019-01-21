@@ -330,6 +330,7 @@ class InputSelectBaza extends React.Component {
           onChange={e => this.onChange2(e)}
           // onChange={e => console.log(e.target.value)}
           // onChange={}
+          clear={() => this.onChange2({ target: { value: "" } })}
           name={this.props.name}
           label={label}
           ref={this.storeInputReference}

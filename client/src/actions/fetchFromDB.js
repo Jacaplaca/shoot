@@ -53,9 +53,19 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
   axios
     .get(url)
     .then(res => {
+      let fromDB = [];
+      if (collection === "turnaments") {
+        fromDB = res.data.map(turn =>
+          Object.assign(turn, {
+            promoterName: turn.promoter.name
+          })
+        );
+      } else {
+        fromDB = res.data;
+      }
       dispatch({
         type,
-        payload: res.data
+        payload: fromDB
       });
     })
     .then(() => {

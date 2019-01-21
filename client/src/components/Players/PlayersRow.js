@@ -15,14 +15,14 @@ const PlayersRow = ({ row, classes, grid }) => {
       <span className={classNames(classes.rowBlock, classes.rowName)}>
         {`${name} ${surname}`}
       </span>
+      <span className={classNames(classes.rowBlock)}>
+        {rank.map(x => `${x} `)}
+      </span>
       <span className={classNames(classes.rowBlock)}>{caliber}</span>
       <span className={classNames(classes.rowBlock)}>{gun}</span>
       <span className={classNames(classes.rowBlock)}>{scope}</span>
       <span className={classNames(classes.rowBlock)}>{team}</span>
       <span className={classNames(classes.rowBlock)}>{club}</span>
-      <span className={classNames(classes.rowBlock)}>
-        {rank.map(x => `${x} `)}
-      </span>
     </React.Fragment>
   );
 };

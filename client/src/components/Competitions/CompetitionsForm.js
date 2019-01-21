@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-// import axios from "axios";
-// import { loginUser } from "../actions/authentication";
+import { compose } from "redux";
+import { withStyles } from "@material-ui/core/styles";
+import { combineStyles } from "../../functions/functions";
 import { registerUser } from "../../actions/authentication";
 import store from "../../store";
-import { withStyles } from "@material-ui/core/styles";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -22,6 +22,7 @@ import UploadFile from "../../inputs/UploadFile";
 import InputSelectBaza from "../../inputs/InputSelectBaza";
 import DatePickerMy from "../../inputs/DatePickerMy";
 import FormButtons from "../../skins/FormButtons";
+import { formStyles } from "../../skins/mainStyles";
 const axios = require("axios");
 
 // const endpoint = "/api/upload";
@@ -50,16 +51,13 @@ class CompetitionsFormik extends Component {
     } = this.props;
     // setFieldValue("email", "ccc@ccc.com");
     return (
-      <Paper
-        style={{
-          padding: 30
-        }}
-      >
+      <Paper className={classes.paper}>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={24}>
+          <Grid container spacing={0}>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="name"
+                clear={() => setFieldValue("name", "")}
                 label="Nazwa/nr"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -100,15 +98,17 @@ class CompetitionsFormik extends Component {
             </Grid>
           </Grid>
 
-          <FormButtons
-            subDisable={!isValid}
-            subLabel={toEdit ? "Edytuj konkurencje" : "Dodaj konkurencje"}
-            cancelLabel={"Anuluj"}
-            cancelAction={() => {
-              store.dispatch(actions.editFetch());
-              resetForm();
-            }}
-          />
+          <div style={{ marginTop: 10 }}>
+            <FormButtons
+              subDisable={!isValid}
+              subLabel={toEdit ? "Edytuj konkurencje" : "Dodaj konkurencje"}
+              cancelLabel={"Anuluj"}
+              cancelAction={() => {
+                store.dispatch(actions.editFetch());
+                resetForm();
+              }}
+            />
+          </div>
         </form>
       </Paper>
     );
@@ -208,7 +208,20 @@ const mapStateToProps = state => ({
 //   { loginUser }
 // )(withRouter(CompetitionsForm));
 
-export default connect(
-  mapStateToProps,
-  actions
-)(withRouter(CompetitionsForm));
+const combinedStyles = combineStyles(formStyles);
+
+const enhance = compose(
+  withRouter,
+  withStyles(combinedStyles, { withTheme: true }),
+  connect(
+    mapStateToProps,
+    actions
+  )
+);
+
+export default enhance(CompetitionsForm);
+
+// export default connect(
+//   mapStateToProps,
+//   actions
+// )(withRouter(CompetitionsForm));

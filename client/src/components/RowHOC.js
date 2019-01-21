@@ -49,24 +49,63 @@ const RowRowHOC = WrappedComponent => {
             <span className={classNames(classes.rowBlock)}>
               {user.rola === "admin" || collection === "players" ? (
                 <IconButton
+                  style={{ padding: 5 }}
                   onClick={() => editFetch(collection, _id)}
                   color="primary"
                   aria-label="Add to shopping cart"
                 >
-                  <Edit />
+                  <Edit
+                    style={styles.button}
+                    iconStyle={styles.icon}
+                    tooltipStyles={styles.tooltip}
+                  />
                 </IconButton>
               ) : null}
             </span>
             <WrappedComponent {...this.props} />
             <span className={classNames(classes.rowBlock)}>
-              <IconButton
-                color="primary"
-                aria-owns={anchorEl ? "simple-menu" : undefined}
-                aria-haspopup="true"
-                onClick={this.handleClick}
-              >
-                <MenuIcon />
-              </IconButton>
+              {collection === "turnaments" ? (
+                <IconButton
+                  style={{ padding: 5 }}
+                  color="primary"
+                  aria-owns={anchorEl ? "simple-menu" : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handleClick}
+                >
+                  <MenuIcon
+                    style={styles.button}
+                    iconStyle={styles.icon}
+                    tooltipStyles={styles.tooltip}
+                  />
+                </IconButton>
+              ) : (
+                //   <IconButton
+                //     aria-label="Delete"
+                //     onClick={() => toDeleteAction(_id)}
+                //   >
+                //     <DeleteIcon />
+                //   </IconButton>
+                // ) : (
+                //   <IconButton
+                //     color="primary"
+                //     aria-owns={anchorEl ? "simple-menu" : undefined}
+                //     aria-haspopup="true"
+                //     onClick={this.handleClick}
+                //   >
+                //     <MenuIcon />
+                //   </IconButton>
+                <IconButton
+                  style={{ padding: 5 }}
+                  aria-label="Delete"
+                  onClick={() => toDeleteAction(_id)}
+                >
+                  <DeleteIcon
+                    style={styles.button}
+                    iconStyle={styles.icon}
+                    tooltipStyles={styles.tooltip}
+                  />
+                </IconButton>
+              )}
             </span>
           </div>
           <MenuContextTurnament
@@ -86,6 +125,21 @@ const RowRowHOC = WrappedComponent => {
     }
   }
   return RowRowHOC;
+};
+
+const styles = {
+  button: {
+    width: 18,
+    height: 18,
+    padding: 0
+  },
+  icon: {
+    fontSize: 17,
+    color: "#fffff"
+  },
+  tooltip: {
+    marginLeft: 7
+  }
 };
 
 export default RowRowHOC;

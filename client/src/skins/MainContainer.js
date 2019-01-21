@@ -73,6 +73,7 @@ export const mainStyles = theme => ({
     marginLeft: drawerClosedWidth,
     width: `calc(100% - ${drawerClosedWidth}px)`,
     backgroundColor: theme.palette.menu,
+    // backgroundColor: lighten(theme.palette.menu, 0.3),
     zIndex: 0,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,

@@ -23,17 +23,17 @@ export const registerUser = (user, history) => dispatch => {
     .then(res => {
       if (history) {
         history.push("/login");
+      } else {
+        dispatch(actions.fetchFromDB("promoters"));
       }
-      // else {
-      //   dispatch(actions.fetchFromDB("promoters"));
-      // }
 
       history ? history.push("/login") : res.status(200).json(res);
     })
     .catch(err => {
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload:
+          err && err.response && err.response.data ? err.response.data : ""
       });
     });
 };

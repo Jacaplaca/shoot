@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-// import axios from "axios";
-// import { loginUser } from "../actions/authentication";
-// import { registerUser } from "../../actions/authentication";
+import { compose } from "redux";
+import { withStyles } from "@material-ui/core/styles";
+import { combineStyles } from "../../functions/functions";
+import { formStyles } from "../../skins/mainStyles";
 import store from "../../store";
 import * as actions from "../../actions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
-
 import InputComponent from "../../inputs/InputComponent";
 import Thumb from "../Thumb";
 import UploadFile from "../../inputs/UploadFile";
@@ -41,12 +41,11 @@ class PromotersFormik extends Component {
     // console.log("validationSchema", validationSchema);
     return (
       <Paper
-        style={{
-          padding: 30
-        }}
+        // style={formStyles.paper}
+        className={classes.paper}
       >
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={24}>
+          <Grid container spacing={0}>
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="name"
@@ -54,6 +53,7 @@ class PromotersFormik extends Component {
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
+                clear={() => setFieldValue("name", "")}
                 value={name}
                 error={touched.name && Boolean(errors.name)}
                 helperText={touched.name && errors.name ? errors.name : " "}
@@ -66,6 +66,7 @@ class PromotersFormik extends Component {
                 label="Adres"
                 type="string"
                 // edytuj={change.bind(null, "email")}
+                clear={() => setFieldValue("adres", "")}
                 edytuj={handleChange}
                 value={adres}
                 error={touched.adres && Boolean(errors.adres)}
@@ -76,6 +77,7 @@ class PromotersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="www"
+                clear={() => setFieldValue("www", "")}
                 label="Strona internetowa"
                 type="string"
                 // edytuj={change.bind(null, "email")}
@@ -89,6 +91,7 @@ class PromotersFormik extends Component {
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
                 name="email"
+                clear={() => setFieldValue("email", "")}
                 label="E-mail"
                 type="string"
                 edytuj={handleChange}
@@ -153,7 +156,9 @@ class PromotersFormik extends Component {
 
           <FormButtons
             subDisable={!isValid}
-            subLabel={toEdit ? "Edytuj organizatora" : "Dodaj organizatora"}
+            subLabel={
+              toEdit !== null ? "Edytuj organizatora" : "Dodaj organizatora"
+            }
             cancelLabel={"Anuluj"}
             cancelAction={() => {
               store.dispatch(actions.editFetch());
@@ -216,17 +221,20 @@ const PromotersForm = withFormik({
     collection
   }) {
     return {
-      name: toEdit ? toEdit.name : name || "aaaaaaa",
+      name: toEdit ? toEdit.name : name || "",
       logo: toEdit ? toEdit.logo : logo || "",
-      www: toEdit ? toEdit.www : www || "aaaaa",
-      password: password || "aaaaaaaaa",
-      password2: password2 || "aaaaaaaaa",
-      adres: toEdit ? toEdit.adres : adres || "aaaaa",
-      email: toEdit ? toEdit.email : email || "aaaaa@asdfsaldfkjaf.pl",
+      www: toEdit ? toEdit.www : www || "",
+      password: password || "",
+      password2: password2 || "",
+      adres: toEdit ? toEdit.adres : adres || "",
+      email: toEdit ? toEdit.email : email || "",
       collection,
       toEdit
     };
   },
+  // handleChange(e) {
+  //   console.log("handle", e);
+  // },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
     const form = {
       name: values.name,
@@ -274,8 +282,21 @@ const mapStateToProps = state => ({
   toEdit: state.edit
 });
 
-export default connect(
-  mapStateToProps,
-  // { registerUser }
-  actions
-)(withRouter(PromotersForm));
+const combinedStyles = combineStyles(formStyles);
+
+const enhance = compose(
+  withRouter,
+  withStyles(combinedStyles, { withTheme: true }),
+  connect(
+    mapStateToProps,
+    actions
+  )
+);
+
+export default enhance(PromotersForm);
+
+// export default connect(
+//   mapStateToProps,
+//   // { registerUser }
+//   actions
+// )(withRouter(PromotersForm));

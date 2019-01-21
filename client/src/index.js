@@ -24,6 +24,7 @@ import {
   lighten
 } from "@material-ui/core/styles/colorManipulator";
 
+const right = "dark";
 const glowny = "#2b2b2b";
 const szary = "rgb(135, 135, 135)";
 const czerwony = "rgb(255, 0, 0)";
@@ -41,6 +42,9 @@ const pomaranczowy = orange[300];
 
 const newTheme = theme =>
   createMuiTheme({
+    // spacing: {
+    //   iconSize: 1
+    // },
     // menu: {
     //   backgroundColor: Colors.greenA100
     // },
@@ -89,6 +93,12 @@ const newTheme = theme =>
         icon: "rgba(255, 255, 255, 0.5)",
         primary: bialy,
         secondary: "rgba(255, 255, 255, 0.7)"
+      },
+      paper: {
+        background: right === "dark" ? glowny : bialy
+      },
+      form: {
+        color: right === "dark" ? bialy : glowny
       }
       // // Used by `getContrastText()` to maximize the contrast between the background and
       // // the text.

@@ -17,11 +17,6 @@ import { PTSans } from "../skins/PTSans";
 
 // const fetch64 = require("fetch-base64");
 
-
-
-
-
-
 export const makeImprints = async turnamentId => {
   console.log("make makeImprints");
   const unsubscribe = store.subscribe(async () => {
@@ -54,7 +49,8 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         playerName: player.name,
         playerSurname: player.surname,
         playerId: player._id,
-        team: player.team
+        team: player.team,
+        startNo: player.rank.length > 0 ? player.rank[0] : ""
       });
     } else {
       Object.assign(teams, { [team]: [] });
@@ -62,7 +58,8 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         playerName: player.name,
         playerSurname: player.surname,
         playerId: player._id,
-        team: player.team
+        team: player.team,
+        startNo: player.rank.length > 0 ? player.rank[0] : ""
       });
     }
   }
@@ -97,6 +94,7 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
           {
             playerName: player.name,
             playerSurname: player.surname,
+            startNo: player.startNo,
             playerId: player._id,
             team: player.team
           }
@@ -117,7 +115,6 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
       }
     }
   }
-
 
   const makePDF = () => {
     var doc = new jsPDF({
@@ -283,6 +280,31 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
           72,
           27.5 + a()
         );
+        doc.text(
+          `${
+            arrayToPdf[i].names[0].startNo ? arrayToPdf[i].names[0].startNo : ""
+          }`,
+          41,
+          13 + a()
+        );
+        doc.text(
+          `${
+            arrayToPdf[i].names[1] && arrayToPdf[i].names[1].startNo
+              ? arrayToPdf[i].names[1].startNo
+              : ""
+          }`,
+          41,
+          20.5 + a()
+        );
+        doc.text(
+          `${
+            arrayToPdf[i].names[2] && arrayToPdf[i].names[2].startNo
+              ? arrayToPdf[i].names[2].startNo
+              : ""
+          }`,
+          41,
+          27.5 + a()
+        );
         var competition = doc.splitTextToSize(
           `${arrayToPdf[i].competition}`,
           30
@@ -297,8 +319,6 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     doc.save(`${theTurnament.name}_metryczki_zawodnikow.pdf`);
     console.log(arrayToPdf);
   };
-
-
 
   console.log("playerCompetition", playerCompetition);
   console.log("teams", teams);
@@ -346,6 +366,4 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
   }
 
   processArray();
-
-
 };

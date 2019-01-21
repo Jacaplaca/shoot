@@ -108,7 +108,7 @@ module.exports = {
       club,
       rank
     } = req.body;
-    console.log('rank',rank);
+    console.log("rank", rank);
     const updatedPlayer = {
       name,
       surname,
@@ -197,13 +197,14 @@ module.exports = {
   },
 
   pickTurnament: async (req, res, next) => {
-    console.log("pickTurnament", req.params.turnamentId);
+    const id = req.params.turnamentId;
+    console.log("pickTurnament", id);
     try {
       const result = await Player.find({
-        turnament: req.params.turnamentId
+        turnament: id
       });
       // .populate("turnament");
-      res.status(200).json(result);
+      id ? res.status(200).json(result) : res.status(200).json({});
     } catch (e) {
       console.log(e);
     }

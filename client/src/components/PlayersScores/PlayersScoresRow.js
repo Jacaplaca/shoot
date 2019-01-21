@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import NumberFormat from "react-number-format";
+
 import * as actions from "../../actions";
 import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
@@ -47,7 +49,7 @@ const PlayersScoresRow = ({ row, classes, turnament, finished }) => {
       <div
         className={classNames(classes.rowTable, classes.table)}
         style={{
-          gridTemplateColumns: `50px 1fr 50px repeat(${
+          gridTemplateColumns: `50px 1fr 80px repeat(${
             competitions.length
           }, 100px)`
         }}
@@ -66,7 +68,12 @@ const PlayersScoresRow = ({ row, classes, turnament, finished }) => {
           {`${playerName} ${playerSurname}`}
         </span>
         <span className={classNames(classes.rowBlock)}>
-          {Math.floor(totalScore)}
+          {/* {Math.floor(totalScore)} */}
+          <NumberFormat
+            value={Math.floor(totalScore)}
+            displayType={"text"}
+            thousandSeparator={" "}
+          />
         </span>
         {comps(competitions, classes, playerId, turnament, finished)}
       </div>

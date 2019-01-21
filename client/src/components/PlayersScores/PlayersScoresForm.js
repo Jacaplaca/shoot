@@ -39,6 +39,8 @@ class PlayersScoresForm extends React.Component {
 
   save = (value, compId, playerId, turnament) => {
     const form = { value, compId, playerId, turnament };
+    const score = value.replace(",", ".");
+    form.value = score;
 
     const adding = {
       post: `/api/score/`,
@@ -111,7 +113,8 @@ class PlayersScoresForm extends React.Component {
               marginLeft: 5,
               marginRight: 5
             }}
-            value={this.state.value}
+            // value={this.state.value}
+            value={this.state.value.replace(".", ",")}
             InputLabelProps={{ shrink: true, className: classes.label }}
             id="outlined-name"
             label={label.slice(0, 12)}
@@ -127,8 +130,10 @@ class PlayersScoresForm extends React.Component {
             className={classes.textField}
             // onKeyPress={this.handleKeyPress}
             InputProps={{
-              className: classes.input,
               inputComponent: NumberFormatCustom
+            }}
+            inputProps={{
+              className: classes.input
             }}
           />
         </form>
@@ -139,24 +144,30 @@ class PlayersScoresForm extends React.Component {
 
 const styles = theme => ({
   textField: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
-    paddingBottom: 0,
-    marginTop: 0,
-    fontWeight: 500
+    // width: "90%",
+    // marginLeft: "auto",
+    // marginRight: "auto",
+    // paddingBottom: 0,
+    // marginTop: 0,
+    // fontWeight: 500
+    // padding: 2
   },
   label: {
     color: "gray"
   },
   input: {
-    // color: "red"
+    // color: "red",
+    // paddingTop: 3
     // background: "red",
-    // padding: 0
+    // padding: "0!important"
+    paddingTop: 9,
+    paddingBottom: 6,
+    paddingLeft: 6,
+    paddingRight: 4
+    // margin: 10
   },
   inputNative: {
-    // background: "white",
-    padding: 10
+    background: "white"
   }
 });
 
@@ -171,10 +182,13 @@ function NumberFormatCustom(props) {
       onValueChange={values => {
         onChange({
           target: {
-            value: values.value
+            // value: values.value
+            value: values.formattedValue.replace(/ /g, "")
           }
         });
       }}
+      decimalSeparator=","
+      thousandSeparator=" "
       decimalScale={2}
       // thousandSeparator
       // prefix="$"

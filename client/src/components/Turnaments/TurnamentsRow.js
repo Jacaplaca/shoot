@@ -7,8 +7,9 @@ import * as actions from "../../actions";
 import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
+import RowBlock from "../../skins/RowBlock";
 
-const TurnamentsRow = ({ row, classes, grid }) => {
+const TurnamentsRow = ({ row, classes, grid, auth: { user } }) => {
   const {
     date,
     name,
@@ -18,33 +19,33 @@ const TurnamentsRow = ({ row, classes, grid }) => {
     judgeCounting,
     lzss,
     tech,
-    logo
+    logo,
+    promoterName
   } = row;
   // console.log("image", require(`../../${logo}`));
   // console.log('image', !!require(`../../${logo}`));
   return (
     <React.Fragment>
-      <span className={classNames(classes.rowBlock, classes.date)}>{date}</span>
-      <span className={classNames(classes.rowBlock, classes.rowName)}>
-        {name}
-      </span>
-      <span className={classNames(classes.rowBlock)}>{facility}</span>
-      <span className={classNames(classes.rowBlock)}>
+      <RowBlock>{date}</RowBlock>
+      {user.rola === "admin" && <RowBlock>{promoterName}</RowBlock>}
+      <RowBlock>{name}</RowBlock>
+      <RowBlock>{facility}</RowBlock>
+      <RowBlock>
         {judgeMain ? `${judgeMain.name} ${judgeMain.surname}` : "usunięto"}
-      </span>
-      <span className={classNames(classes.rowBlock)}>
+      </RowBlock>
+      {/* <span className={classNames(classes.rowBlock)}>
         {judgeCounting
           ? `${judgeCounting.name} ${judgeCounting.surname}`
           : "usnięto"}
       </span>
       <span className={classNames(classes.rowBlock)}>
         {judgeRTS ? `${judgeRTS.name} ${judgeRTS.surname}` : "usunięto"}
-      </span>
-      <span className={classNames(classes.rowBlock)}>{lzss}</span>
-      <span className={classNames(classes.rowBlock)}>{tech}</span>
-      <span className={classNames(classes.rowBlock)}>
+      </span> */}
+      <RowBlock>{lzss}</RowBlock>
+      {/* <span className={classNames(classes.rowBlock)}>{tech}</span> */}
+      <RowBlock>
         <img className={classes.rowImg} src={require(`../../${logo}`)} />
-      </span>
+      </RowBlock>
     </React.Fragment>
   );
 };

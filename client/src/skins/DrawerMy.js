@@ -108,13 +108,6 @@ class DrawerMy extends React.Component {
         rola: "admin,promoter"
       },
       {
-        comp: "judges",
-        text: "Sędziowie",
-        link: "/sedziowie",
-        icon: "EventAvailableIcon",
-        rola: "admin"
-      },
-      {
         comp: "competitions",
         text: "Konkurencje",
         link: "/konkurencje",
@@ -127,6 +120,13 @@ class DrawerMy extends React.Component {
         link: "/zawodnicy",
         icon: "InsertChartOutlined",
         rola: "admin,promoter"
+      },
+      {
+        comp: "judges",
+        text: "Sędziowie",
+        link: "/sedziowie",
+        icon: "EventAvailableIcon",
+        rola: "admin"
       }
     ];
     return (

@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
+import NumberFormat from "react-number-format";
+
 import classNames from "classnames";
 import * as actions from "../../actions";
+
 import { rowStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import PlayersScoresForm from "./PlayersScoresForm";
@@ -29,7 +32,14 @@ const comps = (competitions, classes, sorting) => {
         }}
       >
         <SortButtons click={e => sorting("competitions", e, competitionId)} />
-        <span>{Math.floor(score)}</span>
+        <span>
+          {/* {Math.floor(score)} */}
+          <NumberFormat
+            value={Math.floor(score)}
+            displayType={"text"}
+            thousandSeparator={" "}
+          />
+        </span>
       </span>
       // <PlayersScoresForm
       //   key={competitionId}
@@ -62,7 +72,7 @@ class SummaryRow extends Component {
         <div
           className={classNames(classes.rowTable, classes.table)}
           style={{
-            gridTemplateColumns: `50px 1fr 50px repeat(${
+            gridTemplateColumns: `50px 1fr 80px repeat(${
               competitions.length
             }, 100px)`,
             // justifyContent: "end"
@@ -106,7 +116,12 @@ class SummaryRow extends Component {
             </ButtonMy>
           </span>
           <span className={classNames(classes.rowBlock)}>
-            {Math.floor(totalScore)}
+            {/* {Math.floor(totalScore)} */}
+            <NumberFormat
+              value={Math.floor(totalScore)}
+              displayType={"text"}
+              thousandSeparator={" "}
+            />
           </span>
           {/* <span className={classNames(classes.rowBlock)}> */}
           {row.competitions.length !== 0
