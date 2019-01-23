@@ -49,7 +49,8 @@ module.exports = {
       scope,
       team,
       rank,
-      club
+      club,
+      rodo
     } = req.body;
 
     const newPlayer = new Player({
@@ -61,7 +62,8 @@ module.exports = {
       scope,
       team,
       rank: rank.split(", "),
-      club
+      club,
+      rodo
     });
 
     try {
@@ -106,7 +108,8 @@ module.exports = {
       scope,
       team,
       club,
-      rank
+      rank,
+      rodo
     } = req.body;
     console.log("rank", rank);
     const updatedPlayer = {
@@ -118,7 +121,8 @@ module.exports = {
       scope,
       team,
       club,
-      rank
+      rank,
+      rodo
       // rank: rank.split(", ")
     };
 
@@ -171,7 +175,8 @@ module.exports = {
           scope,
           team,
           rank,
-          club
+          club,
+          rodo
         } = item;
 
         const newPlayer = new Player({
@@ -183,7 +188,8 @@ module.exports = {
           scope,
           team,
           rank: rank.split(","),
-          club
+          club,
+          rodo: rodo && rodo.toLowerCase() === "tak" ? true : false
         });
 
         const updatuj = await Player.create(newPlayer);

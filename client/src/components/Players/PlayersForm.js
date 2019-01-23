@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import { combineStyles } from "../../functions/functions";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import XLSX from "xlsx";
 // import axios from "axios";
 // import { loginUser } from "../actions/authentication";
@@ -80,7 +83,8 @@ class PlayersFormik extends Component {
         scope,
         team,
         rank,
-        club
+        club,
+        rodo
       },
       auth: { user },
       turnaments,
@@ -101,9 +105,10 @@ class PlayersFormik extends Component {
     } = this.props;
     // console.log("turn", turnament.length);
     // setFieldValue("email", "ccc@ccc.com");
+    // console.log("rodo", rodo);
     return (
       <Paper className={classes.paper}>
-        <form onSubmit={handleSubmit}>
+        <form autoComplete="new-password" onSubmit={handleSubmit}>
           <Grid container spacing={0}>
             <Grid item xs={12} sm={6} md={4}>
               <InputSelectBaza
@@ -117,7 +122,7 @@ class PlayersFormik extends Component {
                 // placeholder="Organizator"
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={3}>
               <InputComponent
                 name="rank"
                 clear={() => setFieldValue("rank", "")}
@@ -131,7 +136,7 @@ class PlayersFormik extends Component {
                 onBlur={handleBlur}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={3}>
               <InputComponent
                 clear={() => setFieldValue("name", "")}
                 name="name"
@@ -143,6 +148,19 @@ class PlayersFormik extends Component {
                 error={touched.name && Boolean(errors.name)}
                 helperText={touched.name && errors.name ? errors.name : " "}
                 onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={2}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="rodo"
+                    checked={rodo}
+                    onChange={handleChange}
+                    // value="zaplanowane"
+                  />
+                }
+                label="RODO"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -287,7 +305,8 @@ const PlayersForm = withFormik({
     toEdit,
     collection,
     turnamentId,
-    turnaments
+    turnaments,
+    rodo
   }) {
     console.log("maps to props", turnament);
     // console.log("maps to props", turnament);
@@ -302,6 +321,7 @@ const PlayersForm = withFormik({
       team: toEdit ? toEdit.team : team || "",
       rank: toEdit ? toEdit.rank : rank || "",
       club: toEdit ? toEdit.club : club || "",
+      rodo: toEdit ? toEdit.rodo : rodo || false,
       toEdit,
       collection,
       turnamentId,
@@ -319,7 +339,8 @@ const PlayersForm = withFormik({
       scope: values.scope,
       team: values.team,
       rank: values.rank,
-      club: values.club
+      club: values.club,
+      rodo: values.rodo
     };
 
     const { collection, toEdit, turnamentId, turnaments } = values;

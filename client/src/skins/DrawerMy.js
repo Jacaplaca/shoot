@@ -143,7 +143,7 @@ class DrawerMy extends React.Component {
       >
         <div className={classes.toolbar}>
           {/* {auth && auth.email.split("@")[0]} */}
-          {auth.user.name}
+          <span style={{ color: "white" }}>{auth.user.name}</span>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />

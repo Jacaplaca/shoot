@@ -45,7 +45,8 @@ const PlayerSchema = new Schema({
   ],
   order: {
     type: Number
-  }
+  },
+  rodo: { type: Boolean }
 });
 
 // global.TurnamentSchema =

@@ -9,11 +9,12 @@ import * as actions from "../../actions";
 import RowHOC from "../RowHOC";
 
 const PlayersRow = ({ row, classes, grid }) => {
-  const { name, surname, caliber, gun, scope, team, club, rank } = row;
+  const { name, surname, caliber, gun, scope, team, club, rank, rodo } = row;
+
   return (
     <React.Fragment>
       <span className={classNames(classes.rowBlock, classes.rowName)}>
-        {`${name} ${surname}`}
+        {`${rodo ? name : "rodo"} ${rodo ? surname : "rodo"}`}
       </span>
       <span className={classNames(classes.rowBlock)}>
         {rank.map(x => `${x} `)}
