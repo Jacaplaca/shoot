@@ -7,39 +7,46 @@ import NumberFormat from "react-number-format";
 import classNames from "classnames";
 import * as actions from "../../actions";
 
-import { rowStyles } from "../../skins/mainStyles";
+import { rowStyles, tableHeadStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import PlayersScoresForm from "./PlayersScoresForm";
 import SortButtons from "../../skins/SortButtons";
 import ButtonMy from "../../skins/ButtonMy";
 import RowHOC from "../RowHOC";
+import Search from "../../inputs/Search";
 
 let value = "";
 
-const comps = (competitions, classes, sorting) => {
+const comps = (competitions, classes, sorting, competitionClicked) => {
   // console.log("comps", competitions);
   return competitions.map(comp => {
     const { competition, competitionId, score } = comp;
     return (
       <span
-        className={classNames(classes.rowBlock)}
+        className={classNames(
+          classes.rowBlock,
+          competitionId === competitionClicked && classes.headBlockHighlight
+        )}
         key={competitionId}
         style={{
           display: "grid",
           alignItems: "center",
           justifyContent: "center",
-          gridTemplateColumns: "25px 1fr"
+          gridTemplateColumns: "25px 1fr",
+          width: "100%",
+          height: "100%"
+          // display: "block"
         }}
       >
         <SortButtons click={e => sorting("competitions", e, competitionId)} />
-        <span>
+        <div style={{ width: "100%", display: "block" }}>
           {/* {Math.floor(score)} */}
           <NumberFormat
             value={Math.floor(score)}
             displayType={"text"}
             thousandSeparator={" "}
           />
-        </span>
+        </div>
       </span>
       // <PlayersScoresForm
       //   key={competitionId}
@@ -61,8 +68,23 @@ class SummaryRow extends Component {
   handleSearching = () => {
     this.props.searching(["playerName", "playerSurname"], this.state.searching);
   };
+
+  searching = search => {
+    console.log("search", search);
+    // this.setState({ rows: search });
+    this.props.searched(search);
+  };
+
   render() {
-    const { row, classes, sorting, searching } = this.props;
+    const {
+      row,
+      classes,
+      sorting,
+      searching,
+      grid,
+      rows,
+      competitionClicked
+    } = this.props;
     const { totalScore, competitions } = row;
     // console.log("summaryRow", row);
 
@@ -70,14 +92,13 @@ class SummaryRow extends Component {
       <React.Fragment>
         {/* {row.competitions.length !== 0 ? ( */}
         <div
-          className={classNames(classes.rowTable, classes.table)}
+          className={classNames(classes.headTable, classes.table)}
           style={{
-            gridTemplateColumns: `50px 1fr 80px repeat(${
-              competitions.length
-            }, 100px)`,
+            gridTemplateColumns: grid
+            // position: "fixed"
             // justifyContent: "end"
             // marginLeft: "auto"
-            alignItems: "center"
+            // alignItems: "center"
           }}
         >
           {/* <span className={classNames(classes.rowBlock)}>{rank}</span>
@@ -92,15 +113,24 @@ class SummaryRow extends Component {
             style={{
               display: "grid",
               alignItems: "center",
-              gridTemplateColumns: "25px 1fr 2fr 25px"
+              justifyContent: "start",
+              justifySelf: "start",
+              textAlign: "left",
+              gridTemplateColumns: "25px 225px "
             }}
           >
             <SortButtons click={e => sorting("playerSurname", e)} />
-            <span>Zawodnik</span>
-            <PlayersScoresForm
+            {/* <span>Zawodnik</span> */}
+            <Search
+              data={rows}
+              handleSearch={this.searching}
+              columns={["playerName", "playerSurname"]}
+            />
+            {/* <PlayersScoresForm
               // key={}
+              // disabled={false}
               className={classNames(classes.rowBlock)}
-              // value={score}
+              // value={this.state.val}
               // classes={classes}
               label="Szukaj zawodnika"
               id="23sdf"
@@ -110,10 +140,11 @@ class SummaryRow extends Component {
               sendValue={val => this.setState({ searching: val })}
               enterAction={this.handleSearching}
               button
+              enable
             />
             <ButtonMy onClick={this.handleSearching} size="small">
               OK
-            </ButtonMy>
+            </ButtonMy> */}
           </span>
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
@@ -125,7 +156,7 @@ class SummaryRow extends Component {
           </span>
           {/* <span className={classNames(classes.rowBlock)}> */}
           {row.competitions.length !== 0
-            ? comps(competitions, classes, sorting)
+            ? comps(competitions, classes, sorting, competitionClicked)
             : null}
           {/* </span> */}
         </div>
@@ -146,7 +177,7 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-const combinedStyles = combineStyles(styles, rowStyles);
+const combinedStyles = combineStyles(styles, rowStyles, tableHeadStyles);
 
 const enhance = compose(
   // withRouter,

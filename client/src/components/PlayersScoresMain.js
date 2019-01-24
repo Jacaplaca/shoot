@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { withTheme } from "@material-ui/core/styles";
 import { compose } from "redux";
 import axios from "axios";
+import { StickyContainer, Sticky } from "react-sticky";
+import Measure from "react-measure";
 import { connect } from "react-redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
 import * as actions from "../actions";
 import PlayersScoresRow from "../components/PlayersScores/PlayersScoresRow";
+import PlayersScoresHead from "../components/PlayersScores/PlayersScoresHead";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
 import { dynamicSort, addRank, searchingInArray } from "../functions/functions";
 import Pagination from "../skins/Pagination";
@@ -21,7 +24,11 @@ class PlayersScoresMain extends Component {
     summaryRow: [],
     matrixUnifilltered: [],
     filter: "",
-    filterNames: []
+    filterNames: [],
+    rowWidth: -1,
+    headerHeight: -1,
+    playerClicked: null,
+    competitionClicked: null
   };
 
   componentDidMount() {
@@ -112,10 +119,10 @@ class PlayersScoresMain extends Component {
       }
       // console.log("matrix", matrix);
       // console.log("SummaryRow", summaryRow);
-      console.log("orderIsUnd", orderIsUnd);
+      // console.log("orderIsUnd", orderIsUnd);
       let matrixSorted = [];
       if (orderIsUnd === "yes") {
-        console.log("sort via order", orderIsUnd);
+        // console.log("sort via order", orderIsUnd);
         matrixSorted = addRank(matrix, "totalScore");
         this.setState(
           {
@@ -195,41 +202,135 @@ class PlayersScoresMain extends Component {
   render() {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
     const zmienna = this.state.filter;
+    const grid = `50px 250px 80px repeat(${this.state.summaryRow &&
+      this.state.summaryRow.competitions &&
+      this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
     return (
       <React.Fragment>
         {this.state.summaryRow && this.state.summaryRow.competitions ? (
-          <SummaryRow
-            row={this.state.summaryRow}
-            sorting={(toSort, how, id) => this.sorting(toSort, how, id)}
-            searching={(toSearch, value) =>
-              this.searching(this.state.matrixUnifilltered, toSearch, value)
-            }
-          />
+          <React.Fragment>
+            <StickyContainer>
+              {/* Other elements can be in between `StickyContainer` and `Sticky`,
+        but certain styles can break the positioning logic used. */}
+              <Sticky>
+                {({
+                  style,
+
+                  // the following are also available but unused in this example
+                  isSticky,
+                  wasSticky,
+                  distanceFromTop,
+                  distanceFromBottom,
+                  calculatedHeight
+                }) => {
+                  console.log("isSticky", isSticky);
+                  console.log("wasSticky", wasSticky);
+                  console.log("distanceFromTop", distanceFromTop);
+                  console.log("style", style);
+                  console.log("calc", calculatedHeight);
+                  return (
+                    <header
+                      style={{
+                        ...style,
+                        // top: 70
+                        paddingTop: 60,
+                        zIndex: 3
+                        // marginTop: isSticky ? 50 : 0
+                        // marginTop: distanceFromTop < 60 ? 50 : 0
+                      }}
+                    >
+                      <PlayersScoresHead
+                        grid={grid}
+                        row={this.state.matrix[0]}
+                        competitionClicked={this.state.competitionClicked}
+                      />
+                      <SummaryRow
+                        competitionClicked={this.state.competitionClicked}
+                        rows={this.state.matrixUnifilltered}
+                        grid={grid}
+                        row={this.state.summaryRow}
+                        sorting={(toSort, how, id) =>
+                          this.sorting(toSort, how, id)
+                        }
+                        searching={(toSearch, value) =>
+                          this.searching(
+                            this.state.matrixUnifilltered,
+                            toSearch,
+                            value
+                          )
+                        }
+                        searched={result => this.setState({ matrix: result })}
+                      />
+                    </header>
+                  );
+                }}
+              </Sticky>
+              {this.state.summaryRow && this.state.summaryRow.competitions ? (
+                <div>
+                  <Pagination data={this.state.matrix}>
+                    <PlayersScoresRows
+                      grid={grid}
+                      rows={this.state.matrix}
+                      turnament={this.props.add.turnamentId}
+                      finished={this.state.finished}
+                      rowClick={(player, competition) =>
+                        this.setState({
+                          playerClicked: player,
+                          competitionClicked: competition
+                        })
+                      }
+                      playerClicked={this.state.playerClicked}
+                      competitionClicked={this.state.competitionClicked}
+                    />
+                    {/* <h1 style={{ color: "white" }}>{zmienna}</h1>/> */}
+                  </Pagination>
+                </div>
+              ) : null}
+            </StickyContainer>
+          </React.Fragment>
         ) : null}
-        <Pagination
-          data={this.state.matrix}
-          // turnament={this.props.add.turnamentId}
-        >
-          <PlayersScoresRows
-            rows={this.state.matrix}
-            turnament={this.props.add.turnamentId}
-            finished={this.state.finished}
-          />
+        {/* <Pagination data={this.state.matrix}>
+          {this.state.summaryRow && this.state.summaryRow.competitions ? (
+            <PlayersScoresRows
+              grid={grid}
+              rows={this.state.matrix}
+              turnament={this.props.add.turnamentId}
+              finished={this.state.finished}
+              rowClick={e => this.setState({ playerClicked: e })}
+              playerClicked={this.state.playerClicked}
+            />
+          ) : null}
           {/* <h1 style={{ color: "white" }}>{zmienna}</h1>/> */}
-        </Pagination>
+        {/* </Pagination> */} */}
       </React.Fragment>
     );
   }
 }
 
-const PlayersScoresRows = ({ rows, turnament }) =>
-  rows.map(player => (
-    <PlayersScoresRow
-      key={player.playerId}
-      row={player}
-      turnament={turnament}
-    />
-  ));
+const PlayersScoresRows = ({
+  rows,
+  turnament,
+  grid,
+  rowClick,
+  playerClicked,
+  competitionClicked
+}) => {
+  // console.log("psr wyzej", rows, turnament, grid, rowClick, playerClicked);
+  return rows.map(player => {
+    // console.log("psr", rows);
+    return (
+      <PlayersScoresRow
+        grid={grid}
+        key={player.playerId}
+        row={player}
+        turnament={turnament}
+        rowClick={rowClick}
+        playerClicked={playerClicked}
+        competitionClicked={competitionClicked}
+      />
+    );
+  });
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

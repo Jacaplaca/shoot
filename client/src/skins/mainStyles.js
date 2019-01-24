@@ -27,10 +27,24 @@ export const rowStyles = theme => ({
   },
   rowTable: {
     display: "grid",
-    minWidth: 900,
+    minWidth: "100%",
     color: theme.palette.text.primary,
     background: lighten(theme.palette.menu, 0.1),
     marginBottom: 2
+  },
+  rowHighlight: {
+    // display: "grid",
+    // minWidth: 900,
+    // color: theme.palette.text.primary,
+    background: darken(theme.palette.button.end, 0.43)
+    // marginBottom: 2
+  },
+  highlightBlock: {
+    // display: "grid",
+    // minWidth: 900,
+    // color: theme.palette.text.primary,
+    background: darken(theme.palette.button.end, 0.43)
+    // marginBottom: 2
   },
   rowName: {
     // fontWeight: "600",
@@ -45,7 +59,7 @@ export const rowStyles = theme => ({
   },
   rowFinished: {
     display: "grid",
-    minWidth: 900,
+    minWidth: "100%",
     color: theme.palette.text.primary,
     background: darken(theme.palette.secondary.dark, 0.5),
     marginBottom: 2
@@ -57,20 +71,27 @@ export const tableHeadStyles = theme => ({
     alignSelf: "center",
     justifySelf: "center",
     paddingLeft: 5,
-    // paddingTop: 2,
-    // paddingBottom: 2,
+    paddingTop: 3,
+    paddingBottom: 2,
     textAlign: "center",
     fontWeight: "500",
     textTransform: "uppercase",
     fontSize: 13
   },
+  headBlockHighlight: {
+    background: darken(theme.palette.button.end, 0.43)
+  },
   headTable: {
     display: "grid",
-    minWidth: 900,
+    minWidth: "100%",
     color: theme.palette.text.primary,
-    background: lighten(theme.palette.menu, 0.1),
-    marginBottom: 2,
-    height: 50
+    // background: "red",
+    background: lighten(theme.palette.menu, 0.1)
+    // padding: 3
+    // border: "1px solid white"
+    // marginBottom: 2,
+    // minHeight: 50,
+    // zIndex: 2000000000
   }
 });
 

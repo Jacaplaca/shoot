@@ -14,7 +14,7 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
   let url;
   let type;
 
-  console.log("fetchFromDB", collection, get, id);
+  // console.log("fetchFromDB", collection, get, id);
 
   switch (collection) {
     case "turnaments":
@@ -36,12 +36,12 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
       type = PROMOTERS;
       break;
     case "players":
-      console.log("fetchFromDB");
+      // console.log("fetchFromDB");
       url = get || `/api/${collection}/turnament/${id}`;
       type = PLAYERS;
       break;
     case "score":
-      console.log("fetchFromDB");
+      // console.log("fetchFromDB");
       url = get;
       type = PLAYERS;
       break;

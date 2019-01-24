@@ -18,8 +18,8 @@ export const addToDB = ({
   collection,
   id
 }) => async dispatch => {
-  console.log("addToDB vaelues", values);
-  console.log("addToDB form", form);
+  // console.log("addToDB vaelues", values);
+  // console.log("addToDB form", form);
   // let url;
   // let fetch;
   const fetch = fetchFromDB(collection, get);
@@ -44,7 +44,7 @@ export const addToDB = ({
     });
 
     Object.assign(form, { [fieldName]: res.data.file });
-    console.log(res.data.file);
+    // console.log(res.data.file);
 
     await delay();
     // console.log(item);
@@ -68,16 +68,16 @@ export const addToDB = ({
         }
       }
     }
-    console.log("bede dispatchowal bo juz po promisach");
-    console.log(form);
+    // console.log("bede dispatchowal bo juz po promisach");
+    // console.log(form);
     if (collection === "promoters" && action === "add") {
-      console.log("bede dispatchowal usera");
+      // console.log("bede dispatchowal usera");
       dispatch(registerUser(form));
     } else {
-      console.log("bede dispatchowal ogolnie do bazy");
+      // console.log("bede dispatchowal ogolnie do bazy");
       axios.post(post, form).then(resp => dispatch(fetch));
     }
-    console.log("Done!");
+    // console.log("Done!");
   }
 
   processArray([1, 2, 3]);

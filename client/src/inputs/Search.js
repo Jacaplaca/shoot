@@ -89,10 +89,12 @@ class Search extends Component {
 
   render() {
     return (
-      <div style={{ display: "grid", marginTop: 8, marginBottom: 8 }}>
-        <div
+      <span style={{ display: "grid", marginTop: 8, marginBottom: 8 }}>
+        <span
           style={{
+            display: "grid",
             justifySelf: "end",
+            gridTemplateColumns: "1fr 70px",
             // marginTop: 13,
             // marginBottom: 13,
             justifyItems: "center"
@@ -139,8 +141,8 @@ class Search extends Component {
           <ButtonMy onClick={this.handleSearching} size="normal">
             OK
           </ButtonMy>
-        </div>
-      </div>
+        </span>
+      </span>
     );
   }
 }

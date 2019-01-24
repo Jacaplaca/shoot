@@ -23,10 +23,10 @@ class PlayersScoresForm extends React.Component {
     const thisTurnament = this.props.turnaments.filter(
       turnam => turnam._id === this.props.turnament
     );
-    console.log("players scores form", thisTurnament);
+    // console.log("players scores form", thisTurnament);
     const finished =
       thisTurnament && thisTurnament[0] && thisTurnament[0].finished;
-    console.log("players scores form", finished);
+    // console.log("players scores form", finished);
     this.setState({ finished });
   }
 
@@ -50,10 +50,10 @@ class PlayersScoresForm extends React.Component {
       action: "add",
       collection: "score"
     };
-    console.log(adding);
+    // console.log(adding);
     this.props.addToDB(adding);
 
-    console.log("save", value, compId, playerId, turnament);
+    // console.log("save", value, compId, playerId, turnament);
   };
 
   // handleKeyPress = event => {
@@ -81,16 +81,17 @@ class PlayersScoresForm extends React.Component {
       enterAction,
       // finished,
       turnaments,
+      enable,
       auth: { user }
     } = this.props;
 
-    console.log("PlayersScoresForm", typeof this.state.value);
+    // console.log("PlayersScoresForm", typeof this.state.value);
 
     return (
       <React.Fragment>
         <form
           // className={classes.container}
-          style={{ display: "inline-block" }}
+          style={{ display: "inline-block", textAlign: "center" }}
           noValidate
           autoComplete="off"
           onSubmit={e => {
@@ -104,11 +105,13 @@ class PlayersScoresForm extends React.Component {
             // inputStyle={{ backgroundColor: "red" }}
             // type="number"
             disabled={
-              user.rola === "admin" || this.state.finished ? true : false
+              user.rola === "admin" || this.state.finished || enable
+                ? true
+                : false
             }
             // InputProps={{ className: classes.input }}
             style={{
-              marginTop: 10,
+              marginTop: 3,
               marginBottom: 3,
               marginLeft: 5,
               marginRight: 5
@@ -117,10 +120,14 @@ class PlayersScoresForm extends React.Component {
             value={this.state.value.replace(".", ",")}
             InputLabelProps={{ shrink: true, className: classes.label }}
             id="outlined-name"
-            label={label.slice(0, 12)}
+            // label={label.slice(0, 12)}
             // className={classes.textField}
             // value={this.state.value}
             // placeholder={score}
+            onClick={() => {
+              // console.log("click", this.state.value, id, player, turnament);
+              return this.props.rowClicked(player, id);
+            }}
             onChange={this.handleChange("value")}
             onBlur={() => {
               !button && this.save(this.state.value, id, player, turnament);
@@ -163,7 +170,8 @@ const styles = theme => ({
     paddingTop: 9,
     paddingBottom: 6,
     paddingLeft: 6,
-    paddingRight: 4
+    paddingRight: 4,
+    textAlign: "center"
     // margin: 10
   },
   inputNative: {
@@ -172,7 +180,7 @@ const styles = theme => ({
 });
 
 function NumberFormatCustom(props) {
-  console.log("NumberFormatCustom", props);
+  // console.log("NumberFormatCustom", props);
   const { inputRef, onChange, ...other } = props;
 
   return (

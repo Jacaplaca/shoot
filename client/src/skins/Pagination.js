@@ -11,19 +11,44 @@ class Pagination extends Component {
 
   state = {
     matrixPaginated: [],
-    page_size: 10,
+    page_size: 25,
     page_number: 1,
     howManyPages: 0
   };
 
+  componentDidMount() {
+    this.setState({ page_number: 1 }, () => {
+      this.paginate(
+        this.props.data,
+        this.state.page_size,
+        this.state.page_number
+      );
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
-    console.log('pagination', nextProps);
-    if (nextProps && nextProps.data && nextProps.data[0] && nextProps.data.length !== this.props && this.props.data && this.props.data[0] ) {
-      this.setState({page_number:1}, () => {
-        this.paginate(nextProps.data, this.state.page_size, this.state.page_number);
-      })
+    console.log("pagination", nextProps);
+    if (
+      nextProps &&
+      nextProps.data &&
+      nextProps.data[0] &&
+      nextProps.data.length !== this.props &&
+      this.props.data &&
+      this.props.data[0]
+    ) {
+      this.setState({ page_number: 1 }, () => {
+        this.paginate(
+          nextProps.data,
+          this.state.page_size,
+          this.state.page_number
+        );
+      });
     } else {
-      this.paginate(nextProps.data, this.state.page_size, this.state.page_number);
+      this.paginate(
+        nextProps.data,
+        this.state.page_size,
+        this.state.page_number
+      );
     }
   }
 
@@ -33,7 +58,7 @@ class Pagination extends Component {
   };
 
   paginate = (array, page_size, page_number) => {
-    console.log(array, page_size, page_number);
+    // console.log(array, page_size, page_number);
     --page_number; // because pages logically start with 1, but technically with 0
 
     this.setState({
@@ -63,13 +88,17 @@ class Pagination extends Component {
   };
 
   render() {
-    const { children, data } = this.props;
+    const { children, data, grid } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
         rows: this.state.matrixPaginated
+        // grid: grid
         // turnament: this.props.turnament
       })
     );
+    console.log("matrix", this.state.matrixPaginated);
+    console.log("pagi", childrenWithProps);
+    console.log("pagi", data);
     return (
       <React.Fragment>
         {childrenWithProps}
