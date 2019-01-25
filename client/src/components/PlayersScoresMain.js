@@ -3,7 +3,7 @@ import { withTheme } from "@material-ui/core/styles";
 import { compose } from "redux";
 import axios from "axios";
 import { StickyContainer, Sticky } from "react-sticky";
-import Measure from "react-measure";
+// import Measure from "react-measure";
 import { connect } from "react-redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
 import * as actions from "../actions";
