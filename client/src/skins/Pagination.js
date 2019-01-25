@@ -96,9 +96,9 @@ class Pagination extends Component {
         // turnament: this.props.turnament
       })
     );
-    console.log("matrix", this.state.matrixPaginated);
-    console.log("pagi", childrenWithProps);
-    console.log("pagi", data);
+    // console.log("matrix", this.state.matrixPaginated);
+    // console.log("pagi", childrenWithProps);
+    // console.log("pagi", data);
     return (
       <React.Fragment>
         {childrenWithProps}

@@ -7,6 +7,7 @@ import turnamentsReducer from "./turnamentsReducer";
 import editReducer from "./editReducer";
 import toDeleteReducer from "./toDeleteReducer";
 import confirmationReducer from "./confirmationReducer";
+import loadingReducer from "./loadingReducer";
 import playersReducer from "./playersReducer";
 import turnamentIdReducer from "./turnamentIdReducer";
 
@@ -19,6 +20,7 @@ export default combineReducers({
   edit: editReducer,
   delete: toDeleteReducer,
   confirmation: confirmationReducer,
+  loading: loadingReducer,
   players: playersReducer,
   turnamentId: turnamentIdReducer
 });

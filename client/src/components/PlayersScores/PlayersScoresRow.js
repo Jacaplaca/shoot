@@ -18,13 +18,14 @@ const comps = (
   turnament,
   finished,
   rowClicked,
-  competitionClicked
+  competitionClicked,
+  isAuthenticated
 ) => {
   // console.log("comps", turnament, finished);
   return competitions.map(comp => {
     const { competition, competitionId, score } = comp;
-    console.log("competitionClicked", competitionClicked);
-    console.log("class", classes.highlightBlock);
+    // console.log("competitionClicked", competitionClicked);
+    // console.log("class", classes.highlightBlock);
     return (
       <span
         key={competitionId}
@@ -36,24 +37,28 @@ const comps = (
         )}
         style={{ textAlign: "center" }}
       >
-        <PlayersScoresForm
-          className={
-            classNames()
-            // classes.rowBlock,
-            // competitionId === competitionClicked && classes.highlightBlock
-            // competitionId === competitionClicked && classes.highlightBlock
-          }
-          // value={score}
-          // classes={classes}
-          label={competition}
-          id={competitionId}
-          score={score ? score.toString() : "0"}
-          player={playerId}
-          turnament={turnament}
-          rowClicked={rowClicked}
-          // finished={finished}
-          // aaa={finished}
-        />
+        {isAuthenticated ? (
+          <PlayersScoresForm
+            className={
+              classNames()
+              // classes.rowBlock,
+              // competitionId === competitionClicked && classes.highlightBlock
+              // competitionId === competitionClicked && classes.highlightBlock
+            }
+            // value={score}
+            // classes={classes}
+            label={competition}
+            id={competitionId}
+            score={score ? score.toString() : "0"}
+            player={playerId}
+            turnament={turnament}
+            rowClicked={rowClicked}
+            // finished={finished}
+            // aaa={finished}
+          />
+        ) : (
+          <div>{score}</div>
+        )}
       </span>
     );
   });
@@ -76,7 +81,8 @@ class PlayersScoresRow extends Component {
       finished,
       grid,
       playerClicked,
-      competitionClicked
+      competitionClicked,
+      auth: { isAuthenticated }
     } = this.props;
     const {
       playerName,
@@ -129,7 +135,8 @@ class PlayersScoresRow extends Component {
             turnament,
             finished,
             this.rowClicked,
-            competitionClicked
+            competitionClicked,
+            isAuthenticated
           )}
         </div>
       </React.Fragment>

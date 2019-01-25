@@ -15,11 +15,14 @@ module.exports = {
     console.log("turnament req.user", loggedUser);
 
     let query;
-
-    if (loggedUser.rola === "admin") {
-      query = {};
+    if (loggedUser) {
+      if (loggedUser.rola === "admin") {
+        query = {};
+      } else {
+        query = { promoter: { _id: loggedUser._id } };
+      }
     } else {
-      query = { promoter: { _id: loggedUser._id } };
+      query = {};
     }
 
     Turnament.find(query)

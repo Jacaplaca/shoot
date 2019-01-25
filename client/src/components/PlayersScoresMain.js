@@ -16,6 +16,7 @@ import Pagination from "../skins/Pagination";
 // import PlayersScoresList from "./PlayersScores/PlayersScoresList";
 
 const collection = "playersScores";
+let turnamentId;
 
 class PlayersScoresMain extends Component {
   state = {
@@ -32,26 +33,41 @@ class PlayersScoresMain extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchFromDB("players", null, this.props.add.turnamentId);
+    turnamentId = window.location.pathname.split("/")[2];
+    console.log(
+      "psm",
+      this.props.auth.isAuthenticated,
+      // this.props.add.turnamentId,
+      turnamentId
+      // this.props
+    );
+    this.props.auth.isAuthenticated
+      ? this.props.fetchFromDB("players", null, turnamentId)
+      : this.props.fetchFromDB("playersopen", null, turnamentId);
+    this.props.auth.isAuthenticated ||
+      this.props.fetchFromDB(
+        "turnamentsOpen",
+        `/api/turnamentsopen/${turnamentId}`,
+        null
+      );
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log("nextProps", nextProps.turnaments);
     if (
       this.props.players !== nextProps.players ||
       this.props.turnaments !== nextProps.turnaments
     ) {
-      // console.log("pozmienialo sie");
       this.makeMatrix(nextProps);
     }
-    // if (nextProps.players.length > 0 && this.props.turnaments.length > 0) {
-    //   console.log("ok");
-    // }
   }
 
   makeMatrix = nextProps => {
-    const { players, turnaments } = nextProps;
-    const { turnamentId } = this.props.add;
+    const {
+      players,
+      turnaments,
+      auth: { isAuthenticated }
+    } = nextProps;
+    // const { turnamentId } = this.props.add;
     // console.log("makeMatrix", players.length, turnaments.length);
     let matrix = [];
     if (players.length > 0 && turnaments.length > 0) {
@@ -201,12 +217,17 @@ class PlayersScoresMain extends Component {
 
   render() {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
+    const {
+      auth: { isAuthenticated }
+    } = this.props;
     const zmienna = this.state.filter;
     const grid = `50px 250px 80px repeat(${this.state.summaryRow &&
       this.state.summaryRow.competitions &&
       this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
+    console.log("sum", this.state.summaryRow);
     return (
       <React.Fragment>
+        {/* <h4 style={{ color: "white" }}>aslkdjfls lsakdfj</h4> */}
         {this.state.summaryRow && this.state.summaryRow.competitions ? (
           <React.Fragment>
             <StickyContainer>
@@ -233,7 +254,7 @@ class PlayersScoresMain extends Component {
                       style={{
                         ...style,
                         // top: 70
-                        paddingTop: 60,
+                        paddingTop: isAuthenticated ? 60 : 0,
                         zIndex: 3
                         // marginTop: isSticky ? 50 : 0
                         // marginTop: distanceFromTop < 60 ? 50 : 0
@@ -337,7 +358,8 @@ const mapStateToProps = state => ({
   errors: state.errors,
   confirmation: state.confirmation,
   turnaments: state.turnaments,
-  players: state.players
+  players: state.players,
+  loading: state.loading
 });
 
 const enhance = compose(

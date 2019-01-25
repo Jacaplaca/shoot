@@ -5,7 +5,7 @@ const PlayerController = require("../controllers/player");
 
 router
   .route("/")
-  .get(PlayerController.index)
+  // .get(PlayerContrwoller.index)
   .post(PlayerController.add);
 
 router.route("/remove/:id").post(PlayerController.remove);

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import classNames from "classnames";
+import { Link } from "react-router-dom";
+
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import MenuIcon from "@material-ui/icons/Menu";
+import Group from "@material-ui/icons/Group";
 import Search from "@material-ui/icons/Search";
 import MenuContextTurnament from "../skins/MenuContextTurnament";
 
@@ -31,7 +34,7 @@ const RowRowHOC = WrappedComponent => {
         editFetch,
         theme,
         toDeleteAction,
-        auth: { user },
+        auth: { user, isAuthenticated },
         grid
       } = this.props;
       const { anchorEl } = this.state;
@@ -65,19 +68,43 @@ const RowRowHOC = WrappedComponent => {
             <WrappedComponent {...this.props} />
             <span className={classNames(classes.rowBlock)}>
               {collection === "turnaments" ? (
-                <IconButton
-                  style={{ padding: 5 }}
-                  color="primary"
-                  aria-owns={anchorEl ? "simple-menu" : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleClick}
-                >
-                  <MenuIcon
-                    style={styles.button}
-                    iconStyle={styles.icon}
-                    tooltipStyles={styles.tooltip}
-                  />
-                </IconButton>
+                isAuthenticated ? (
+                  <IconButton
+                    style={{ padding: 5 }}
+                    color="primary"
+                    aria-owns={anchorEl ? "simple-menu" : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleClick}
+                  >
+                    <MenuIcon
+                      style={styles.button}
+                      iconStyle={styles.icon}
+                      tooltipStyles={styles.tooltip}
+                    />
+                  </IconButton>
+                ) : (
+                  <Link
+                    to={{
+                      pathname: `/wyniki_zawodnikow/${_id}`,
+                      state: { turnamentId: _id }
+                    }}
+                  >
+                    <IconButton
+                      style={{ padding: 5 }}
+                      color="primary"
+                      // aria-owns={anchorEl ? "simple-menu" : undefined}
+                      // aria-haspopup="true"
+                      // onClick={this.handleClick}
+                    >
+                      <Group
+                        style={styles.button}
+                        iconStyle={styles.icon}
+                        tooltipStyles={styles.tooltip}
+                      />
+                      {/* <MenuItem onClick={onClose}>Wyniki zawodników</MenuItem> */}
+                    </IconButton>
+                  </Link>
+                )
               ) : (
                 //   <IconButton
                 //     aria-label="Delete"

@@ -20,6 +20,7 @@ import Competitions from "../components/Competitions";
 import Players from "../components/Players";
 import PlayersScoresMain from "../components/PlayersScoresMain";
 import MetryczkiMain from "../components/MetryczkiMain";
+import Scores from "../components/Scores";
 // import Players from "../components/Players";
 //
 // import Costs from "./Costs";
@@ -109,20 +110,41 @@ class MiniDrawer extends React.Component {
     //     title: ""
     //   }
     // ];
+    // console.log("domain", window.location.href);
+    // console.log("pathname", window.location.pathname.split("/"));
+    // console.log("user", auth.user);
+    const path = window.location.pathname.split("/")[1];
     return (
       <BrowserRouter>
         <div className={classes.root}>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
-          <TopNavBar
-            // style={{ position: "absolute", righ: 34, top: 334 }}
-            open={this.state.open}
-            handleDrawerOpen={this.handleDrawerOpen}
-          />
+          {!auth.isAuthenticated &&
+          (path === "wyniki" || path === "wyniki_zawodnikow") ? null : (
+            <TopNavBar
+              // style={{ position: "absolute", righ: 34, top: 334 }}
+              open={this.state.open}
+              handleDrawerOpen={this.handleDrawerOpen}
+            />
+          )}
           <DrawerMy
             open={this.state.open}
             handleDrawerClose={this.handleDrawerClose}
           />
+
+          <Route
+            exact
+            path="/wyniki"
+            render={() => (
+              // <MainContainer
+              //   open={this.state.open}
+              //   handleDrawerOpen={this.handleDrawerOpen}
+              // >
+              // </MainContainer>
+              <Scores title="Zawody" />
+            )}
+          />
+
           {auth.user.rola === "admin" && (
             <Route
               exact
@@ -183,7 +205,7 @@ class MiniDrawer extends React.Component {
             exact
             path="/wyniki_zawodnikow/:id"
             render={props => {
-              console.log("route", props);
+              console.log("route /wyniki_zawodnikow/", props);
               return (
                 <MainContainer
                   open={this.state.open}

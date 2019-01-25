@@ -5,7 +5,8 @@ import {
   GET_ERRORS,
   PROMOTERS,
   EDIT,
-  PLAYERS
+  PLAYERS,
+  LOADING
 } from "./types";
 // import setAuthToken from "../setAuthToken";
 // import jwt_decode from "jwt-decode";
@@ -19,6 +20,10 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
   switch (collection) {
     case "turnaments":
       url = get || `/api/turnaments`;
+      type = TURNAMENTS;
+      break;
+    case "turnamentsOpen":
+      url = get || `/api/turnamentsopen`;
       type = TURNAMENTS;
       break;
     case "competitions":
@@ -40,6 +45,11 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
       url = get || `/api/${collection}/turnament/${id}`;
       type = PLAYERS;
       break;
+    case "playersopen":
+      // console.log("fetchFromDB");
+      url = get || `/api/${collection}/turnament/${id}`;
+      type = PLAYERS;
+      break;
     case "score":
       // console.log("fetchFromDB");
       url = get;
@@ -50,6 +60,10 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
   // console.log("fetchFromDB()", collection, url, type);
 
   // console.log("fetchTurnaments");
+  dispatch({
+    type: LOADING,
+    payload: true
+  });
   axios
     .get(url)
     .then(res => {
@@ -74,10 +88,17 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
         payload: null
       });
     })
+    .then(() => {
+      dispatch({
+        type: LOADING,
+        payload: false
+      });
+    })
     .catch(err => {
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload:
+          err && err.response && err.response.data ? err.response.data : null
       });
     });
 };
