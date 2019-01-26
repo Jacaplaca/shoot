@@ -64,7 +64,7 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
     type: LOADING,
     payload: true
   });
-  axios
+  return axios
     .get(url)
     .then(res => {
       let fromDB = [];

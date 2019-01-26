@@ -1,11 +1,14 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Confirmation from "./Confirmation";
 import SiteHeader from "./SiteHeader";
+import * as actions from "../actions/authentication";
 
 const MainFrameHOC = moreProps => WrappedComponent => {
-  return class MainFrameHOC extends Component {
+  class MainFrameHOCc extends Component {
     render() {
       console.log("load", this.props);
       const { isAuthenticated } = this.props.auth;
@@ -34,9 +37,11 @@ const MainFrameHOC = moreProps => WrappedComponent => {
       };
       // console.log("mainfram", this.props);
       // console.log("main mofre", moreProps);
+      console.log("main frame loading", this.props.loading);
       return (
         <div style={{ paddingTop: isAuthenticated ? 80 : 0 }}>
           <div style={styles.root}>
+            {/* <LinearProgress color="secondary" /> */}
             {this.props.loading ? (
               <LinearProgress color="secondary" />
             ) : (
@@ -67,7 +72,14 @@ const MainFrameHOC = moreProps => WrappedComponent => {
         </div>
       );
     }
-  };
+  }
+  const mapStateToProps = state => ({
+    loading: state.loading
+  });
+  return connect(
+    mapStateToProps,
+    null
+  )(MainFrameHOCc);
 };
 
 export default MainFrameHOC;

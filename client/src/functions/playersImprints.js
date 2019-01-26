@@ -18,29 +18,30 @@ import { PTSans } from "../skins/PTSans";
 // const fetch64 = require("fetch-base64");
 
 export const makeImprints = async turnamentId => {
-  console.log("make makeImprints");
-  const unsubscribe = store.subscribe(async () => {
-    console.log("subscribe");
-    const myStore = await store.getState();
-    const { players, turnaments } = myStore;
-    const thePlayers = players.filter(x => x.turnament === turnamentId);
-    const theTurnament = turnaments.filter(x => x._id === turnamentId);
-    const competitions = theTurnament[0].competitions;
-    // console.log("every players", players);
-    // console.log("turnamentId", turnamentId);
-    // console.log("makeImprints", thePlayers, competitions);
-    generatePDFs(theTurnament[0], thePlayers, competitions);
-    unsubscribe();
-  });
-  store.dispatch(actions.fetchFromDB("players", null, turnamentId));
+  // console.log("make makeImprints");
+
+  store
+    .dispatch(actions.fetchFromDB("players", null, turnamentId))
+    .then(async () => {
+      store.dispatch(actions.loadingAction(true));
+      const myStore = await store.getState();
+      console.log("myStore", myStore);
+      const { players, turnaments } = myStore;
+      const thePlayers = players.filter(x => x.turnament === turnamentId);
+      const theTurnament = turnaments.filter(x => x._id === turnamentId);
+      const competitions = theTurnament[0].competitions;
+      // console.log("every players", players);
+      // console.log("turnamentId", turnamentId);
+      // console.log("makeImprints", thePlayers, competitions);
+      generatePDFs(theTurnament[0], thePlayers, competitions);
+    });
 };
 
 const generatePDFs = async (theTurnament, thePlayers, competitions) => {
-  console.log("generatepdf");
-
   let playerCompetition = [];
   let teams = {};
   let arrayToPdf = [];
+  console.log("generatepdf thePlayers", thePlayers);
 
   for (let player of thePlayers) {
     let team = player.team;
@@ -317,6 +318,7 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     }
 
     doc.save(`${theTurnament.name}_metryczki_zawodnikow.pdf`);
+    store.dispatch(actions.loadingAction(false));
     console.log(arrayToPdf);
   };
 
