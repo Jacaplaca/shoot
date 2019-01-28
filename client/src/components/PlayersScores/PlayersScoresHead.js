@@ -71,7 +71,7 @@ const PlayersScoresHead = ({
       />
 
       <HeadRowField
-        title="email"
+        title="Suma"
         classes={classes}
         // click={e => sorting("email", e)}
         // sort

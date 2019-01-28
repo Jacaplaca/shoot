@@ -51,7 +51,7 @@ class PlayersScoresForm extends React.Component {
       collection: "score"
     };
     // console.log(adding);
-    this.props.addToDB(adding);
+    this.props.score !== score && this.props.addToDB(adding);
 
     // console.log("save", value, compId, playerId, turnament);
   };

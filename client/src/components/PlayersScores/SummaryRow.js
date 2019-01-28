@@ -33,20 +33,20 @@ const comps = (competitions, classes, sorting, competitionClicked) => {
           alignItems: "center",
           justifyContent: "center",
           gridTemplateColumns: "25px 1fr",
-          width: "100%",
+          // width: "100%"
           height: "100%"
           // display: "block"
         }}
       >
         <SortButtons click={e => sorting("competitions", e, competitionId)} />
-        <div style={{ width: "100%", display: "block" }}>
+        <span>
           {/* {Math.floor(score)} */}
           <NumberFormat
             value={Math.floor(score)}
             displayType={"text"}
             thousandSeparator={" "}
           />
-        </div>
+        </span>
       </span>
       // <PlayersScoresForm
       //   key={competitionId}

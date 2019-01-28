@@ -111,6 +111,7 @@ export const textFieldStyles = theme => ({
 
 export const formStyles = theme => ({
   paper: {
+    width: "100%",
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 15,

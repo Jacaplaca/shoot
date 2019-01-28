@@ -14,8 +14,8 @@ const MainFrameHOC = moreProps => WrappedComponent => {
       const { isAuthenticated } = this.props.auth;
       const styles = {
         container: {
-          // width: "100%",
-          display: "inline-block",
+          width: "100%",
+          display: "grid",
           flexWrap: "nowrap",
           padding: this.props.theme.spacing.unit * 3
           // paddingTop: isAuthenticated ? 80 : 0

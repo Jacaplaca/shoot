@@ -21,6 +21,8 @@ import Players from "../components/Players";
 import PlayersScoresMain from "../components/PlayersScoresMain";
 import MetryczkiMain from "../components/MetryczkiMain";
 import Scores from "../components/Scores";
+import Kontakt from "../components/Kontakt";
+import Footer from "./Footer";
 // import Players from "../components/Players";
 //
 // import Costs from "./Costs";
@@ -119,6 +121,18 @@ class MiniDrawer extends React.Component {
         <div className={classes.root}>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route
+            exact
+            path="/kontakt"
+            render={() => (
+              <MainContainer
+                open={this.state.open}
+                handleDrawerOpen={this.handleDrawerOpen}
+              >
+                <Kontakt title="Kontakt" />
+              </MainContainer>
+            )}
+          />
           {!auth.isAuthenticated &&
           (path === "wyniki" || path === "wyniki_zawodnikow") ? null : (
             <TopNavBar
@@ -298,6 +312,7 @@ class MiniDrawer extends React.Component {
           {/* {this.props.children} */}
 
           {/* </main> */}
+          <Footer />
         </div>
       </BrowserRouter>
     );

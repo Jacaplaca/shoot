@@ -70,8 +70,8 @@ class App extends Component {
       //     </div>
       // </div>
       <Provider store={store}>
-        <Router>
-          <React.Fragment>
+        <React.Fragment>
+          <Router>
             {/* <Navbar /> */}
             {/* <div className="container"> */}
             <MiniDrawer>
@@ -85,8 +85,18 @@ class App extends Component {
               /> */}
             </MiniDrawer>
             {/* </div> */}
-          </React.Fragment>
-        </Router>
+          </Router>
+          {/* <div
+            style={{
+              color: "white",
+              zIndex: 34345,
+              position: "sticky",
+              bottom: 0
+            }}
+          >
+            laksdjf
+          </div> */}
+        </React.Fragment>
       </Provider>
     );
   }

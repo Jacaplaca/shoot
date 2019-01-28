@@ -68,11 +68,13 @@ class TopNavBar extends React.Component {
     switch (this.props.auth.isAuthenticated) {
       case true:
         return [
+          <ButtonNavBar key="3b" link="/kontakt" text="Kontakt" />,
           <ButtonNavBar key={2} click={this.onLogout} text="Wyloguj się" />
         ];
       // return [<ButtonNavBar key={2} link="/api/logout" text="Wyloguj się" />];
       case false:
         return [
+          <ButtonNavBar key="3b" link="/kontakt" text="Kontakt" />,
           <ButtonNavBar key="1a" link="/register" text="Rejestracja" />,
           <ButtonNavBar key="2b" link="/login" text="Logowanie" />
         ];

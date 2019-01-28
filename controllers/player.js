@@ -174,7 +174,7 @@ module.exports = {
           gun,
           scope,
           team,
-          rank,
+          nr,
           club,
           rodo
         } = item;
@@ -187,7 +187,7 @@ module.exports = {
           gun,
           scope,
           team,
-          rank: rank.split(","),
+          rank: nr,
           club,
           rodo: rodo && rodo.toLowerCase() === "tak" ? true : false
         });

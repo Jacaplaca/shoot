@@ -14,7 +14,7 @@ const PlayersRow = ({ row, classes, grid }) => {
   return (
     <React.Fragment>
       <span className={classNames(classes.rowBlock, classes.rowName)}>
-        {`${rodo ? name : "rodo"} ${rodo ? surname : "rodo"}`}
+        {`${name} ${surname}`}
       </span>
       <span className={classNames(classes.rowBlock)}>
         {rank.map(x => `${x} `)}

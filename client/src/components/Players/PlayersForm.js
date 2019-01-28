@@ -25,7 +25,7 @@ import InputSelectBaza from "../../inputs/InputSelectBaza";
 import FormButtons from "../../skins/FormButtons";
 
 class PlayersFormik extends Component {
-  importExcel = (file, turnament, collection) => {
+  importExcel = (file, turnament, collection, resetForm) => {
     console.log(file, turnament);
 
     var reader = new FileReader();
@@ -39,6 +39,7 @@ class PlayersFormik extends Component {
 
       workbook.SheetNames.forEach(function(sheetName) {
         // Here is your object
+        console.log("XLSX", sheetName);
         var XL_row_object = XLSX.utils.sheet_to_row_object_array(
           workbook.Sheets[sheetName]
         );
@@ -56,7 +57,7 @@ class PlayersFormik extends Component {
         };
         console.log("add", adding);
         store.dispatch(actions.addToDB(adding));
-
+        resetForm();
         // console.log("XL_row_object", XL_row_object);
         // axios.post("/api/players/upload_many", XL_row_object);
         // console.log("wihtTurnament", wihtTurnament);
@@ -269,7 +270,8 @@ class PlayersFormik extends Component {
                 this.importExcel(
                   event.currentTarget.files[0],
                   turnament,
-                  collection
+                  collection,
+                  resetForm
                 );
               }}
             />
