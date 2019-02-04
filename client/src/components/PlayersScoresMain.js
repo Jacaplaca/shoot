@@ -292,7 +292,11 @@ class PlayersScoresMain extends Component {
                     <PlayersScoresRows
                       grid={grid}
                       rows={this.state.matrix}
-                      turnament={this.props.add.turnamentId}
+                      turnament={
+                        isAuthenticated
+                          ? this.props.add.turnamentId
+                          : turnamentId
+                      }
                       finished={this.state.finished}
                       rowClick={(player, competition) =>
                         this.setState({

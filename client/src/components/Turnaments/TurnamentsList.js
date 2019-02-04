@@ -12,7 +12,8 @@ class TurnamentsList extends Component {
   state = {
     rows: [],
     zaplanowane: true,
-    zakonczone: true
+    zakonczone: true,
+    www: false
   };
 
   componentDidMount() {
@@ -26,27 +27,39 @@ class TurnamentsList extends Component {
   }
 
   handleChange = name => event => {
-    const { zaplanowane, zakonczone } = this.state;
+    const { zaplanowane, zakonczone, www } = this.state;
     let rows = [];
+    if (name === "www" && www) {
+      rows = this.props.rows;
+      this.setState({ zaplanowane: true, zakonczone: true });
+    } else if (name === "www" && !www) {
+      rows = this.props.rows.filter(row => row.www === true);
+      this.setState({ zaplanowane: true, zakonczone: true });
+    }
+
     if (zaplanowane && zakonczone) {
+      this.setState({ www: false });
       if (name === "zaplanowane") {
         rows = this.props.rows.filter(row => row.finished === true);
       } else if (name === "zakonczone") {
         rows = this.props.rows.filter(row => row.finished === false);
       }
     } else if (zaplanowane && !zakonczone) {
+      this.setState({ www: false });
       if (name === "zaplanowane") {
         rows = [];
       } else if (name === "zakonczone") {
         rows = this.props.rows;
       }
     } else if (!zaplanowane && zakonczone) {
+      this.setState({ www: false });
       if (name === "zaplanowane") {
         rows = this.props.rows;
       } else if (name === "zakonczone") {
         rows = [];
       }
     } else if (!zaplanowane && !zakonczone) {
+      this.setState({ www: false });
       if (name === "zaplanowane") {
         rows = this.props.rows.filter(row => row.finished === false);
       } else if (name === "zakonczone") {
@@ -95,7 +108,7 @@ class TurnamentsList extends Component {
   render() {
     const {
       collection,
-      auth: { user }
+      auth: { user, isAuthenticated }
     } = this.props;
     const { rows } = this.state;
     const grid =
@@ -127,6 +140,19 @@ class TurnamentsList extends Component {
               }
               label="Zakończone"
             />
+            {isAuthenticated && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.state.www}
+                    onChange={this.handleChange("www")}
+                    value="www"
+                    // color="primary"
+                  />
+                }
+                label="Tylko opublikowane"
+              />
+            )}
           </FormGroup>
           <Search
             data={this.props.rows}
@@ -145,14 +171,31 @@ class TurnamentsList extends Component {
         </div>
         <TurnamentsHeadRow grid={grid} row={rows[0]} sorting={this.sorting} />
         {rows.length > 0 &&
-          rows.map(row => (
-            <TurnamentsRow
-              key={row._id}
-              row={row}
-              collection={collection}
-              grid={grid}
-            />
-          ))}
+          rows.map(row => {
+            if (isAuthenticated) {
+              return (
+                <TurnamentsRow
+                  key={row._id}
+                  row={row}
+                  collection={collection}
+                  grid={grid}
+                />
+              );
+            } else {
+              if (row.www) {
+                return (
+                  <TurnamentsRow
+                    key={row._id}
+                    row={row}
+                    collection={collection}
+                    grid={grid}
+                  />
+                );
+              } else {
+                return null;
+              }
+            }
+          })}
       </div>
     );
   }

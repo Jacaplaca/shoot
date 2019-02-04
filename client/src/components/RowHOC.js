@@ -27,7 +27,7 @@ const RowRowHOC = WrappedComponent => {
 
     render() {
       const {
-        row: { _id, finished },
+        row: { _id, finished, www },
         collection,
         classes,
         edit,
@@ -47,7 +47,11 @@ const RowRowHOC = WrappedComponent => {
               finished ? classes.rowFinished : classes.rowTable,
               classes.table
             )}
-            style={{ gridTemplateColumns: grid }}
+            style={{
+              gridTemplateColumns: grid,
+              borderTopRightRadius: www && isAuthenticated ? 20 : 0,
+              borderBottomRightRadius: www && isAuthenticated ? 20 : 0
+            }}
           >
             <span className={classNames(classes.rowBlock)}>
               {user.rola === "admin" || collection === "players" ? (
@@ -70,7 +74,12 @@ const RowRowHOC = WrappedComponent => {
               {collection === "turnaments" ? (
                 isAuthenticated ? (
                   <IconButton
-                    style={{ padding: 5 }}
+                    style={{
+                      padding: 5,
+                      // borderColor: www && isAuthenticated && "white",
+                      borderWidth: www && isAuthenticated && 1,
+                      borderStyle: www && isAuthenticated && "solid"
+                    }}
                     color="primary"
                     aria-owns={anchorEl ? "simple-menu" : undefined}
                     aria-haspopup="true"
@@ -88,6 +97,7 @@ const RowRowHOC = WrappedComponent => {
                       pathname: `/wyniki_zawodnikow/${_id}`,
                       state: { turnamentId: _id }
                     }}
+                    target="_blank"
                   >
                     <IconButton
                       style={{ padding: 5 }}
@@ -136,6 +146,7 @@ const RowRowHOC = WrappedComponent => {
             </span>
           </div>
           <MenuContextTurnament
+            style={{ background: "red" }}
             user={user}
             deleteAction={id => {
               toDeleteAction(id);
@@ -146,6 +157,7 @@ const RowRowHOC = WrappedComponent => {
             open={Boolean(anchorEl)}
             onClose={this.handleClose}
             finished={finished}
+            www={www}
           />
         </React.Fragment>
       );

@@ -25,7 +25,8 @@ const MenuContextTurnament = ({
   deleteAction,
   user,
   fetchFromDB,
-  finished
+  finished,
+  www
 }) => {
   // console.log("fs menu", fs);
 
@@ -41,6 +42,21 @@ const MenuContextTurnament = ({
     axios
       .get(`/api/turnaments/cancel/${turnamentId}`)
       .then(result => console.log("canceled finis", result))
+      .then(() => fetchFromDB("turnaments"))
+      .then(() => onClose());
+  };
+
+  const addToWww = turnamentId => {
+    axios
+      .get(`/api/turnaments/www/${turnamentId}`)
+      .then(result => console.log("www", result))
+      .then(() => fetchFromDB("turnaments"))
+      .then(() => onClose());
+  };
+  const noWww = turnamentId => {
+    axios
+      .get(`/api/turnaments/nowww/${turnamentId}`)
+      .then(result => console.log("nowww", result))
       .then(() => fetchFromDB("turnaments"))
       .then(() => onClose());
   };
@@ -87,6 +103,14 @@ const MenuContextTurnament = ({
           Zakończ zawody
         </MenuItem>
       )}
+      {user.rola === "admin" &&
+        (www ? (
+          <MenuItem onClick={() => noWww(turnamentId)}>
+            Anuluj publikację
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={() => addToWww(turnamentId)}>Strona WWW</MenuItem>
+        ))}
     </Menu>
   );
 };

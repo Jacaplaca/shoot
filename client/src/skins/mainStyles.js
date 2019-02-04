@@ -63,6 +63,9 @@ export const rowStyles = theme => ({
     color: theme.palette.text.primary,
     background: darken(theme.palette.secondary.dark, 0.5),
     marginBottom: 2
+  },
+  rowWWW: {
+    borderRadius: 20
   }
 });
 
