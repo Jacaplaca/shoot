@@ -4,3 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+class.Component.open	C:\work\shoot\client\src\skins\MiniDrawer.js	/^    open: true$/;"	property	line:67
+render	C:\work\shoot\client\src\skins\MiniDrawer.js	/^  render() {$/;"	function	line:86
+mapStateToProps	C:\work\shoot\client\src\skins\MiniDrawer.js	/^function mapStateToProps({ auth }) {$/;"	function	line:331
+mapStateToProps	C:\work\shoot\client\src\skins\MiniDrawer.js	/^function mapStateToProps({ auth }) {$/;"	function	line:331

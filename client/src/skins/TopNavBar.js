@@ -17,6 +17,7 @@ import * as actions from "../actions/authentication";
 import ButtonNavBar from "./ButtonNavBar";
 
 let drawerWidth = 240;
+const path = window.location.pathname.split("/")[1];
 
 const styles = theme => ({
   flex: {
@@ -105,19 +106,26 @@ class TopNavBar extends React.Component {
           </IconButton>
           <div variant="title" color="inherit" className={classes.flex}>
             <Typography variant="title" color="inherit" noWrap>
-              <NavLink
-                activeStyle={{
-                  color: "white",
-                  fontWeight: "600",
-                  textDecoration: "none"
-                }}
-                to="/"
+              <a
+                href={
+                  !auth.isAuthenticated &&
+                  (path === "wyniki" || path === "wyniki_zawodnikow")
+                    ? "http://portalstrzelecki.pl/zawody-on-line/"
+                    : "/"
+                }
               >
-                Shooter Stats
-              </NavLink>
+                <img
+                  // className={classes.rowImg}
+                  style={{ height: 45 }}
+                  src={require(`../images/ps_logo_biale.png`)}
+                />
+              </a>
             </Typography>
           </div>
-          <ul className="right">{this.renderContent()}</ul>
+          {!auth.isAuthenticated &&
+          (path === "wyniki" || path === "wyniki_zawodnikow") ? null : (
+            <ul className="right">{this.renderContent()}</ul>
+          )}
         </Toolbar>
       </AppBar>
     );

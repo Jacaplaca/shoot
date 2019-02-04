@@ -7,6 +7,8 @@ import Confirmation from "./Confirmation";
 import SiteHeader from "./SiteHeader";
 import * as actions from "../actions/authentication";
 
+const path = window.location.pathname.split("/")[1];
+
 const MainFrameHOC = moreProps => WrappedComponent => {
   class MainFrameHOCc extends Component {
     render() {
@@ -39,7 +41,11 @@ const MainFrameHOC = moreProps => WrappedComponent => {
       // console.log("main mofre", moreProps);
       console.log("main frame loading", this.props.loading);
       return (
-        <div style={{ paddingTop: isAuthenticated ? 80 : 0 }}>
+        <div
+          style={{
+            paddingTop: isAuthenticated ? 80 : path === "wyniki" ? 0 : 40
+          }}
+        >
           <div style={styles.root}>
             {/* <LinearProgress color="secondary" /> */}
             {this.props.loading ? (

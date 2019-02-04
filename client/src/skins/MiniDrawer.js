@@ -85,7 +85,11 @@ class MiniDrawer extends React.Component {
 
   render() {
     // return <div>{this.props.children}</div>;
-    const { classes, theme, auth } = this.props;
+    const {
+      classes,
+      theme,
+      auth: { user, isAuthenticated }
+    } = this.props;
     // const routes = [
     //   {
     //     comp: "costs",
@@ -133,14 +137,14 @@ class MiniDrawer extends React.Component {
               </MainContainer>
             )}
           />
-          {!auth.isAuthenticated &&
-          (path === "wyniki" || path === "wyniki_zawodnikow") ? null : (
+          {!isAuthenticated && path === "wyniki" ? null : (
             <TopNavBar
               // style={{ position: "absolute", righ: 34, top: 334 }}
               open={this.state.open}
               handleDrawerOpen={this.handleDrawerOpen}
             />
           )}
+
           <DrawerMy
             open={this.state.open}
             handleDrawerClose={this.handleDrawerClose}
@@ -159,7 +163,7 @@ class MiniDrawer extends React.Component {
             )}
           />
 
-          {auth.user.rola === "admin" && (
+          {user.rola === "admin" && (
             <Route
               exact
               path="/organizatorzy"
@@ -187,7 +191,7 @@ class MiniDrawer extends React.Component {
               )}
             />
           )} */}
-          {(auth.user.rola === "admin" || auth.user.rola === "promoter") && (
+          {(user.rola === "admin" || user.rola === "promoter") && (
             <Route
               exact
               path="/zawody"
@@ -201,7 +205,7 @@ class MiniDrawer extends React.Component {
               )}
             />
           )}
-          {auth.user.rola === "admin" && (
+          {user.rola === "admin" && (
             <Route
               exact
               path="/sedziowie"
@@ -251,7 +255,7 @@ class MiniDrawer extends React.Component {
               );
             }}
           />
-          {auth.user.rola === "admin" && (
+          {user.rola === "admin" && (
             <Route
               exact
               path="/konkurencje"
@@ -312,7 +316,7 @@ class MiniDrawer extends React.Component {
           {/* {this.props.children} */}
 
           {/* </main> */}
-          <Footer />
+          {(!isAuthenticated && path === "wyniki") || <Footer />}
         </div>
       </BrowserRouter>
     );
