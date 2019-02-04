@@ -49,7 +49,7 @@ const TurnamentsHeadRow = ({ classes, grid, sorting, auth: { user } }) => {
       <span className={classNames(classes.headBlock)}>Sędzia główny</span>
       {/* <span className={classNames(classes.headBlock)}>Sędzia liczący</span> */}
       {/* <span className={classNames(classes.headBlock)}>Sędzia RTS</span> */}
-      <span className={classNames(classes.headBlock)}>Obserwator lzss</span>
+      <span className={classNames(classes.headBlock)}>Obserwator PZSS</span>
       {/* <span className={classNames(classes.headBlock)}>Techniczny</span> */}
       <span className={classNames(classes.headBlock)}>
         {/* <img className={classes.rowImg} src={require(`../../${logo}`)} /> */}

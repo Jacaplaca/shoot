@@ -146,7 +146,7 @@ class TurnamentsFormik extends Component {
               <InputComponent
                 clear={() => setFieldValue("lzss", "")}
                 name="lzss"
-                label="Obserwator LZSS"
+                label="Obserwator PZSS"
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
