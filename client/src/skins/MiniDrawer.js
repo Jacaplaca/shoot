@@ -20,6 +20,8 @@ import Competitions from "../components/Competitions";
 import Players from "../components/Players";
 import PlayersScoresMain from "../components/PlayersScoresMain";
 import MetryczkiMain from "../components/MetryczkiMain";
+import Raport from "../components/Raport";
+import Statement from "../components/Statement";
 import Scores from "../components/Scores";
 import Kontakt from "../components/Kontakt";
 import Footer from "./Footer";
@@ -137,7 +139,8 @@ class MiniDrawer extends React.Component {
               </MainContainer>
             )}
           />
-          {!isAuthenticated && path === "wyniki" ? null : (
+          {(!isAuthenticated && path === "wyniki") ||
+          path === "raport" ? null : (
             <TopNavBar
               // style={{ position: "absolute", righ: 34, top: 334 }}
               open={this.state.open}
@@ -239,6 +242,21 @@ class MiniDrawer extends React.Component {
           />
           <Route
             exact
+            path="/komunikat/:id"
+            render={props => {
+              console.log("route /komunikat/", props);
+              return (
+                <MainContainer
+                  open={this.state.open}
+                  handleDrawerOpen={this.handleDrawerOpen}
+                >
+                  <Statement title="Komunikat" add={props.location.state} />
+                </MainContainer>
+              );
+            }}
+          />
+          <Route
+            exact
             path="/metryczki_zawodnikow/:id"
             render={props => {
               console.log("route", props);
@@ -316,7 +334,9 @@ class MiniDrawer extends React.Component {
           {/* {this.props.children} */}
 
           {/* </main> */}
-          {(!isAuthenticated && path === "wyniki") || <Footer />}
+          {(!isAuthenticated && path === "wyniki") || path === "raport" || (
+            <Footer />
+          )}
         </div>
       </BrowserRouter>
     );

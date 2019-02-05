@@ -76,7 +76,7 @@ class InputSelectBaza extends React.Component {
     fetchowane: [],
     fetchowaneRest: null,
     offset: 0,
-    openSuggestions: true
+    openSuggestions: false
   };
 
   // componentDidMount() {
@@ -84,7 +84,8 @@ class InputSelectBaza extends React.Component {
   // }
 
   componentWillReceiveProps(nextProps) {
-    // console.log("nextProps InputSelectBaza()", this.props.suggestion.name);
+    // console.log("nextProps InputSelectBaza()", nextProps);
+    // console.log("state InputSelectBaza()", this.state);
     if (nextProps.value && nextProps.value._id) {
       // this.setState({ openSuggestions: false });
       let value;
@@ -159,7 +160,12 @@ class InputSelectBaza extends React.Component {
     if (e.type === "click") {
       // console.log(e.target);
       newValue = e.target.textContent;
-      // this.setState({ openSuggestions: false });
+      this.setState({
+        fetchowane:
+          this.state.fetchowane === []
+            ? this.props.object
+            : this.state.fetchowane
+      });
     } else if (e.type === "change") {
       // console.log("onchange2", e.type);
       newValue = e.target.value;
@@ -175,8 +181,13 @@ class InputSelectBaza extends React.Component {
       value: newValue
       // openSuggestions: e.type === "click" ? false : true
     });
-    const wybrano = this.state.fetchowane.filter(x => x.name === newValue)[0];
-    // console.log(wybrano);
+    console.log("fetchowane", this.state.fetchowane);
+    console.log("fetchowane do wybrano", e.target.title);
+    const wybrano = this.state.fetchowane.filter(x => {
+      console.log("filter", x._id);
+      return x._id === e.target.title;
+    })[0];
+    console.log("wybrano", wybrano);
     let input = {
       target: {
         // value: wybrano ? wybrano.id : newValue,
@@ -188,6 +199,15 @@ class InputSelectBaza extends React.Component {
         type: "inputSelectBaza"
       }
     };
+    console.log("inputselectbaza wybrano", newValue);
+    wybrano &&
+      wybrano.name &&
+      this.setState({
+        value: wybrano.surname
+          ? `${wybrano.name} ${wybrano.surname}`
+          : wybrano.name
+      });
+    console.log("input", input);
     newValue !== ""
       ? this.setState({ clear: true })
       : this.setState({ clear: false });
@@ -197,7 +217,6 @@ class InputSelectBaza extends React.Component {
   };
 
   loadSuggestions = async (value, fetched) => {
-    // console.log("loadSuggestions", value, fetched);
     let fetchowane;
     let fetchowaneRest;
     if (this.props.object) {
@@ -216,6 +235,8 @@ class InputSelectBaza extends React.Component {
             .reverse()
         : fetched.sort(dynamicSort("name")).splice(0, 5);
     }
+    console.log("loadSuggestions", value, this.props.object);
+    console.log("loadSuggestions fetchowane", value, fetchowane);
     this.setState({
       fetchowane,
       fetchowaneRest:

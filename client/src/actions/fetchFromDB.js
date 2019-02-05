@@ -15,7 +15,7 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
   let url;
   let type;
 
-  // console.log("fetchFromDB", collection, get, id);
+  console.log("fetchFromDB", collection, get, id);
 
   switch (collection) {
     case "turnaments":

@@ -74,7 +74,16 @@ class CompetitionsFormik extends Component {
                   object={this.props.turnaments}
                   name="turnament"
                   type="string"
-                  wybrano={handleChange}
+                  // wybrano={handleChange}
+                  wybrano={e => {
+                    handleChange({
+                      target: {
+                        name: e.target.name,
+                        value:
+                          e.target.value === "" ? e.target.text : e.target.value
+                      }
+                    });
+                  }}
                   // wybrano={e => onChange(e)}
                   value={turnament}
                   label="Zawody"
@@ -87,7 +96,16 @@ class CompetitionsFormik extends Component {
                 object={this.props.judges}
                 name="judge"
                 type="string"
-                wybrano={handleChange}
+                // wybrano={handleChange}
+                wybrano={e => {
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value:
+                        e.target.value === "" ? e.target.text : e.target.value
+                    }
+                  });
+                }}
                 suggestion={nameSurnameSuggestion}
                 names={["name", "surname"]}
                 // wybrano={e => onChange(e)}

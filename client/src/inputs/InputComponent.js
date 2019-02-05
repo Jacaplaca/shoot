@@ -48,6 +48,8 @@ const InputComponent = props => {
     kwota,
     autoComplete,
     clear,
+    multiline,
+    rows,
     ...other
   } = props;
 
@@ -57,33 +59,61 @@ const InputComponent = props => {
       aria-describedby="name-helper-text"
       style={{ width: "90%" }}
     >
-      <InputMask mask={mask} value={value} onChange={edytuj} {...other}>
-        {() => (
-          <InputSelectTextField
-            // onClick={() => {
-            //   console.log("InputComponent");
-            //   console.log(props);
-            // }}
-            //refy={props.refy}
-            clear={clear}
-            helperText={helperText}
-            error={error}
-            label={label}
-            name={name}
-            id="name-helper"
-            value={value}
-            onChange={edytuj}
-            type={type}
-            // type={password ? "password" : type}
-            // InputLabelProps={{
-            //   shrink: type === "date" || value !== "" ? true : false
-            // }}
-            kwota={kwota}
-            fullWidth={fullWidth}
-            autoComplete={autoComplete}
-          />
-        )}
-      </InputMask>
+      {multiline ? (
+        <InputSelectTextField
+          // onClick={() => {
+          //   console.log("InputComponent");
+          //   console.log(props);
+          // }}
+          //refy={props.refy}
+          clear={clear}
+          helperText={helperText}
+          error={error}
+          label={label}
+          name={name}
+          id="name-helper"
+          value={value}
+          onChange={edytuj}
+          type={type}
+          // type={password ? "password" : type}
+          // InputLabelProps={{
+          //   shrink: type === "date" || value !== "" ? true : false
+          // }}
+          kwota={kwota}
+          fullWidth={fullWidth}
+          autoComplete={autoComplete}
+          multiline
+          rows={rows}
+        />
+      ) : (
+        <InputMask mask={mask} value={value} onChange={edytuj} {...other}>
+          {() => (
+            <InputSelectTextField
+              // onClick={() => {
+              //   console.log("InputComponent");
+              //   console.log(props);
+              // }}
+              //refy={props.refy}
+              clear={clear}
+              helperText={helperText}
+              error={error}
+              label={label}
+              name={name}
+              id="name-helper"
+              value={value}
+              onChange={edytuj}
+              type={type}
+              // type={password ? "password" : type}
+              // InputLabelProps={{
+              //   shrink: type === "date" || value !== "" ? true : false
+              // }}
+              kwota={kwota}
+              fullWidth={fullWidth}
+              autoComplete={autoComplete}
+            />
+          )}
+        </InputMask>
+      )}
     </FormControl>
   );
 };

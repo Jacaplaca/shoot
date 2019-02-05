@@ -17,6 +17,7 @@ import Pagination from "../skins/Pagination";
 
 const collection = "playersScores";
 let turnamentId;
+const path = window.location.pathname.split("/")[1];
 
 class PlayersScoresMain extends Component {
   state = {
@@ -218,7 +219,8 @@ class PlayersScoresMain extends Component {
   render() {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
     const {
-      auth: { isAuthenticated }
+      auth: { isAuthenticated },
+      raport
     } = this.props;
     const zmienna = this.state.filter;
     const grid = `50px 250px 80px repeat(${this.state.summaryRow &&
@@ -226,7 +228,7 @@ class PlayersScoresMain extends Component {
       this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
     console.log("sum", this.state.summaryRow);
     return (
-      <React.Fragment>
+      <div id="raport">
         {/* <h4 style={{ color: "white" }}>aslkdjfls lsakdfj</h4> */}
         {this.state.summaryRow && this.state.summaryRow.competitions ? (
           <React.Fragment>
@@ -254,7 +256,8 @@ class PlayersScoresMain extends Component {
                       style={{
                         ...style,
                         // top: 70
-                        paddingTop: isAuthenticated ? 60 : 0,
+                        paddingTop:
+                          isAuthenticated && path !== "raport" ? 60 : 0,
                         zIndex: 3
                         // marginTop: isSticky ? 50 : 0
                         // marginTop: distanceFromTop < 60 ? 50 : 0
@@ -288,12 +291,12 @@ class PlayersScoresMain extends Component {
               </Sticky>
               {this.state.summaryRow && this.state.summaryRow.competitions ? (
                 <div>
-                  <Pagination data={this.state.matrix}>
+                  <Pagination data={this.state.matrix} off={raport}>
                     <PlayersScoresRows
                       grid={grid}
                       rows={this.state.matrix}
                       turnament={
-                        isAuthenticated
+                        isAuthenticated && path !== "raport"
                           ? this.props.add.turnamentId
                           : turnamentId
                       }
@@ -326,8 +329,8 @@ class PlayersScoresMain extends Component {
             />
           ) : null}
           {/* <h1 style={{ color: "white" }}>{zmienna}</h1>/> */}
-        {/* </Pagination> */} */}
-      </React.Fragment>
+        {/* </Pagination> */}
+      </div>
     );
   }
 }

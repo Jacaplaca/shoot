@@ -29,6 +29,7 @@ import ButtonNavBar from "./ButtonNavBar";
 
 let drawerWidth = 240;
 let drawerClosedWidth = 72;
+const path = window.location.pathname.split("/")[1];
 
 export const mainStyles = theme => ({
   back: { background: "red", color: "yellow", fontWeight: "800" },
@@ -118,7 +119,8 @@ class MainContainer extends React.Component {
           className={classNames(
             classes.appBar,
             open && classes.appBarShift,
-            !auth.isAuthenticated && classes.appBarShiftHide
+            (path === "raport" || !auth.isAuthenticated) &&
+              classes.appBarShiftHide
           )}
         >
           {children}

@@ -5,7 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 const ClearButton = props => {
   const { value, isloading, name, onChange, clear } = props;
-  console.log("ClearButton", props);
+  // console.log("ClearButton", props);
   if (value !== "" && isloading) {
     return <CircularProgress size={23} style={{ marginBottom: 10 }} />;
   } else if (value !== "" && !isloading) {

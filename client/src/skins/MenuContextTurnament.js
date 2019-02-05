@@ -88,7 +88,17 @@ const MenuContextTurnament = ({
         <MenuItem onClick={onClose}>Wyniki zawodników</MenuItem>
       </Link>
       {/* <MenuItem onClick={onClose}>Zobacz wyniki</MenuItem> */}
-      <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
+
+      <Link
+        to={{
+          pathname: `/komunikat/${turnamentId}`,
+          state: { turnamentId }
+        }}
+        // target="_blank"
+      >
+        <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
+      </Link>
+
       {user.rola === "admin" && (
         <MenuItem onClick={() => deleteAction(turnamentId)}>
           <DeleteIcon /> Usuń zawody

@@ -25,6 +25,10 @@ import InputSelectBaza from "../../inputs/InputSelectBaza";
 import FormButtons from "../../skins/FormButtons";
 
 class PlayersFormik extends Component {
+  componentWillReceiveProps(nextProps) {
+    console.log("PlayersForm", nextProps.values.turnament);
+  }
+
   importExcel = (file, turnament, collection, resetForm) => {
     console.log(file, turnament);
 
@@ -104,7 +108,7 @@ class PlayersFormik extends Component {
       resetForm,
       turnamentId
     } = this.props;
-    // console.log("turn", turnament.length);
+    console.log("turn", turnament);
     // setFieldValue("email", "ccc@ccc.com");
     // console.log("rodo", rodo);
     return (
@@ -116,7 +120,16 @@ class PlayersFormik extends Component {
                 object={turnaments}
                 name="turnament"
                 type="string"
-                wybrano={handleChange}
+                wybrano={e => {
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value:
+                        e.target.value === "" ? e.target.text : e.target.value
+                    }
+                  });
+                }}
+                // wybrano={e => setFieldValue("turnament", e)}
                 // wybrano={e => onChange(e)}
                 value={turnament}
                 label="Zawody"

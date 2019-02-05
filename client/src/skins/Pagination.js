@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PaginationRow from "./PaginationRow";
 
+const path = window.location.pathname.split("/")[1];
+
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +19,8 @@ class Pagination extends Component {
   };
 
   componentDidMount() {
+    const { off } = this.props;
+    this.setState({ page_size: off ? 9999 : 25 });
     this.setState({ page_number: 1 }, () => {
       this.paginate(
         this.props.data,
@@ -102,7 +106,7 @@ class Pagination extends Component {
     return (
       <React.Fragment>
         {childrenWithProps}
-        {data.length > 9 && (
+        {data.length > 9 && path !== "raport" && (
           <PaginationRow
             changePageNumber={this.changePage}
             page={this.state.page_number}

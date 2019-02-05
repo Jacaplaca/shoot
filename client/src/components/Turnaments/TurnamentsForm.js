@@ -62,7 +62,7 @@ class TurnamentsFormik extends Component {
     // const { prepopulate } = this.state;
     // setFieldValue("name", "asdfsadf");
     // console.log(toEdit);
-    // console.log("TurnamentsForm", this.props.values);
+    console.log("TurnamentsForm", this.props.values.promoter);
     return (
       <Paper
         // style={formStyles.paper}
@@ -104,7 +104,16 @@ class TurnamentsFormik extends Component {
                 object={this.props.promoters}
                 name="promoter"
                 type="string"
-                wybrano={handleChange}
+                // wybrano={handleChange}
+                wybrano={e => {
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value:
+                        e.target.value === "" ? e.target.text : e.target.value
+                    }
+                  });
+                }}
                 // wybrano={e => onChange(e)}
                 value={promoter}
                 label="Organizator"
@@ -133,7 +142,16 @@ class TurnamentsFormik extends Component {
                 object={this.props.judges}
                 name="judgeMain"
                 type="string"
-                wybrano={handleChange}
+                // wybrano={handleChange}
+                wybrano={e => {
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value:
+                        e.target.value === "" ? e.target.text : e.target.value
+                    }
+                  });
+                }}
                 suggestion={nameSurnameSuggestion}
                 names={["name", "surname"]}
                 // wybrano={e => onChange(e)}
@@ -161,7 +179,16 @@ class TurnamentsFormik extends Component {
                 object={this.props.judges}
                 name="judgeCounting"
                 type="string"
-                wybrano={handleChange}
+                // wybrano={handleChange}
+                wybrano={e => {
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value:
+                        e.target.value === "" ? e.target.text : e.target.value
+                    }
+                  });
+                }}
                 suggestion={nameSurnameSuggestion}
                 names={["name", "surname"]}
                 // wybrano={e => onChange(e)}
@@ -175,7 +202,16 @@ class TurnamentsFormik extends Component {
                 object={this.props.judges}
                 name="judgeRTS"
                 type="string"
-                wybrano={handleChange}
+                // wybrano={handleChange}
+                wybrano={e => {
+                  handleChange({
+                    target: {
+                      name: e.target.name,
+                      value:
+                        e.target.value === "" ? e.target.text : e.target.value
+                    }
+                  });
+                }}
                 suggestion={nameSurnameSuggestion}
                 names={["name", "surname"]}
                 // wybrano={e => onChange(e)}

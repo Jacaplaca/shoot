@@ -17,6 +17,7 @@ import DrawerLink from "./DrawerLink";
 import ShowLinkToComp from "./ShowLinkToComp";
 
 let drawerWidth = 240;
+const path = window.location.pathname.split("/")[1];
 
 const styles = theme => ({
   root: {
@@ -136,7 +137,8 @@ class DrawerMy extends React.Component {
           paper: classNames(
             classes.drawerPaper,
             !open && classes.drawerPaperClose,
-            !auth.isAuthenticated && classes.drawerPaperHide
+            (path === "raport" || !auth.isAuthenticated) &&
+              classes.drawerPaperHide
           )
         }}
         open={open}

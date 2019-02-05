@@ -12,7 +12,7 @@ const path = window.location.pathname.split("/")[1];
 const MainFrameHOC = moreProps => WrappedComponent => {
   class MainFrameHOCc extends Component {
     render() {
-      console.log("load", this.props);
+      // console.log("load", this.props);
       const { isAuthenticated } = this.props.auth;
       const styles = {
         container: {
@@ -39,11 +39,18 @@ const MainFrameHOC = moreProps => WrappedComponent => {
       };
       // console.log("mainfram", this.props);
       // console.log("main mofre", moreProps);
-      console.log("main frame loading", this.props.loading);
+      // console.log("main frame loading", this.props.loading);
       return (
         <div
           style={{
-            paddingTop: isAuthenticated ? 80 : path === "wyniki" ? 0 : 40
+            paddingTop: isAuthenticated
+              ? path === "raport"
+                ? 0
+                : 80
+              : path === "wyniki"
+              ? 0
+              : 40
+            // paddingTop: path === "wyniki" && isAuthenticated ? 80 :  ? 0 : 40,
           }}
         >
           <div style={styles.root}>

@@ -3,6 +3,23 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import MenuItem from "@material-ui/core/MenuItem";
 
+export const minimalSuggestion = (suggestion, { query, isHighlighted }) => {
+  return (
+    <MenuItem
+      selected={isHighlighted}
+      component="div"
+      key={suggestion._id}
+      title={suggestion._id}
+    >
+      <div
+        style={{ display: "block", width: "100%", color: "black" }}
+        title={suggestion._id}
+      >
+        <span>{suggestion.name}</span>
+      </div>
+    </MenuItem>
+  );
+};
 export const simpleSuggestion = (suggestion, { query, isHighlighted }) => {
   // console.log("simpleSuggestion", suggestion);
   const matches = match(suggestion.name, query);
@@ -53,7 +70,7 @@ export const nameSurnameSuggestion = (suggestion, { query, isHighlighted }) => {
   const parts = parse(fullName, matches);
 
   return (
-    <MenuItem selected={isHighlighted} component="div" dense title={_id}>
+    <MenuItem selected={isHighlighted} component="div" title={_id}>
       <div
         style={{ display: "block", width: "100%", color: "black" }}
         title={_id}
@@ -61,14 +78,14 @@ export const nameSurnameSuggestion = (suggestion, { query, isHighlighted }) => {
         <span title={_id}>
           {parts.map((part, index) => {
             return part.highlight ? (
-              <span key={String(index)} title={_id} style={{ fontWeight: 500 }}>
+              <span key={String(index)} title={_id} style={{ fontWeight: 600 }}>
                 {part.text}
               </span>
             ) : (
               <strong
                 key={String(index)}
                 title={_id}
-                style={{ fontWeight: 300 }}
+                style={{ fontWeight: 400 }}
               >
                 {part.text}
               </strong>
