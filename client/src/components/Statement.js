@@ -55,6 +55,8 @@ class Statement extends React.Component {
             competitions={
               this.state.competitions ? this.state.competitions : []
             }
+            turnaments={this.props.turnaments}
+            players={this.props.players}
           />
         )}
       </React.Fragment>
