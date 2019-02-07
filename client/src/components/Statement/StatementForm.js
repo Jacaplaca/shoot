@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
+import Cookies from "universal-cookie";
 import TextField from "@material-ui/core/TextField";
 import { combineStyles, dynamicSort } from "../../functions/functions";
 import store from "../../store";
@@ -18,7 +19,9 @@ import InputSelectBaza from "../../inputs/InputSelectBaza";
 import ChooseSelect from "../../inputs/ChooseSelect";
 import FormButtons from "../../skins/FormButtons";
 import ButtonMy from "../../skins/ButtonMy";
+import generatePDF from "./generatePDF";
 // import
+const cookies = new Cookies();
 
 class StatementForm extends Component {
   state = {
@@ -29,13 +32,34 @@ class StatementForm extends Component {
   };
 
   componentDidMount() {
+    // cookies.set("myCat", "Pacman2", { path: "/" });
+    // console.log(cookies.get("myCat")); // Pacman
+
     this.setState({ q: { name: "pro2", _id: 2 } });
 
     this.props.competitions &&
       this.createProtocolsForForm(this.props.competitions);
   }
 
+  componentDidUpdate() {
+    const { competitions, finalProtocols } = this.state;
+    const turnamentId = this.props.turnament._id;
+    const cookieTurnament = cookies.get(turnamentId);
+    const finalProtocolsCookies =
+      cookieTurnament && cookieTurnament.finalProtocols;
+    const competitionsCookies = cookieTurnament && cookieTurnament.competitions;
+    if (
+      finalProtocols !== finalProtocolsCookies ||
+      competitions !== competitionsCookies
+    ) {
+      cookies.set(turnamentId, { competitions, finalProtocols }, { path: "/" });
+      // console.log("finalProtocolsCookies", finalProtocolsCookies);
+      // console.log("competitionsCookies", competitionsCookies);
+    }
+    // console.log("update");
+  }
   componentWillReceiveProps(nextProps) {
+    console.log("componentWillReceiveProps");
     const { competitions } = this.props;
     if (competitions !== nextProps.competitions) {
       this.createProtocolsForForm(nextProps.competitions);
@@ -49,7 +73,35 @@ class StatementForm extends Component {
     for (let competition of competitions) {
       finalProtocols[0].competitions.push(competition._id);
     }
-    this.setState({ finalProtocols, competitions });
+
+    const turnamentId = this.props.turnament._id;
+    const cookieTurnament = cookies.get(turnamentId);
+    const finalProtocolsCookies =
+      cookieTurnament && cookieTurnament.finalProtocols;
+    const competitionsCookies = cookieTurnament && cookieTurnament.competitions;
+    // console.log(
+    //   "create",
+    //   competitions,
+    //   competitionsCookies,
+    //
+    //
+    // );
+
+    if (
+      finalProtocolsCookies &&
+      competitionsCookies &&
+      JSON.stringify(competitions) === JSON.stringify(competitionsCookies)
+    ) {
+      // cookies.set(turnamentId, { competitions, finalProtocols }, { path: "/" });
+      // console.log("finalProtocolsCookies", finalProtocolsCookies);
+      this.setState({
+        finalProtocols: finalProtocolsCookies,
+        competitions: competitionsCookies
+      });
+      // console.log("competitionsCookies", competitionsCookies);
+    } else {
+      this.setState({ finalProtocols, competitions });
+    }
   };
 
   // createProtocolsForFormOld = competitions => {
@@ -250,19 +302,19 @@ class StatementForm extends Component {
 
   handleComment = e => {
     const { name, value } = e.target;
-    console.log("handleComment()", value, name);
+    // console.log("handleComment()", value, name);
     // this.setState({ [e.target.name]: e.target.value });
 
     let { finalProtocols } = this.state;
     // const comment = this.state[protocolId] ? this.state[protocolId] : "";
     let toChange = finalProtocols.filter(proto => {
-      console.log("tochange", proto._id, name);
+      // console.log("tochange", proto._id, name);
       return proto._id.toString() === name;
     });
     const toNoChange = finalProtocols.filter(
       proto => proto._id.toString() !== name
     );
-    console.log("handleComment(), ", toChange, toNoChange);
+    // console.log("handleComment(), ", toChange, toNoChange);
     toChange[0].comment = value;
     finalProtocols = [...toChange, ...toNoChange].sort(dynamicSort("_id"));
     this.setState({ finalProtocols });
@@ -285,7 +337,11 @@ class StatementForm extends Component {
     let protocols = [];
     for (let protocol of finalProtocols) {
       iterator = iterator + 1;
-      protocols.push({ protocol: protocol.name, players: [] });
+      protocols.push({
+        protocol: protocol.name,
+        players: [],
+        comment: protocol.comment
+      });
       const competInProt = protocol.competitions;
       for (let player of players) {
         let wholeScore = 0;
@@ -306,7 +362,14 @@ class StatementForm extends Component {
         });
       }
     }
+    // protocols.sort(dynamicSort("score"));
+    protocols.map((x, i) => x.players.sort(dynamicSort("score")).reverse());
+    protocols.map(x =>
+      x.players.map((player, i) => Object.assign(player, { position: i + 1 }))
+    );
     console.log("protocols", protocols);
+    console.log(JSON.stringify(protocols));
+    generatePDF(this.props.turnament, protocols);
   };
 
   render() {
@@ -489,3 +552,70 @@ const enhance = compose(
 );
 
 export default enhance(StatementForm);
+
+const protocols = [
+  {
+    protocol: "Protokół nr 1",
+    players: [
+      { name: "tak dsa", score: 3766, position: 1 },
+      { name: "John Foczy", score: 966, position: 2 },
+      { name: "Brajan Fish", score: 435, position: 3 },
+      { name: "tak dsa", score: 367, position: 4 },
+      { name: "no d", score: 367, position: 5 },
+      { name: "yes ed", score: 357, position: 6 },
+      { name: "yes ed", score: 337, position: 7 },
+      { name: "nie asd", score: 206, position: 8 },
+      { name: "nie asd", score: 156, position: 9 },
+      { name: "no d", score: 44, position: 10 },
+      { name: "tak dsa", score: 3766, position: 1 },
+      { name: "John Foczy", score: 966, position: 2 },
+      { name: "Brajan Fish", score: 435, position: 3 },
+      { name: "tak dsa", score: 367, position: 4 },
+      { name: "no d", score: 367, position: 5 },
+      { name: "yes ed", score: 357, position: 6 },
+      { name: "yes ed", score: 337, position: 7 },
+      { name: "nie asd", score: 206, position: 8 },
+      { name: "nie asd", score: 156, position: 9 },
+      { name: "no d", score: 44, position: 10 },
+      { name: "tak dsa", score: 3766, position: 1 },
+      { name: "John Foczy", score: 966, position: 2 },
+      { name: "Brajan Fish", score: 435, position: 3 },
+      { name: "tak dsa", score: 367, position: 4 },
+      { name: "no d", score: 367, position: 5 },
+      { name: "yes ed", score: 357, position: 6 },
+      { name: "yes ed", score: 337, position: 7 },
+      { name: "nie asd", score: 206, position: 8 },
+      { name: "nie asd", score: 156, position: 9 },
+      { name: "no d", score: 44, position: 10 },
+      { name: "tak dsa", score: 3766, position: 1 },
+      { name: "John Foczy", score: 966, position: 2 },
+      { name: "Brajan Fish", score: 435, position: 3 },
+      { name: "tak dsa", score: 367, position: 4 },
+      { name: "no d", score: 367, position: 5 },
+      { name: "yes ed", score: 357, position: 6 },
+      { name: "yes ed", score: 337, position: 7 },
+      { name: "nie asd", score: 206, position: 8 },
+      { name: "nie asd", score: 156, position: 9 },
+      { name: "no d", score: 44, position: 10 }
+    ],
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum, sem cursus varius tristique, tortor sem placerat odio, sit amet convallis sem erat nec neque. Quisque at orci tempor, imperdiet urna quis, laoreet urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per ince. "
+  },
+  {
+    protocol: "Protokół nr 2",
+    players: [
+      { name: "John Foczy", score: 53, position: 1 },
+      { name: "Brajan Fish", score: 43, position: 2 },
+      { name: "no d", score: 34, position: 3 },
+      { name: "tak dsa", score: 33, position: 4 },
+      { name: "tak dsa", score: 30, position: 5 },
+      { name: "yes ed", score: 23.1, position: 6 },
+      { name: "no d", score: 13, position: 7 },
+      { name: "nie asd", score: 13, position: 8 },
+      { name: "yes ed", score: 3, position: 9 },
+      { name: "nie asd", score: 3, position: 10 }
+    ],
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum, sem cursus varius tristique, tortor sem placerat odio, sit amet convallis sem erat nec neque. Quisque at orci tempor, imperdiet urna quis, laoreet urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent mattis nec nibh id hendrerit. Vivamus convallis felis erat, et vestibulum lectus auctor ac. Nulla facilisi. Vestibulum tempus orci massa, vitae blandit nulla elementum in. In lobortis aliquam nulla, eu finibus odio ultrices a. In ante quam, molestie varius dolor et, semper commodo nulla. Phasellus ac est ante. "
+  }
+];

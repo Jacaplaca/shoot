@@ -46,7 +46,10 @@ class ChooseSelect extends React.Component {
           onClose={this.handleClose}
         >
           {options.map(option => (
-            <MenuItem onClick={() => this.handleChange(option._id)}>
+            <MenuItem
+              key={option._id}
+              onClick={() => this.handleChange(option._id)}
+            >
               {option.name}
             </MenuItem>
           ))}

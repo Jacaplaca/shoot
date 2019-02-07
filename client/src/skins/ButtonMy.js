@@ -30,7 +30,7 @@ const styles = theme => ({
     borderColor: "gray"
   },
   text: {
-    height: 4
+    height: 34
   }
 });
 
