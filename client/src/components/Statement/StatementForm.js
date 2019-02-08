@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
+import Icon from "@material-ui/core/Icon";
 import Cookies from "universal-cookie";
 import TextField from "@material-ui/core/TextField";
 import { combineStyles, dynamicSort } from "../../functions/functions";
@@ -23,6 +24,23 @@ import generatePDF from "./generatePDF";
 // import
 const cookies = new Cookies();
 
+const styles = theme => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end"
+  },
+  icon: {
+    margin: theme.spacing.unit * 2
+  },
+  iconHover: {
+    margin: theme.spacing.unit * 2,
+    "&:hover": {
+      color: "grey"
+    }
+  }
+});
+
 class StatementForm extends Component {
   state = {
     protocols: [],
@@ -35,7 +53,7 @@ class StatementForm extends Component {
     // cookies.set("myCat", "Pacman2", { path: "/" });
     // console.log(cookies.get("myCat")); // Pacman
 
-    this.setState({ q: { name: "pro2", _id: 2 } });
+    // this.setState({ q: { name: "pro2", _id: 2 } });
 
     this.props.competitions &&
       this.createProtocolsForForm(this.props.competitions);
@@ -44,19 +62,31 @@ class StatementForm extends Component {
   componentDidUpdate() {
     const { competitions, finalProtocols } = this.state;
     const turnamentId = this.props.turnament._id;
-    const cookieTurnament = cookies.get(turnamentId);
+
+    const cookieTurnament = JSON.parse(localStorage.getItem(turnamentId));
     const finalProtocolsCookies =
       cookieTurnament && cookieTurnament.finalProtocols;
     const competitionsCookies = cookieTurnament && cookieTurnament.competitions;
+    console.log(
+      "ifupdate",
+      finalProtocols !== finalProtocolsCookies,
+      competitions !== competitionsCookies
+    );
     if (
       finalProtocols !== finalProtocolsCookies ||
       competitions !== competitionsCookies
     ) {
-      cookies.set(turnamentId, { competitions, finalProtocols }, { path: "/" });
+      console.log("updateuje cookisa", finalProtocols);
+      localStorage.setItem(
+        turnamentId,
+        JSON.stringify({ competitions, finalProtocols })
+      );
+      // cookies.set(turnamentId, { competitions, finalProtocols }, { path: "/" });
       // console.log("finalProtocolsCookies", finalProtocolsCookies);
       // console.log("competitionsCookies", competitionsCookies);
+
+      console.log("update get", JSON.parse(localStorage.getItem(turnamentId)));
     }
-    // console.log("update");
   }
   componentWillReceiveProps(nextProps) {
     console.log("componentWillReceiveProps");
@@ -68,24 +98,24 @@ class StatementForm extends Component {
 
   createProtocolsForForm = competitions => {
     const finalProtocols = [
-      { name: `Protokół nr 1`, _id: 1, competitions: [], comment: "" }
+      {
+        name: `Protokół Zbiorczy`,
+        _id: 0,
+        competitions: [],
+        description: "",
+        annotation: ""
+      }
     ];
     for (let competition of competitions) {
       finalProtocols[0].competitions.push(competition._id);
     }
 
     const turnamentId = this.props.turnament._id;
-    const cookieTurnament = cookies.get(turnamentId);
+    const cookieTurnament = JSON.parse(localStorage.getItem(turnamentId));
     const finalProtocolsCookies =
       cookieTurnament && cookieTurnament.finalProtocols;
     const competitionsCookies = cookieTurnament && cookieTurnament.competitions;
-    // console.log(
-    //   "create",
-    //   competitions,
-    //   competitionsCookies,
-    //
-    //
-    // );
+    console.log("cookieTurnament", cookieTurnament);
 
     if (
       finalProtocolsCookies &&
@@ -104,231 +134,225 @@ class StatementForm extends Component {
     }
   };
 
-  // createProtocolsForFormOld = competitions => {
-  //   const finalProtocols = [];
-  //   const protocols = competitions.map((competition, i) => {
-  //     const protocol = {
-  //       name: `Protokół nr ${i + 1}`,
-  //       _id: i + 1,
-  //       comment: ""
-  //     };
-  //     // this.setState({ [competition._id]: { name: "pro2", _id: 2 } });
-  //     // this.setState({ [competition._id]: protocol });
-  //     finalProtocols.push({
-  //       ...protocol,
-  //       competitions: [competition._id]
-  //     });
-  //     this.setState({ [competition._id]: i + 1 });
-  //     // this.setState({
-  //     //   [competition._id]: {
-  //     //     target: {
-  //     //       name: competition.name,
-  //     //       text: "pro1",
-  //     //       type: "inputSelectBaza",
-  //     //       value: 1
-  //     //     }
-  //     //   }
-  //     // });
-  //     return protocol;
-  //   });
-  //
-  //   this.setState({
-  //     protocols,
-  //     finalProtocols,
-  //     howManyProtocols: protocols.length
-  //   });
-  // };
-
   chooseProtocol = (name, value) => {
     console.log("e", value);
     this.setState({ [name]: value });
   };
 
-  // change = (competitionId, protocolId) => {
-  //   let { finalProtocols } = this.state;
-  //   let containCompetiton = finalProtocols.filter(protocol =>
-  //     protocol.competitions.includes(competitionId)
-  //   );
-  //
-  //   let containProtocol = finalProtocols.filter(
-  //     protocol => protocol._id === protocolId
-  //   );
-  //   const finalRest = finalProtocols.filter(
-  //     protocol =>
-  //       !protocol.competitions.includes(competitionId) &&
-  //       protocol._id !== protocolId
-  //   );
-  //   const containCompetitonCompetitions = containCompetiton[0].competitions;
-  //   console.log(containCompetitonCompetitions);
-  //   const filteredContaintCompetition = containCompetitonCompetitions.filter(
-  //     x => x !== competitionId
-  //   );
-  //   containCompetiton[0].competitions = filteredContaintCompetition;
-  //
-  //   // const containProtocolCompetitions = containProtocol[0].competitions;
-  //   containProtocol[0].competitions.push(competitionId);
-  //   finalProtocols = [...finalRest, ...containCompetiton, ...containProtocol];
-  //   finalProtocols.sort(dynamicSort("_id"));
-  //   const howManyProtocols = finalProtocols.filter(
-  //     protocol => protocol.competitions.length > 0
-  //   );
-  //   // finalProtocols = howManyProtocols.map((protocol, i) => {
-  //   //   return Object.assign(protocol, {
-  //   //     _id: i + 1,
-  //   //     name: `Protokół nr ${i + 1}`
-  //   //   });
-  //   // });
-  //
-  //   console.log("change", competitionId, protocolId);
-  //   console.log(
-  //     "change",
-  //     finalProtocols
-  //     // containCompetiton,
-  //     // containProtocol,
-  //     // finalRest
-  //   );
-  //   this.setState({
-  //     [competitionId]: protocolId,
-  //     finalProtocols,
-  //     howManyProtocols: howManyProtocols.length
-  //   });
-  // };
-
   addProtocol = () => {
     const { finalProtocols } = this.state;
     const protocolsAmount = finalProtocols.length;
     finalProtocols.push({
-      name: `Protokół nr ${protocolsAmount + 1}`,
-      _id: protocolsAmount + 1,
+      name: `Protokół nr ${protocolsAmount}`,
+      _id: protocolsAmount,
       competitions: [],
-      comment: ""
+      description: "",
+      annotation: ""
     });
     this.setState({ finalProtocols });
   };
 
   addCompetition = (competitionId, protocolId) => {
-    // const added = [];
-    let { finalProtocols } = this.state;
-    let containCompetiton = finalProtocols.filter(protocol =>
-      protocol.competitions.includes(competitionId)
-    );
-
-    let containProtocol = finalProtocols.filter(
-      protocol => protocol._id === protocolId
-    );
-    const finalRest = finalProtocols.filter(
-      protocol =>
-        !protocol.competitions.includes(competitionId) &&
-        protocol._id !== protocolId
-    );
-    const containCompetitonCompetitions = containCompetiton[0].competitions;
-    console.log(containCompetitonCompetitions);
-    const filteredContaintCompetition = containCompetitonCompetitions.filter(
-      x => x !== competitionId
-    );
-    containCompetiton[0].competitions = filteredContaintCompetition;
-
-    // const containProtocolCompetitions = containProtocol[0].competitions;
-    containProtocol[0].competitions.push(competitionId);
-    finalProtocols = [...finalRest, ...containCompetiton, ...containProtocol];
-    finalProtocols.sort(dynamicSort("_id"));
-    if (finalProtocols[0].competitions.length === 0) {
-      finalProtocols = finalProtocols.slice(1);
-      finalProtocols = finalProtocols.map((protocol, i) => {
-        return Object.assign(protocol, {
-          name: `Protokół nr ${i + 1}`,
-          _id: i + 1
-        });
-      });
-    }
-    // for (let protocol of finalProtocols) {
-    //   const competitions = protocol.competitions;
-    //   for (let competition of competitions) {
-    //     added.push(competition._id);
-    //   }
+    // let { finalProtocols } = this.state;
+    // //found protocol which contains competitionId without Zbiorczy
+    // let containCompetiton = finalProtocols
+    //   .slice(1)
+    //   .filter(protocol => protocol.competitions.includes(competitionId));
+    // // edited protocol without Zbiorczy
+    // let containProtocol = finalProtocols
+    //   .slice(1)
+    //   .filter(protocol => protocol._id === protocolId);
+    // // any other protocols without Zbiorczy
+    // const finalRest = finalProtocols
+    //   .slice(1)
+    //   .filter(
+    //     protocol =>
+    //       !protocol.competitions.includes(competitionId) &&
+    //       protocol._id !== protocolId
+    //   );
+    // console.log("cc cp fp", containCompetiton, containProtocol, finalRest);
+    // if (containCompetiton.length > 0) {
+    //   //all competitions in protocol that contains choosed competition
+    //   const containCompetitonCompetitions = containCompetiton[0].competitions;
+    //   console.log(containCompetitonCompetitions);
+    //   const filteredContaintCompetition = containCompetitonCompetitions.filter(
+    //     x => x !== competitionId
+    //   );
+    //   containCompetiton[0].competitions = filteredContaintCompetition;
+    // } else {
+    //   containCompetiton = [];
+    // }
+    // if (containProtocol.length > 0) {
+    //   containProtocol[0].competitions.push(competitionId);
+    // } else {
+    //   containProtocol = [];
+    // }
+    // // const containProtocolCompetitions = containProtocol[0].competitions;
+    //
+    // finalProtocols = [
+    //   finalProtocols[0],
+    //   ...finalRest,
+    //   ...containCompetiton,
+    //   ...containProtocol
+    // ];
+    // console.log("finalProtocols", finalProtocols);
+    // finalProtocols.sort(dynamicSort("_id"));
+    // if (finalProtocols[1].competitions.length === 0) {
+    //   finalProtocols = finalProtocols.slice(1);
+    //   finalProtocols = finalProtocols.map((protocol, i) => {
+    //     return Object.assign(protocol, {
+    //       name: `Protokół nr ${i}`,
+    //       _id: i
+    //     });
+    //   });
     // }
 
-    // const howManyProtocols = finalProtocols.filter(
-    //   protocol => protocol.competitions.length > 0
-    // );
-    // finalProtocols = howManyProtocols.map((protocol, i) => {
-    //   return Object.assign(protocol, {
-    //     _id: i + 1,
-    //     name: `Protokół nr ${i + 1}`
-    //   });
+    // this.setState({
+    //   // [competitionId]: protocolId,
+    //   finalProtocols
+    //   // added
+    //   // howManyProtocols: howManyProtocols.length
     // });
 
-    // console.log("change", competitionId, protocolId);
-    // console.log(
-    //   "change",
-    //   finalProtocols
-    //   // containCompetiton,
-    //   // containProtocol,
-    //   // finalRest
-    // );
+    console.log("addCompetition(),", competitionId, protocolId);
+    const finalProtocols = this.state.finalProtocols;
+    console.log("addCompetition(),", finalProtocols);
+
+    let protocolEdit = [...finalProtocols].filter(
+      protocol => protocol._id === protocolId
+    );
+    let protocolsRemain = [...finalProtocols].filter(
+      protocol => protocol._id !== protocolId
+    );
+    let competitionsInEditedProtocol = protocolEdit[0].competitions;
+    protocolEdit[0].competitions.push(competitionId);
+
+    const newFinalProtocols =
+      protocolsRemain.length < 1
+        ? protocolEdit
+        : [...protocolEdit, ...protocolsRemain].sort(dynamicSort("_id"));
+    console.log("competitionsInEditedProtocol", competitionsInEditedProtocol);
+    console.log("final competitionsInEditedProtocol", newFinalProtocols);
+
+    console.log("addCompetition ed rem", protocolEdit, protocolsRemain);
     this.setState({
-      // [competitionId]: protocolId,
-      finalProtocols
-      // added
-      // howManyProtocols: howManyProtocols.length
+      finalProtocols: newFinalProtocols
     });
   };
 
   removeProtocol = protocolId => {
-    console.log("protocolId", protocolId);
     let { finalProtocols } = this.state;
-    // const protocolsAmount = finalProtocols.length;
-    const toRemove = finalProtocols.filter(proto => proto._id === protocolId);
-    let toRemain = finalProtocols.filter(proto => proto._id !== protocolId);
-    // toRemain[0].competitions.push([...toRemove.competitions]);
-    console.log("remove", toRemove, toRemain);
-    const competitionsToMove = toRemove[0].competitions;
-    for (let compet of competitionsToMove) {
-      toRemain[0].competitions.push(compet);
-    }
-    finalProtocols = toRemain.map((protocol, i) => {
-      return Object.assign(protocol, {
-        name: `Protokół nr ${i + 1}`,
-        _id: i + 1
+    console.log(
+      "removeProtocol",
+      protocolId,
+      finalProtocols.filter(protocol => protocol._id !== protocolId)
+    );
+
+    const newProtocols = finalProtocols
+      .filter(protocol => protocol._id !== protocolId)
+      .map((protocol, i) => {
+        if (i === 0) {
+          return protocol;
+        } else {
+          return Object.assign(protocol, { name: `Protokół nr ${i}`, _id: i });
+        }
       });
-    });
+
+    // const protocolsAmount = finalProtocols.length;
     // finalProtocols.push({
-    //   name: `Protokół nr ${protocolsAmount + 1}`,
-    //   _id: protocolsAmount + 1,
-    //   competitions: []
+    //   name: `Protokół nr ${protocolsAmount}`,
+    //   _id: protocolsAmount,
+    //   competitions: [],
+    //   description: "",
+    //   annotation: ""
     // });
-    this.setState({ finalProtocols });
+    this.setState({ finalProtocols: newProtocols });
+
+    // console.log("protocolId", protocolId);
+    // let { finalProtocols } = this.state;
+    // // const protocolsAmount = finalProtocols.length;
+    // const toRemove = finalProtocols
+    //   .slice(1)
+    //   .filter(proto => proto._id === protocolId);
+    // let toRemain = finalProtocols.filter(proto => proto._id !== protocolId);
+    // // toRemain[0].competitions.push([...toRemove.competitions]);
+    // console.log("remove", toRemove, toRemain);
+    // // const competitionsToMove = toRemove[0].competitions;
+    // // for (let compet of competitionsToMove) {
+    // //   toRemain[0].competitions.push(compet);
+    // // }
+    // finalProtocols = toRemain.map((protocol, i) => {
+    //   if (i === 0) {
+    //     return protocol;
+    //   } else {
+    //     return Object.assign(protocol, {
+    //       name: `Protokół nr ${i}`,
+    //       _id: i
+    //     });
+    //   }
+    // });
+    //
+    // this.setState({
+    //   finalProtocols
+    // });
   };
 
-  handleComment = e => {
-    const { name, value } = e.target;
-    // console.log("handleComment()", value, name);
-    // this.setState({ [e.target.name]: e.target.value });
+  removeCompetition = (protocolId, competitionId) => {
+    console.log("removeCompetition(),", protocolId, competitionId);
+    const { finalProtocols } = this.state;
+
+    let protocolEdit = finalProtocols.filter(
+      protocol => protocol._id === protocolId
+    );
+    let protocolsRemain = finalProtocols.filter(
+      protocol => protocol._id !== protocolId
+    );
+    let competitionsInEditedProtocol = protocolEdit[0].competitions;
+    protocolEdit[0].competitions = competitionsInEditedProtocol.filter(
+      competition => competition !== competitionId
+    );
+
+    const newFinalProtocols =
+      protocolsRemain.length < 1
+        ? protocolEdit
+        : [...protocolEdit, ...protocolsRemain].sort(dynamicSort("_id"));
+    console.log("competitionsInEditedProtocol", competitionsInEditedProtocol);
+    console.log("final competitionsInEditedProtocol", newFinalProtocols);
+
+    console.log("removeCompetition ed rem", protocolEdit, protocolsRemain);
+    this.setState({
+      finalProtocols: newFinalProtocols
+    });
+  };
+
+  handleComment = (name, value, field) => {
+    // const { name, value } = e.target;
+    // console.log("handleComment()", name, value, field);
 
     let { finalProtocols } = this.state;
     // const comment = this.state[protocolId] ? this.state[protocolId] : "";
     let toChange = finalProtocols.filter(proto => {
       // console.log("tochange", proto._id, name);
-      return proto._id.toString() === name;
+      return proto._id === name;
     });
-    const toNoChange = finalProtocols.filter(
-      proto => proto._id.toString() !== name
-    );
+    // console.log("finalProtocols", finalProtocols);
+    // console.log("toChange", toChange);
+    const toNoChange = finalProtocols.filter(proto => proto._id !== name);
     // console.log("handleComment(), ", toChange, toNoChange);
-    toChange[0].comment = value;
+    toChange[0][field] = value;
     finalProtocols = [...toChange, ...toNoChange].sort(dynamicSort("_id"));
     this.setState({ finalProtocols });
   };
 
-  saveComment = protocolId => {
-    let { finalProtocols } = this.state;
-    const comment = this.state[protocolId] ? this.state[protocolId] : "";
-    let toChange = finalProtocols.filter(proto => proto._id === protocolId);
-    const toNoChange = finalProtocols.filter(proto => proto._id !== protocolId);
-    toChange.comment = comment;
-    finalProtocols = [...toChange, ...toNoChange];
-    this.setState({ finalProtocols });
-  };
+  // saveComment = protocolId => {
+  //   let { finalProtocols } = this.state;
+  //   const comment = this.state[protocolId] ? this.state[protocolId] : "";
+  //   let toChange = finalProtocols.filter(proto => proto._id === protocolId);
+  //   const toNoChange = finalProtocols.filter(proto => proto._id !== protocolId);
+  //   toChange.comment = comment;
+  //   finalProtocols = [...toChange, ...toNoChange];
+  //   this.setState({ finalProtocols });
+  // };
 
   generateStatement = () => {
     const { finalProtocols, competitions } = this.state;
@@ -347,8 +371,8 @@ class StatementForm extends Component {
         let wholeScore = 0;
         const competInPlayer = player.competitions;
         for (let compet of competInProt) {
-          console.log("competInPlayer", competInPlayer);
-          console.log("compet", compet);
+          // console.log("competInPlayer", competInPlayer);
+          // console.log("compet", compet);
           const foundCompetsInPlayer = competInPlayer.filter(
             x => x.compId === compet
           );
@@ -372,6 +396,27 @@ class StatementForm extends Component {
     generatePDF(this.props.turnament, protocols);
   };
 
+  checkIfAllCompetitionWasUse = () => {
+    const { finalProtocols, competitions } = this.state;
+    if (finalProtocols.length > 1) {
+      const withoutZbiorczy = finalProtocols.slice(1);
+      const usedProtocols = [];
+      for (let protocol of withoutZbiorczy) {
+        const competitions = protocol.competitions;
+        for (let competition of competitions) {
+          usedProtocols.push(competition);
+        }
+      }
+      if (usedProtocols.length < competitions.length) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
   render() {
     const { classes, competitions, theme } = this.props;
     const { protocols, q, finalProtocols, howManyProtocols } = this.state;
@@ -382,16 +427,19 @@ class StatementForm extends Component {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(4, 1fr)`
+            gridTemplateColumns: `repeat(3, 1fr)`
           }}
           // onSubmit={handleSubmit}
         >
           {finalProtocols &&
             competitions &&
             finalProtocols.map((protocol, indexProtocol) => {
-              const withoutAdded = competitions.filter(
-                compet => !protocol.competitions.includes(compet._id)
-              );
+              const withoutAdded = competitions.filter(compet => {
+                // console.log("protcol comp", protocol.competitions);
+                // console.log("protocols", protocol, indexProtocol);
+                // console.log("final inprotocols", finalProtocols);
+                return !protocol.competitions.includes(compet._id);
+              });
               return (
                 <span
                   key={protocol._id}
@@ -445,6 +493,7 @@ class StatementForm extends Component {
                     }}
                   >
                     {competitions.map((competition, i) => {
+                      // console.log("436", protocol);
                       if (protocol.competitions.includes(competition._id)) {
                         return (
                           <div
@@ -454,7 +503,33 @@ class StatementForm extends Component {
                               fontWeight: 600
                             }}
                           >
-                            {competition.name}
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr"
+                              }}
+                            >
+                              <span
+                                style={{ textAlign: "right", marginRight: 10 }}
+                              >
+                                {competition.name}
+                              </span>
+                              {protocol._id > 0 && (
+                                <span>
+                                  <Icon
+                                    className={classes.icon}
+                                    onClick={() =>
+                                      this.removeCompetition(
+                                        protocol._id,
+                                        competition._id
+                                      )
+                                    }
+                                  >
+                                    remove_circle_outline
+                                  </Icon>{" "}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         );
                       }
@@ -468,6 +543,40 @@ class StatementForm extends Component {
                       marginTop: 15
                     }}
                   >
+                    <span>{protocol.description.length}/500</span>
+                    <TextField
+                      style={{
+                        width: "100%",
+                        background: theme.palette.paper.background,
+                        // border: `solid 1px ${theme.palette.menu}`,
+                        color: theme.palette.menu
+                      }}
+                      InputLabelProps={{ shrink: false }}
+                      id="outlined-multiline-static"
+                      // label="Uwagi"
+                      placeholder="Opis"
+                      multiline
+                      rows="5"
+                      // defaultValue="Default Value"
+                      // className={classes.textField}
+                      margin="normal"
+                      variant="outlined"
+                      onChange={e =>
+                        this.handleComment(
+                          protocol._id,
+                          e.target.value.slice(0, 500),
+                          "description"
+                        )
+                      }
+                      name={protocol._id}
+                      value={
+                        this.state.finalProtocols.filter(
+                          x => x._id === protocol._id
+                        )[0].description
+                      }
+                      // onBlur={() => this.saveComment(protocol._id.toString())}
+                    />
+                    <span>{protocol.annotation.length}/500</span>
                     <TextField
                       style={{
                         width: "100%",
@@ -485,12 +594,18 @@ class StatementForm extends Component {
                       // className={classes.textField}
                       margin="normal"
                       variant="outlined"
-                      onChange={this.handleComment}
+                      onChange={e =>
+                        this.handleComment(
+                          protocol._id,
+                          e.target.value.slice(0, 500),
+                          "annotation"
+                        )
+                      }
                       name={protocol._id}
                       value={
                         this.state.finalProtocols.filter(
                           x => x._id === protocol._id
-                        )[0].comment
+                        )[0].annotation
                       }
                       // onBlur={() => this.saveComment(protocol._id.toString())}
                     />
@@ -519,9 +634,16 @@ class StatementForm extends Component {
             })}
 
           <div style={{ display: "grid", alignContent: "center" }}>
-            <ButtonMy style={{ width: 200 }} onClick={this.addProtocol}>
-              Dodaj protokół
-            </ButtonMy>
+            {this.state.finalProtocols &&
+              this.state.finalProtocols.length <=
+                this.state.competitions.length &&
+              this.checkIfAllCompetitionWasUse() &&
+              this.state.finalProtocols[this.state.finalProtocols.length - 1]
+                .competitions.length > 0 && (
+                <ButtonMy style={{ width: 200 }} onClick={this.addProtocol}>
+                  Dodaj protokół
+                </ButtonMy>
+              )}
           </div>
         </div>
         <div>
@@ -552,70 +674,3 @@ const enhance = compose(
 );
 
 export default enhance(StatementForm);
-
-const protocols = [
-  {
-    protocol: "Protokół nr 1",
-    players: [
-      { name: "tak dsa", score: 3766, position: 1 },
-      { name: "John Foczy", score: 966, position: 2 },
-      { name: "Brajan Fish", score: 435, position: 3 },
-      { name: "tak dsa", score: 367, position: 4 },
-      { name: "no d", score: 367, position: 5 },
-      { name: "yes ed", score: 357, position: 6 },
-      { name: "yes ed", score: 337, position: 7 },
-      { name: "nie asd", score: 206, position: 8 },
-      { name: "nie asd", score: 156, position: 9 },
-      { name: "no d", score: 44, position: 10 },
-      { name: "tak dsa", score: 3766, position: 1 },
-      { name: "John Foczy", score: 966, position: 2 },
-      { name: "Brajan Fish", score: 435, position: 3 },
-      { name: "tak dsa", score: 367, position: 4 },
-      { name: "no d", score: 367, position: 5 },
-      { name: "yes ed", score: 357, position: 6 },
-      { name: "yes ed", score: 337, position: 7 },
-      { name: "nie asd", score: 206, position: 8 },
-      { name: "nie asd", score: 156, position: 9 },
-      { name: "no d", score: 44, position: 10 },
-      { name: "tak dsa", score: 3766, position: 1 },
-      { name: "John Foczy", score: 966, position: 2 },
-      { name: "Brajan Fish", score: 435, position: 3 },
-      { name: "tak dsa", score: 367, position: 4 },
-      { name: "no d", score: 367, position: 5 },
-      { name: "yes ed", score: 357, position: 6 },
-      { name: "yes ed", score: 337, position: 7 },
-      { name: "nie asd", score: 206, position: 8 },
-      { name: "nie asd", score: 156, position: 9 },
-      { name: "no d", score: 44, position: 10 },
-      { name: "tak dsa", score: 3766, position: 1 },
-      { name: "John Foczy", score: 966, position: 2 },
-      { name: "Brajan Fish", score: 435, position: 3 },
-      { name: "tak dsa", score: 367, position: 4 },
-      { name: "no d", score: 367, position: 5 },
-      { name: "yes ed", score: 357, position: 6 },
-      { name: "yes ed", score: 337, position: 7 },
-      { name: "nie asd", score: 206, position: 8 },
-      { name: "nie asd", score: 156, position: 9 },
-      { name: "no d", score: 44, position: 10 }
-    ],
-    comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum, sem cursus varius tristique, tortor sem placerat odio, sit amet convallis sem erat nec neque. Quisque at orci tempor, imperdiet urna quis, laoreet urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per ince. "
-  },
-  {
-    protocol: "Protokół nr 2",
-    players: [
-      { name: "John Foczy", score: 53, position: 1 },
-      { name: "Brajan Fish", score: 43, position: 2 },
-      { name: "no d", score: 34, position: 3 },
-      { name: "tak dsa", score: 33, position: 4 },
-      { name: "tak dsa", score: 30, position: 5 },
-      { name: "yes ed", score: 23.1, position: 6 },
-      { name: "no d", score: 13, position: 7 },
-      { name: "nie asd", score: 13, position: 8 },
-      { name: "yes ed", score: 3, position: 9 },
-      { name: "nie asd", score: 3, position: 10 }
-    ],
-    comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum, sem cursus varius tristique, tortor sem placerat odio, sit amet convallis sem erat nec neque. Quisque at orci tempor, imperdiet urna quis, laoreet urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent mattis nec nibh id hendrerit. Vivamus convallis felis erat, et vestibulum lectus auctor ac. Nulla facilisi. Vestibulum tempus orci massa, vitae blandit nulla elementum in. In lobortis aliquam nulla, eu finibus odio ultrices a. In ante quam, molestie varius dolor et, semper commodo nulla. Phasellus ac est ante. "
-  }
-];
