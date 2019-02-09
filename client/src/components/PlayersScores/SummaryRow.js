@@ -8,7 +8,7 @@ import classNames from "classnames";
 import * as actions from "../../actions";
 
 import { rowStyles, tableHeadStyles } from "../../skins/mainStyles";
-import { combineStyles } from "../../functions/functions";
+import { combineStyles, formatNumber } from "../../functions/functions";
 import PlayersScoresForm from "./PlayersScoresForm";
 import SortButtons from "../../skins/SortButtons";
 import ButtonMy from "../../skins/ButtonMy";
@@ -42,9 +42,10 @@ const comps = (competitions, classes, sorting, competitionClicked) => {
         <span>
           {/* {Math.floor(score)} */}
           <NumberFormat
-            value={Math.floor(score)}
+            value={formatNumber(score)}
             displayType={"text"}
             thousandSeparator={" "}
+            decimalSeparator={","}
           />
         </span>
       </span>
@@ -149,9 +150,10 @@ class SummaryRow extends Component {
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             <NumberFormat
-              value={Math.floor(totalScore)}
+              value={formatNumber(totalScore)}
               displayType={"text"}
               thousandSeparator={" "}
+              decimalSeparator={","}
             />
           </span>
           {/* <span className={classNames(classes.rowBlock)}> */}

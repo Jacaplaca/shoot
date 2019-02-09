@@ -4,6 +4,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import TurnamentsRow from "./TurnamentsRow";
+import { Link } from "react-router-dom";
 import TurnamentsHeadRow from "./TurnamentsHeadRow";
 import { simpleSortUpDown } from "../../functions/functions";
 import Search from "../../inputs/Search";
@@ -105,16 +106,25 @@ class TurnamentsList extends Component {
     this.setState({ rows: search });
   };
 
+  grid = () => {
+    const {
+      auth: { user, isAuthenticated }
+    } = this.props;
+    if (isAuthenticated) {
+      return user.rola === "admin"
+        ? "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 70px 60px"
+        : "5px minmax(80px, 100px) 1fr 1fr 1fr 1fr 70px 60px";
+    } else {
+      return "5px minmax(80px, 100px) 1fr 1fr 1fr 1fr 70px 80px";
+    }
+  };
   render() {
     const {
       collection,
-      auth: { user, isAuthenticated }
+      auth: { isAuthenticated }
     } = this.props;
     const { rows } = this.state;
-    const grid =
-      user.rola === "admin"
-        ? "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 70px 60px"
-        : "5px minmax(80px, 100px) 1fr 1fr 1fr 1fr 70px 60px";
+    console.log("grid", this.grid());
     return (
       <div>
         <div style={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
@@ -169,7 +179,11 @@ class TurnamentsList extends Component {
             ]}
           />
         </div>
-        <TurnamentsHeadRow grid={grid} row={rows[0]} sorting={this.sorting} />
+        <TurnamentsHeadRow
+          grid={this.grid()}
+          row={rows[0]}
+          sorting={this.sorting}
+        />
         {rows.length > 0 &&
           rows.map(row => {
             if (isAuthenticated) {
@@ -178,18 +192,26 @@ class TurnamentsList extends Component {
                   key={row._id}
                   row={row}
                   collection={collection}
-                  grid={grid}
+                  grid={this.grid()}
                 />
               );
             } else {
               if (row.www) {
                 return (
-                  <TurnamentsRow
-                    key={row._id}
-                    row={row}
-                    collection={collection}
-                    grid={grid}
-                  />
+                  <Link
+                    to={{
+                      pathname: `/wyniki_zawodnikow/${row._id}`,
+                      state: { turnamentId: row._id }
+                    }}
+                    target="_blank"
+                  >
+                    <TurnamentsRow
+                      key={row._id}
+                      row={row}
+                      collection={collection}
+                      grid={this.grid()}
+                    />
+                  </Link>
                 );
               } else {
                 return null;

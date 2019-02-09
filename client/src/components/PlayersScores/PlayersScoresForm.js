@@ -16,6 +16,7 @@ class PlayersScoresForm extends React.Component {
   state = {
     value: "",
     finished: false
+    // focus: false
   };
 
   componentDidMount() {
@@ -56,18 +57,60 @@ class PlayersScoresForm extends React.Component {
     // console.log("save", value, compId, playerId, turnament);
   };
 
-  // handleKeyPress = event => {
-  //   const { id, player, turnament, button } = this.props;
-  //   if (event.key == "Enter") {
-  //     console.log("enter press here! ");
-  //   } else if (event.key == 9) {
-  //     !button && this.save(this.state.value, id, player, turnament);
+  // focusUsernameInputField = input => {
+  //   const { horizontal, vertical, position } = this.props;
+  //   // console.log("horizontal", horizontal, vertical, position);
+  //   if (horizontal === position.x && vertical === position.y) {
+  //     console.log("focus");
+  //     input.focus();
   //   }
+  //   // input && input.focus();
+  //   // // console.log(horizontal, vertical);
+  //   // if (this.state.focus) {
+  //   //   console.log("value,", this.state.value);
+  //   //   input.focus();
+  //   // }
+  //   // // console.log(input);
+  // };
+
+  // handleKeyPress = event => {
+  //   const { horizontal, vertical, nextPos } = this.props;
+  //   const key = event.key;
+  //   console.log("key", event.key);
+  //   if (key === "ArrowLeft") {
+  //     console.log("jakie przycisk", key);
+  //     const newHor = horizontal - 1;
+  //     const newVert = vertical;
+  //     nextPos(newHor, vertical);
+  //     // if (horizontal === newHor && vertical === newVert) {
+  //     //   this.setState({ focus: true });
+  //     // }
+  //   }
+  //   // console.log(focusUsernameInputField);
+  //   // const { id, player, turnament, button } = this.props;
+  //   // if (event.key == "Enter") {
+  //   //   console.log("enter press here! ");
+  //   // } else if (event.key == 9) {
+  //   //   !button && this.save(this.state.value, id, player, turnament);
+  //   // }
   // };
 
   // finished = () => {
   //
   // }
+
+  // afocus = () => {
+  //   const { horizontal, vertical, position } = this.props;
+  //   console.log("dd", horizontal, vertical, position);
+  //   // if (horizontal === position.x && vertical === position.y) {
+  //   //   console.log("focus");
+  //   //   // input.focus();
+  //   //   return true;
+  //   // } else {
+  //   //   return false;
+  //   // }
+  //   return "on";
+  // };
 
   render() {
     const {
@@ -102,6 +145,8 @@ class PlayersScoresForm extends React.Component {
           }}
         >
           <TextField
+            // autoFocus={() => false}
+            // inputRef={this.focusUsernameInputField}
             // inputStyle={{ backgroundColor: "red" }}
             // type="number"
             disabled={
@@ -135,7 +180,7 @@ class PlayersScoresForm extends React.Component {
             // margin="normal"
             variant="outlined"
             className={classes.textField}
-            // onKeyPress={this.handleKeyPress}
+            // onKeyDown={this.handleKeyPress}
             InputProps={{
               inputComponent: NumberFormatCustom
             }}

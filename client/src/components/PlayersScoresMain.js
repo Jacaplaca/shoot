@@ -35,13 +35,13 @@ class PlayersScoresMain extends Component {
 
   componentDidMount() {
     turnamentId = window.location.pathname.split("/")[2];
-    console.log(
-      "psm",
-      this.props.auth.isAuthenticated,
-      // this.props.add.turnamentId,
-      turnamentId
-      // this.props
-    );
+    // console.log(
+    //   "psm",
+    //   this.props.auth.isAuthenticated,
+    //   // this.props.add.turnamentId,
+    //   turnamentId
+    //   // this.props
+    // );
     this.props.auth.isAuthenticated
       ? this.props.fetchFromDB("players", null, turnamentId)
       : this.props.fetchFromDB("playersopen", null, turnamentId);
@@ -151,11 +151,11 @@ class PlayersScoresMain extends Component {
           () => this.sorting("playerSurname", "up")
         );
       } else {
-        console.log("sort via surname", orderIsUnd);
+        // console.log("sort via surname", orderIsUnd);
         matrixSorted = addRank(matrix, "totalScore").sort(dynamicSort("order"));
       }
 
-      console.log(matrixSorted);
+      // console.log(matrixSorted);
       // matrixSorted.push(summaryRow);
       this.setState({
         matrix: matrixSorted,
@@ -200,7 +200,7 @@ class PlayersScoresMain extends Component {
     const matrixOrdered = matrix.map((x, i) =>
       Object.assign({}, { _id: x.playerId, order: i })
     );
-    console.log(matrix);
+    // console.log(matrix);
     axios.post("/api/players/update_all", matrixOrdered);
   };
 
@@ -226,7 +226,7 @@ class PlayersScoresMain extends Component {
     const grid = `50px 250px 80px repeat(${this.state.summaryRow &&
       this.state.summaryRow.competitions &&
       this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
-    console.log("sum", this.state.summaryRow);
+    // console.log("sum", this.state.summaryRow);
     return (
       <div id="raport">
         {/* <h4 style={{ color: "white" }}>aslkdjfls lsakdfj</h4> */}
@@ -246,11 +246,11 @@ class PlayersScoresMain extends Component {
                   distanceFromBottom,
                   calculatedHeight
                 }) => {
-                  console.log("isSticky", isSticky);
-                  console.log("wasSticky", wasSticky);
-                  console.log("distanceFromTop", distanceFromTop);
-                  console.log("style", style);
-                  console.log("calc", calculatedHeight);
+                  // console.log("isSticky", isSticky);
+                  // console.log("wasSticky", wasSticky);
+                  // console.log("distanceFromTop", distanceFromTop);
+                  // console.log("style", style);
+                  // console.log("calc", calculatedHeight);
                   return (
                     <header
                       style={{
@@ -344,10 +344,11 @@ const PlayersScoresRows = ({
   competitionClicked
 }) => {
   // console.log("psr wyzej", rows, turnament, grid, rowClick, playerClicked);
-  return rows.map(player => {
+  return rows.map((player, i) => {
     // console.log("psr", rows);
     return (
       <PlayersScoresRow
+        vertical={i}
         grid={grid}
         key={player.playerId}
         row={player}

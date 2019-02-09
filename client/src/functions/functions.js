@@ -9,6 +9,17 @@ import {
   endOfWeek
 } from "date-fns";
 import axios from "axios";
+
+export const formatNumber = n => {
+  if (Number(n) === n && n % 1 !== 0) {
+    return n
+      .toFixed(2)
+      .toString()
+      .replace(".", ",");
+  } else {
+    return n;
+  }
+};
 // import store from "../store";
 // impot * as actions from "../actions";
 

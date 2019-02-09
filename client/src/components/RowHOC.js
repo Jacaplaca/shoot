@@ -13,7 +13,8 @@ import MenuContextTurnament from "../skins/MenuContextTurnament";
 const RowRowHOC = WrappedComponent => {
   class RowRowHOC extends Component {
     state = {
-      anchorEl: null
+      anchorEl: null,
+      opacity: 0
     };
 
     handleClick = event => {
@@ -23,6 +24,26 @@ const RowRowHOC = WrappedComponent => {
     handleClose = () => {
       // console.log("handluje closa na menu");
       this.setState({ anchorEl: null });
+    };
+
+    componentDidMount() {
+      this.myFunction();
+    }
+
+    //     blin = () => {
+    //       for
+    //       function myFunction() {
+    //   setTimeout(function(){ alert("Hello"); }, 3000);
+    // }
+    //     }
+
+    myFunction = () => {
+      setInterval(() => {
+        this.setState({ opacity: 1 });
+        setTimeout(() => {
+          this.setState({ opacity: 0 });
+        }, 1000);
+      }, 2000);
     };
 
     render() {
@@ -92,28 +113,33 @@ const RowRowHOC = WrappedComponent => {
                     />
                   </IconButton>
                 ) : (
-                  <Link
-                    to={{
-                      pathname: `/wyniki_zawodnikow/${_id}`,
-                      state: { turnamentId: _id }
-                    }}
-                    target="_blank"
-                  >
-                    <IconButton
-                      style={{ padding: 5 }}
-                      color="primary"
-                      // aria-owns={anchorEl ? "simple-menu" : undefined}
-                      // aria-haspopup="true"
-                      // onClick={this.handleClick}
+                  finished || (
+                    <span
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "15px 1fr",
+                        alignItems: "center"
+                      }}
                     >
-                      <Group
-                        style={styles.button}
-                        iconStyle={styles.icon}
-                        tooltipStyles={styles.tooltip}
+                      <span
+                        style={
+                          (styles.button,
+                          {
+                            opacity: this.state.opacity,
+                            transition: "opacity 1s",
+                            height: 10,
+                            width: 10,
+                            borderRadius: 50,
+                            background: "red"
+                          })
+                        }
+                        // iconStyle={styles.icon}
+                        // tooltipStyles={styles.tooltip}
                       />
+                      <span style={{ fontWeight: 600 }}>LIVE</span>
                       {/* <MenuItem onClick={onClose}>Wyniki zawodników</MenuItem> */}
-                    </IconButton>
-                  </Link>
+                    </span>
+                  )
                 )
               ) : (
                 //   <IconButton

@@ -7,9 +7,18 @@ import NumberFormat from "react-number-format";
 
 import * as actions from "../../actions";
 import { rowStyles } from "../../skins/mainStyles";
-import { combineStyles } from "../../functions/functions";
+import { combineStyles, formatNumber } from "../../functions/functions";
 import PlayersScoresForm from "./PlayersScoresForm";
 import RowHOC from "../RowHOC";
+
+// const focus = (x, y, horizontal, vertical) => {
+//   console.log("cord", x, y, horizontal, vertical);
+//   if (x === horizontal && y === vertical) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
 
 const comps = (
   competitions,
@@ -19,10 +28,15 @@ const comps = (
   finished,
   rowClicked,
   competitionClicked,
-  isAuthenticated
+  isAuthenticated,
+  vertical,
+  nextPos,
+  // coordinates,
+  x,
+  y
 ) => {
   // console.log("comps", turnament, finished);
-  return competitions.map(comp => {
+  return competitions.map((comp, i) => {
     const { competition, competitionId, score } = comp;
     // console.log("competitionClicked", competitionClicked);
     // console.log("class", classes.highlightBlock);
@@ -39,6 +53,12 @@ const comps = (
       >
         {isAuthenticated ? (
           <PlayersScoresForm
+            // focus={() => focus(x, y, i, vertical)}
+            // coordinates={(x, y) => coordinates(x, y)}
+            // nextPos={nextPos}
+            // horizontal={i}
+            // vertical={vertical}
+            // position={{ x, y }}
             className={
               classNames()
               // classes.rowBlock,
@@ -65,15 +85,25 @@ const comps = (
 };
 
 class PlayersScoresRow extends Component {
-  state = { clickedPlayer: null };
+  state = { clickedPlayer: null, x: null, y: null };
+
+  coordinates = (x, y) => {
+    this.setState(x, y);
+  };
 
   rowClicked = (player, competiton) => {
     // this.setState({ clickedPlayer: e });
     // console.log("rowClicked()", e);
     this.props.rowClick(player, competiton);
   };
+
+  nextPos = (x, y) => {
+    console.log("xy", x, y);
+    this.setState({ x, y });
+  };
   // console.log("PlayersScoresRow", props);
   render() {
+    const { x, y } = this.state;
     const {
       row,
       classes,
@@ -82,7 +112,8 @@ class PlayersScoresRow extends Component {
       grid,
       playerClicked,
       competitionClicked,
-      auth: { isAuthenticated }
+      auth: { isAuthenticated },
+      vertical
     } = this.props;
     const {
       playerName,
@@ -123,9 +154,10 @@ class PlayersScoresRow extends Component {
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             <NumberFormat
-              value={Math.floor(totalScore)}
+              value={formatNumber(totalScore)}
               displayType={"text"}
               thousandSeparator={" "}
+              decimalSeparator={","}
             />
           </span>
           {comps(
@@ -136,7 +168,11 @@ class PlayersScoresRow extends Component {
             finished,
             this.rowClicked,
             competitionClicked,
-            isAuthenticated
+            isAuthenticated,
+            vertical,
+            this.nextPos,
+            x,
+            y
           )}
         </div>
       </React.Fragment>

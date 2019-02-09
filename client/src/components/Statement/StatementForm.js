@@ -364,7 +364,8 @@ class StatementForm extends Component {
       protocols.push({
         protocol: protocol.name,
         players: [],
-        comment: protocol.comment
+        description: protocol.description,
+        annotation: protocol.annotation
       });
       const competInProt = protocol.competitions;
       for (let player of players) {
@@ -382,6 +383,8 @@ class StatementForm extends Component {
         }
         protocols[iterator].players.push({
           name: `${player.name} ${player.surname}`,
+          gun: `${player.gun ? player.gun : ""}`,
+          scope: `${player.scope ? player.scope : ""}`,
           score: wholeScore
         });
       }
@@ -393,6 +396,7 @@ class StatementForm extends Component {
     );
     console.log("protocols", protocols);
     console.log(JSON.stringify(protocols));
+    console.log(JSON.stringify(this.props.turnament));
     generatePDF(this.props.turnament, protocols);
   };
 

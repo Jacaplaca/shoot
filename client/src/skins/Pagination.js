@@ -31,7 +31,7 @@ class Pagination extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("pagination", nextProps);
+    // console.log("pagination", nextProps);
     if (
       nextProps &&
       nextProps.data &&
