@@ -65,8 +65,11 @@ const RowRowHOC = WrappedComponent => {
         <React.Fragment>
           <div
             className={classNames(
-              finished ? classes.rowFinished : classes.rowTable,
-              classes.table
+              finished && isAuthenticated
+                ? classes.rowFinished
+                : classes.rowTable,
+              classes.table,
+              isAuthenticated || classes.rowHighlight
             )}
             style={{
               gridTemplateColumns: grid,

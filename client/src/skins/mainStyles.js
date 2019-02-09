@@ -33,10 +33,23 @@ export const rowStyles = theme => ({
     marginBottom: 2
   },
   rowHighlight: {
+    "&:hover": {
+      backgroundImage: `linear-gradient(to right, ${lighten(
+        theme.palette.menu,
+        0.1
+      )} 0%, ${darken(theme.palette.secondary.dark, 0.4)} 20%, ${darken(
+        theme.palette.secondary.dark,
+        0.55
+      )} 50% , ${darken(theme.palette.secondary.dark, 0.4)} 80%, ${lighten(
+        theme.palette.menu,
+        0.1
+      )} 100%)`
+      // fontWeight: 600
+    }
     // display: "grid",
     // minWidth: 900,
     // color: theme.palette.text.primary,
-    background: darken(theme.palette.button.end, 0.43)
+    // background: darken(theme.palette.button.end, 0.43)
     // marginBottom: 2
   },
   highlightBlock: {
