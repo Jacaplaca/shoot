@@ -111,7 +111,7 @@ class TopNavBar extends React.Component {
                   !auth.isAuthenticated &&
                   (path === "wyniki" || path === "wyniki_zawodnikow")
                     ? "http://portalstrzelecki.pl/zawody-on-line/"
-                    : "/"
+                    : "http://portalstrzelecki.pl"
                 }
               >
                 <img

@@ -354,39 +354,63 @@ class StatementForm extends Component {
   //   this.setState({ finalProtocols });
   // };
 
+  createAllProtocols = () => {
+    const { finalProtocols, competitions } = this.state;
+    let protocols = [];
+    const zbiorczy = finalProtocols[0];
+    protocols.push(zbiorczy);
+    console.log("proto", protocols);
+    let index = 0;
+    for (let competition of competitions) {
+      index++;
+      protocols.push({
+        name: `Protokół nr ${index}`,
+        _id: index,
+        competitions: [competition._id],
+        description: "",
+        annotation: ""
+      });
+    }
+    this.setState({ finalProtocols: protocols });
+  };
+
   generateStatement = () => {
     const { finalProtocols, competitions } = this.state;
     const { players } = this.props;
     let iterator = -1;
     let protocols = [];
     for (let protocol of finalProtocols) {
-      iterator = iterator + 1;
-      protocols.push({
-        protocol: protocol.name,
-        players: [],
-        description: protocol.description,
-        annotation: protocol.annotation
-      });
-      const competInProt = protocol.competitions;
-      for (let player of players) {
-        let wholeScore = 0;
-        const competInPlayer = player.competitions;
-        for (let compet of competInProt) {
-          // console.log("competInPlayer", competInPlayer);
-          // console.log("compet", compet);
-          const foundCompetsInPlayer = competInPlayer.filter(
-            x => x.compId === compet
-          );
-          const score =
-            foundCompetsInPlayer.length > 0 ? foundCompetsInPlayer[0].score : 0;
-          wholeScore = score + wholeScore;
-        }
-        protocols[iterator].players.push({
-          name: `${player.name} ${player.surname}`,
-          gun: `${player.gun ? player.gun : ""}`,
-          scope: `${player.scope ? player.scope : ""}`,
-          score: wholeScore
+      if (protocol.competitions.length > 0) {
+        iterator = iterator + 1;
+        protocols.push({
+          protocol: protocol.name,
+          players: [],
+          description: protocol.description,
+          annotation: protocol.annotation
         });
+        const competInProt = protocol.competitions;
+        for (let player of players) {
+          let wholeScore = 0;
+          const competInPlayer = player.competitions;
+          for (let compet of competInProt) {
+            // console.log("competInPlayer", competInPlayer);
+            // console.log("compet", compet);
+            const foundCompetsInPlayer = competInPlayer.filter(
+              x => x.compId === compet
+            );
+            const score =
+              foundCompetsInPlayer.length > 0
+                ? foundCompetsInPlayer[0].score
+                : 0;
+            wholeScore = score + wholeScore;
+          }
+          protocols[iterator].players.push({
+            name: `${player.name} ${player.surname}`,
+            gun: `${player.gun ? player.gun : ""}`,
+            scope: `${player.scope ? player.scope : ""}`,
+            score: wholeScore
+          });
+        }
       }
     }
     // protocols.sort(dynamicSort("score"));
@@ -428,6 +452,14 @@ class StatementForm extends Component {
     // console.log("finalProtocols", finalProtocols);
     return (
       <Paper className={classes.paper}>
+        {finalProtocols && competitions && finalProtocols.length === 1 && (
+          <ButtonMy
+            style={{ fontSize: 11.3 }}
+            onClick={() => this.createAllProtocols()}
+          >
+            Stwórz indywidualne protokoły dla każdej konkurencji
+          </ButtonMy>
+        )}
         <div
           style={{
             display: "grid",
