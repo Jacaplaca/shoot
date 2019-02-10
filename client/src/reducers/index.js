@@ -10,6 +10,7 @@ import confirmationReducer from "./confirmationReducer";
 import loadingReducer from "./loadingReducer";
 import playersReducer from "./playersReducer";
 import turnamentIdReducer from "./turnamentIdReducer";
+import languageReducer from "./language";
 
 export default combineReducers({
   errors: errorReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
   confirmation: confirmationReducer,
   loading: loadingReducer,
   players: playersReducer,
-  turnamentId: turnamentIdReducer
+  turnamentId: turnamentIdReducer,
+  language: languageReducer
 });

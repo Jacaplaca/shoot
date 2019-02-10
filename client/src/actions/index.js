@@ -10,3 +10,4 @@ export * from "./loading";
 export * from "./addToDB";
 export * from "./fetchFromDB";
 export * from "./showedTurnament";
+export * from "./language";

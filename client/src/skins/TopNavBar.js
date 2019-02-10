@@ -14,6 +14,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { connect } from "react-redux";
 import * as actions from "../actions/authentication";
 
+import LanguageSwitch from "./LanguageSwitch";
+
 import ButtonNavBar from "./ButtonNavBar";
 
 let drawerWidth = 240;
@@ -71,6 +73,7 @@ class TopNavBar extends React.Component {
         return [
           <ButtonNavBar key="3b" link="/kontakt" text="Kontakt" />,
           <ButtonNavBar key={2} click={this.onLogout} text="Wyloguj się" />
+          // <LanguageSwitch key={3} />
         ];
       // return [<ButtonNavBar key={2} link="/api/logout" text="Wyloguj się" />];
       case false:
@@ -78,6 +81,7 @@ class TopNavBar extends React.Component {
           <ButtonNavBar key="3b" link="/kontakt" text="Kontakt" />,
           <ButtonNavBar key="1a" link="/register" text="Rejestracja" />,
           <ButtonNavBar key="2b" link="/login" text="Logowanie" />
+          // <LanguageSwitch key={3} />
         ];
       default:
         return;

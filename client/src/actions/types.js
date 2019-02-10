@@ -14,3 +14,4 @@ export const SHOWEDTURNAMENT = "SHOWEDTURNAMENT";
 export const CONFIRMATION = "CONFIRMATION";
 export const LOADING = "LOADING";
 export const ADDTODB = "ADDTODB";
+export const LANGUAGE = "LANGUAGE";

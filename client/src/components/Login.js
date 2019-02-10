@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../actions/authentication";
 import store from "../store";
+import { getString } from "../strings";
 import Key from "@material-ui/icons/VpnKey";
 import Paper from "@material-ui/core/Paper";
 import * as Yup from "yup";
@@ -33,7 +34,8 @@ class LoginFormik extends Component {
       handleChange,
       isValid,
       setFieldTouched,
-      handleBlur
+      handleBlur,
+      language
     } = this.props;
     return (
       <div
@@ -63,7 +65,7 @@ class LoginFormik extends Component {
             <form onSubmit={handleSubmit}>
               <InputComponent
                 name="email"
-                label="Adres e-mail"
+                label={getString("LOGIN_EMAIL", language)}
                 type="email"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
@@ -75,7 +77,7 @@ class LoginFormik extends Component {
               />
               <InputComponent
                 name="password"
-                label="Hasło"
+                label={getString("LOGIN_PASS", language)}
                 type="password"
                 edytuj={handleChange}
                 // edytuj={change.bind(null, "password")}
@@ -93,7 +95,7 @@ class LoginFormik extends Component {
                 color="primary"
                 disabled={!isValid}
               >
-                Zaloguj się
+                {getString("LOGIN_BUTTON", language)}
                 <Key style={{ marginLeft: 10 }} />
               </ButtonMy>
             </form>
@@ -136,7 +138,8 @@ const Login = withFormik({
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  language: state.language
 });
 
 export default connect(
