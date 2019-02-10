@@ -26,17 +26,23 @@ class LoginFormik extends Component {
   }
 
   render() {
+    let { errors } = this.props;
     const {
       values: { email, password, test },
-      errors,
+      // errors,
       touched,
       handleSubmit,
       handleChange,
       isValid,
       setFieldTouched,
       handleBlur,
-      language
+      language,
+      errorsRedux
     } = this.props;
+    // errors = Object.assign(errors, errorsRedux);
+    // console.log("err formi", errors);
+    // console.log("err redux", errorsRedux);
+    // console.log("emial i pas", email, password);
     return (
       <div
         style={{
@@ -99,6 +105,20 @@ class LoginFormik extends Component {
                 <Key style={{ marginLeft: 10 }} />
               </ButtonMy>
             </form>
+            {!email && !password && (
+              <div style={{ color: "white", marginTop: 10, fontSize: 13 }}>
+                <div>
+                  {errorsRedux.email
+                    ? getString("LOGIN_WRONG_EMAIL", language)
+                    : ""}
+                </div>
+                <div>
+                  {errorsRedux.password
+                    ? getString("LOGIN_WRONG_PASS", language)
+                    : ""}
+                </div>
+              </div>
+            )}
           </Paper>
         </span>
       </div>
@@ -111,11 +131,13 @@ const styles = {
 };
 
 const Login = withFormik({
-  mapPropsToValue({ email, password }) {
+  mapPropsToValue({ email, password, errorsRedux }) {
+    console.log("mapspropstovalue", errorsRedux);
     return {
       email: email || "",
       password: password || "",
-      test: test || ""
+      test: test || "",
+      errorsRedux
     };
   },
   handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
@@ -138,7 +160,7 @@ const Login = withFormik({
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors,
+  errorsRedux: state.errors,
   language: state.language
 });
 

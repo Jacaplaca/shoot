@@ -2,12 +2,16 @@ const strings = {
   pl: {
     LOGIN_BUTTON: "Zaloguj się",
     LOGIN_EMAIL: "Adres email",
-    LOGIN_PASS: "Hasło"
+    LOGIN_PASS: "Hasło",
+    LOGIN_WRONG_PASS: "Nieprawidłowe hasło",
+    LOGIN_WRONG_EMAIL: "Nieprawidłowy email"
   },
   en: {
     LOGIN_BUTTON: "Login",
     LOGIN_EMAIL: "Email",
-    LOGIN_PASS: "Password"
+    LOGIN_PASS: "Password",
+    LOGIN_WRONG_PASS: "Incorrect Password",
+    LOGIN_WRONG_EMAIL: "User not found"
   }
 };
 
