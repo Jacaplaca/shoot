@@ -1,5 +1,7 @@
 import * as jsPDF from "jspdf";
 import { PTSans } from "../../skins/PTSans";
+import { PTSansBold } from "../../skins/PTSansBold";
+import { PTSansItalic } from "../../skins/PTSansItalic";
 
 export default (turnament, protocols) => {
   console.log("generatePDF()", turnament, protocols.length);
@@ -7,33 +9,36 @@ export default (turnament, protocols) => {
   var doc = new jsPDF();
 
   doc.addFileToVFS("PTSans.ttf", PTSans);
+  doc.addFileToVFS("PTSansBold.ttf", PTSansBold);
+  doc.addFileToVFS("PTSansItalic.ttf", PTSansItalic);
   doc.addFont("PTSans.ttf", "PTSans", "normal");
+  doc.addFont("PTSansBold.ttf", "PTSans", "bold");
+  doc.addFont("PTSansItalic.ttf", "PTSans", "italic");
 
   var ttt2 = JSON.stringify(doc.getFontList());
   ttt2 = ttt2.replace("{", "");
   ttt2 = ttt2.replace("}", "");
   ttt2 = ttt2.split("],");
-  doc.setFont("PTSans");
+  doc.setFont("PTSans", "normal");
 
-  const formatNumber = n => {
+  function formatNumber(n) {
     if (Number(n) === n && n % 1 !== 0) {
-      return n
-        .toFixed(2)
-        .toString()
-        .replace(".", ",");
+      return n.toFixed(2);
     } else {
       return n.toString();
     }
-  };
+  }
   // formatNumber(12)
-  const templateHead = () => {
-    doc.setFontSize(16);
+  function templateHead() {
+    doc.setFontSize(14);
     // doc.setFontType("bold");
+    doc.setFont("PTSans", "normal");
     doc.text(turnament.name, 105, 20, null, null, "center");
-  };
+  }
 
-  const templateFooter = () => {
-    doc.setFontSize(15);
+  function templateFooter() {
+    doc.setFont("PTSans", "normal");
+    doc.setFontSize(14);
     doc.text(
       `${turnament.facility} ${turnament.date}`,
       105,
@@ -42,13 +47,14 @@ export default (turnament, protocols) => {
       null,
       "center"
     );
-  };
+  }
 
   // doc.setFontType("bold");
-  const titlePage = () => {
+  function titlePage() {
     doc.setFontSize(30);
     let promoter = turnament.promoter.name;
-    // promoter = "Bardzo Znana Organizacja Strzelecka Zrzeszajaca Wielu Utalentowanych Strzelców";
+    promoter =
+      "Bardzo Znana Organizacja Strzelecka Zrzeszajaca Wielu Utalentowanych Strzelców";
     const splitPromoter = doc.splitTextToSize(promoter, 180);
     doc.text(splitPromoter, 105, 60, "center");
 
@@ -59,8 +65,9 @@ export default (turnament, protocols) => {
     let turnamentName = turnament.name;
     //turnamentName = "Bardzo Znana Organizacja Strzelecka Zrzeszajaca Wielu Utalentowanych Strzelców"
     const splitTurnament = doc.splitTextToSize(turnamentName, 180);
+    doc.setFont("PTSans", "bold");
     doc.text(splitTurnament, 105, 170, "center");
-
+    doc.setFont("PTSans", "normal");
     doc.setFontSize(20);
     doc.text(
       `${turnament.facility} ${turnament.date}`,
@@ -72,9 +79,9 @@ export default (turnament, protocols) => {
     );
 
     doc.addPage("l", "a4");
-  };
+  }
 
-  const judges = () => {
+  function judges() {
     templateHead();
 
     doc.setFontSize(20);
@@ -110,10 +117,10 @@ export default (turnament, protocols) => {
 
     templateFooter();
     doc.addPage("l", "a4");
-  };
+  }
 
-  titlePage();
-  judges();
+  //titlePage();
+  //judges();
 
   for (var i = 0; i < protocols.length; i++) {
     let description = protocols[i].description;
@@ -137,7 +144,9 @@ export default (turnament, protocols) => {
       templateHead();
       // doc.setFontType("light");
       doc.setFontSize(18);
+      doc.setFont("PTSans", "bold");
       doc.text(protocols[i].protocol, 105, 35, null, null, "center");
+      doc.setFont("PTSans", "normal");
       // doc.setFontType("normal");
       templateFooter();
     };
@@ -151,36 +160,55 @@ export default (turnament, protocols) => {
     const splitAnnotation = doc.splitTextToSize(annotation, 180);
 
     const scoresHeadline = fromTop => {
-      doc.setFontSize(15);
+      doc.setDrawColor(0);
+      doc.setFillColor(246, 246, 246);
+      doc.rect(10, fromTop - 5, 185, playerHeight, "F");
+      doc.setFontSize(12);
+      doc.setFont("PTSans", "bold");
       // doc.setFontType("bold");
-      doc.text("Miejsce", 16, fromTop);
-      doc.text("Imie i nazwisko", 49, fromTop);
-      doc.text("Bron", 105, fromTop);
-      doc.text("Luneta", 140, fromTop);
-      doc.text("Punkty", 175, fromTop);
+      doc.text("Miejsce", 13, fromTop);
+      doc.text("Nr startowy", 32, fromTop);
+      doc.text("Imię i nazwisko", 70, fromTop);
+      doc.text("Broń", 120, fromTop);
+      doc.text("Luneta", 150, fromTop);
+      doc.text("Punkty", 179, fromTop);
     };
 
     scoresHeadline(podescription());
 
     let indexReset = 0;
     let descriptionHeight = podescription();
-    // let lastPosition = 0;
+    let lastPosition = 0;
     for (var index = 0; index < playersLength; index++) {
       indexReset++;
       const player = protocols[i].players[index];
 
       let position = 5 + descriptionHeight + indexReset * playerHeight;
-      doc.setFontSize(14);
+      doc.setFontSize(13);
+      doc.setFont("PTSans", "bold");
       // doc.setFontType("normal");
 
-      doc.text(player.position.toString(), 24, position, null, null, "center");
-      doc.setFontSize(12);
-      doc.text(player.name, 68, position, null, null, "center");
-      doc.text(player.gun, 110, position, null, null, "center");
-      doc.text(player.scope, 149, position, null, null, "center");
-      doc.setFontSize(14);
-      doc.text(formatNumber(player.score), 183, position, null, null, "center");
-      // lastPosition = position;
+      doc.text(player.position.toString(), 20, position, null, null, "center");
+      doc.setFont("PTSans", "normal");
+      doc.setFontSize(11);
+      doc.text(player.number.toString(), 43, position, null, null, "center");
+      doc.text(player.name, 86, position, null, null, "center");
+      doc.text(player.gun, 125, position, null, null, "center");
+      doc.text(player.scope, 157, position, null, null, "center");
+      //doc.line(15, position + 2, 190, position + 2);
+
+      if (index % 2 === 0) {
+        doc.setDrawColor(0);
+        doc.setFillColor(246, 246, 246);
+        doc.rect(15, position + 2, 176, playerHeight, "F");
+      }
+
+      //doc.rect(100, 30, 10, 10, 'F');
+
+      doc.setFontSize(13);
+      doc.setFont("PTSans", "bold");
+      doc.text(formatNumber(player.score), 186, position, null, null, "center");
+      lastPosition = position;
 
       // doc.text(indexReset.toString(), 1, position)
       if (position > bottomPosition) {
@@ -196,6 +224,7 @@ export default (turnament, protocols) => {
       if (index === playersLength - 1) {
         const annotation = () => {
           doc.setFontSize(11);
+          doc.setFont("PTSans", "italic");
           doc.text(15, position + 20, splitAnnotation);
         };
 

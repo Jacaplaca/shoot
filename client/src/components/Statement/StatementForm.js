@@ -67,16 +67,16 @@ class StatementForm extends Component {
     const finalProtocolsCookies =
       cookieTurnament && cookieTurnament.finalProtocols;
     const competitionsCookies = cookieTurnament && cookieTurnament.competitions;
-    console.log(
-      "ifupdate",
-      finalProtocols !== finalProtocolsCookies,
-      competitions !== competitionsCookies
-    );
+    // console.log(
+    //   "ifupdate",
+    //   finalProtocols !== finalProtocolsCookies,
+    //   competitions !== competitionsCookies
+    // );
     if (
       finalProtocols !== finalProtocolsCookies ||
       competitions !== competitionsCookies
     ) {
-      console.log("updateuje cookisa", finalProtocols);
+      // console.log("updateuje cookisa", finalProtocols);
       localStorage.setItem(
         turnamentId,
         JSON.stringify({ competitions, finalProtocols })
@@ -85,7 +85,7 @@ class StatementForm extends Component {
       // console.log("finalProtocolsCookies", finalProtocolsCookies);
       // console.log("competitionsCookies", competitionsCookies);
 
-      console.log("update get", JSON.parse(localStorage.getItem(turnamentId)));
+      // console.log("update get", JSON.parse(localStorage.getItem(turnamentId)));
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -406,6 +406,7 @@ class StatementForm extends Component {
           }
           protocols[iterator].players.push({
             name: `${player.name} ${player.surname}`,
+            number: `${player.rank[0] ? player.rank[0] : ""}`,
             gun: `${player.gun ? player.gun : ""}`,
             scope: `${player.scope ? player.scope : ""}`,
             score: wholeScore
