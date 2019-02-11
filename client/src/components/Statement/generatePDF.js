@@ -53,8 +53,8 @@ export default (turnament, protocols) => {
   function titlePage() {
     doc.setFontSize(30);
     let promoter = turnament.promoter.name;
-    promoter =
-      "Bardzo Znana Organizacja Strzelecka Zrzeszajaca Wielu Utalentowanych Strzelców";
+    // promoter =
+    //   "Bardzo Znana Organizacja Strzelecka Zrzeszajaca Wielu Utalentowanych Strzelców";
     const splitPromoter = doc.splitTextToSize(promoter, 180);
     doc.text(splitPromoter, 105, 60, "center");
 
