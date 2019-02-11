@@ -405,7 +405,7 @@ class StatementForm extends Component {
             wholeScore = score + wholeScore;
           }
           protocols[iterator].players.push({
-            name: `${player.name} ${player.surname}`,
+            name: !player.rodo ? `${player.name} ${player.surname}` : "RODO",
             number: `${player.rank[0] ? player.rank[0] : ""}`,
             gun: `${player.gun ? player.gun : ""}`,
             scope: `${player.scope ? player.scope : ""}`,
