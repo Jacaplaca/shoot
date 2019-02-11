@@ -51,7 +51,8 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         playerSurname: player.surname,
         playerId: player._id,
         team: player.team,
-        startNo: player.rank.length > 0 ? player.rank[0] : ""
+        // startNo: player.rank.length > 0 ? player.rank[0] : ""
+        startNo: player.number ? player.number : ""
       });
     } else {
       Object.assign(teams, { [team]: [] });
@@ -60,7 +61,8 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         playerSurname: player.surname,
         playerId: player._id,
         team: player.team,
-        startNo: player.rank.length > 0 ? player.rank[0] : ""
+        // startNo: player.rank.length > 0 ? player.rank[0] : ""
+        startNo: player.number ? player.number : ""
       });
     }
   }

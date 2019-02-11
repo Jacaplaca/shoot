@@ -5,32 +5,24 @@ import { connect } from "react-redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
 import * as actions from "../actions";
 
-const Kontakt = ({ classes }) => {
+const Kontakt = ({ classes, width, open }) => {
   return (
     <React.Fragment>
       <div className={classes.root}>
-        <div>
-          <h3>Kontakty</h3>
+        <div
+          style={{
+            // overflow: "hidden",
+            // position: "fixed" /* Set the navbar to fixed position */,
+            width: open ? width - 10 : 0,
+            whiteSpace: "initial",
+            display: open ? "inline" : "none"
+          }}
+        >
+          <h5>Kontakty</h5>
           <p>
             Singulis quorum quis proident quid. Duis excepteur an
             comprehenderit, o ullamco exquisitaque e incurreret id excepteur,
-            tamen ab ad anim mandaremus. Non enim comprehenderit, quo illum
-            illum do cernantur.Laborum tamen commodo quibusdam, mentitum esse
-            sed possumus exercitation. Offendit veniam noster cupidatat tempor
-            ea cupidatat ita consequat. Ingeniis quae fugiat ne sunt. Summis a
-            possumus id esse an malis ullamco ea irure quorum.
-          </p>
-        </div>
-        <div>
-          <h3>Kontakty</h3>
-          <p>
-            Singulis quorum quis proident quid. Duis excepteur an
-            comprehenderit, o ullamco exquisitaque e incurreret id excepteur,
-            tamen ab ad anim mandaremus. Non enim comprehenderit, quo illum
-            illum do cernantur.Laborum tamen commodo quibusdam, mentitum esse
-            sed possumus exercitation. Offendit veniam noster cupidatat tempor
-            ea cupidatat ita consequat. Ingeniis quae fugiat ne sunt. Summis a
-            possumus id esse an malis ullamco ea irure quorum.
+            tamen ab ad anim mandaremus. No
           </p>
         </div>
       </div>
@@ -40,9 +32,9 @@ const Kontakt = ({ classes }) => {
 
 const styles = theme => ({
   root: {
-    color: theme.palette.text.primary,
-    gridTemplateColumns: "1fr 2fr",
-    display: "flex"
+    color: theme.palette.text.primary
+    // gridTemplateColumns: "1fr 2fr",
+    // display: "flex"
   }
 });
 

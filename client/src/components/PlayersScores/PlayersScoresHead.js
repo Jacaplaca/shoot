@@ -64,12 +64,18 @@ const PlayersScoresHead = ({
       <span className={classNames(classes.headBlock)} />
 
       <HeadRowField
-        title="Nazwa"
+        title="Zawodnik"
         classes={classes}
         // click={e => sorting("name", e)}
         // sort
       />
 
+      <HeadRowField
+        title="Nr startowy"
+        classes={classes}
+        // click={e => sorting("email", e)}
+        // sort
+      />
       <HeadRowField
         title="Suma"
         classes={classes}

@@ -406,7 +406,8 @@ class StatementForm extends Component {
           }
           protocols[iterator].players.push({
             name: !player.rodo ? `${player.name} ${player.surname}` : "RODO",
-            number: `${player.rank[0] ? player.rank[0] : ""}`,
+            // number: `${player.rank[0] ? player.rank[0] : ""}`,
+            number: player.number ? `${player.number}` : "",
             gun: `${player.gun ? player.gun : ""}`,
             scope: `${player.scope ? player.scope : ""}`,
             score: wholeScore

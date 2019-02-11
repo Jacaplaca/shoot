@@ -6,7 +6,7 @@ import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import { combineStyles } from "../../functions/functions";
 import Checkbox from "@material-ui/core/Checkbox";
-import FormGroup from "@material-ui/core/FormGroup";
+// import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import XLSX from "xlsx";
 // import axios from "axios";
@@ -17,7 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
 import UploadFile from "../../inputs/UploadFile";
-import axios from "axios";
+// import axios from "axios";
 
 import { formStyles } from "../../skins/mainStyles";
 import InputComponent from "../../inputs/InputComponent";
@@ -87,9 +87,10 @@ class PlayersFormik extends Component {
         gun,
         scope,
         team,
-        rank,
+        // rank,
         club,
-        rodo
+        rodo,
+        number
       },
       auth: { user },
       turnaments,
@@ -138,13 +139,13 @@ class PlayersFormik extends Component {
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <InputComponent
-                name="rank"
-                clear={() => setFieldValue("rank", "")}
+                name="number"
+                clear={() => setFieldValue("number", "")}
                 label="Numer startowy"
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
-                value={rank}
+                value={number}
                 error={touched.rank && Boolean(errors.rank)}
                 helperText={touched.rank && errors.rank ? errors.rank : " "}
                 onBlur={handleBlur}
@@ -315,7 +316,8 @@ const PlayersForm = withFormik({
     gun,
     scope,
     team,
-    rank,
+    // rank,
+    number,
     club,
     toEdit,
     collection,
@@ -334,7 +336,8 @@ const PlayersForm = withFormik({
       gun: toEdit ? toEdit.gun : gun || "",
       scope: toEdit ? toEdit.scope : scope || "",
       team: toEdit ? toEdit.team : team || "",
-      rank: toEdit ? toEdit.rank : rank || "",
+      number: toEdit ? toEdit.number : number || "",
+      // rank: toEdit ? toEdit.rank : rank || "",
       club: toEdit ? toEdit.club : club || "",
       rodo: toEdit ? toEdit.rodo : rodo || false,
       toEdit,
@@ -353,7 +356,8 @@ const PlayersForm = withFormik({
       gun: values.gun,
       scope: values.scope,
       team: values.team,
-      rank: values.rank,
+      number: values.number,
+      // rank: values.rank,
       club: values.club,
       rodo: values.rodo
     };

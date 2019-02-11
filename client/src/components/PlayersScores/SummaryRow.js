@@ -86,7 +86,7 @@ class SummaryRow extends Component {
       rows,
       competitionClicked
     } = this.props;
-    const { totalScore, competitions } = row;
+    const { totalScore, competitions, number } = row;
     // console.log("summaryRow", row);
 
     return (
@@ -146,6 +146,9 @@ class SummaryRow extends Component {
             <ButtonMy onClick={this.handleSearching} size="small">
               OK
             </ButtonMy> */}
+          </span>
+          <span className={classNames(classes.rowBlock)}>
+            <SortButtons click={e => sorting("number", e)} />
           </span>
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}

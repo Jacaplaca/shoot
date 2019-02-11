@@ -48,7 +48,8 @@ module.exports = {
       gun,
       scope,
       team,
-      rank,
+      // rank,
+      number,
       club,
       rodo
     } = req.body;
@@ -61,7 +62,8 @@ module.exports = {
       gun,
       scope,
       team,
-      rank: rank.split(", "),
+      // rank: rank.split(", "),
+      number,
       club,
       rodo
     });
@@ -108,10 +110,11 @@ module.exports = {
       scope,
       team,
       club,
-      rank,
+      // rank,
+      number,
       rodo
     } = req.body;
-    console.log("rank", rank);
+    // console.log("rank", rank);
     const updatedPlayer = {
       name,
       surname,
@@ -121,7 +124,8 @@ module.exports = {
       scope,
       team,
       club,
-      rank,
+      // rank,
+      number,
       rodo
       // rank: rank.split(", ")
     };
@@ -187,7 +191,7 @@ module.exports = {
           gun,
           scope,
           team,
-          rank: nr,
+          number: nr,
           club,
           rodo: rodo && rodo.toLowerCase() === "tak" ? true : false
         });

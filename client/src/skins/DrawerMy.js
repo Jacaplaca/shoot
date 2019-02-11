@@ -15,6 +15,7 @@ import * as actions from "../actions/authentication";
 
 import DrawerLink from "./DrawerLink";
 import ShowLinkToComp from "./ShowLinkToComp";
+import Kontakt from "../components/Kontakt";
 
 let drawerWidth = 240;
 const path = window.location.pathname.split("/")[1];
@@ -98,35 +99,35 @@ class DrawerMy extends React.Component {
         comp: "promoters",
         text: "Organizatorzy",
         link: "/organizatorzy",
-        icon: "MoneyIcon",
+        icon: "Person",
         rola: "admin"
       },
       {
         comp: "turnamets",
         text: "Zawody",
         link: "/zawody",
-        icon: "EventIcon",
+        icon: "Riffle",
         rola: "admin,promoter"
       },
       {
         comp: "competitions",
         text: "Konkurencje",
         link: "/konkurencje",
-        icon: "InsertChartOutlined",
+        icon: "ShootingShield",
         rola: "admin"
       },
       {
         comp: "players",
         text: "Zawodnicy",
         link: "/zawodnicy",
-        icon: "InsertChartOutlined",
+        icon: "People",
         rola: "admin,promoter"
       },
       {
         comp: "judges",
         text: "Sędziowie",
         link: "/sedziowie",
-        icon: "EventAvailableIcon",
+        icon: "Eye",
         rola: "admin"
       }
     ];
@@ -172,6 +173,7 @@ class DrawerMy extends React.Component {
             });
           })}
         </div>
+        <Kontakt width={drawerWidth} open={open} />
       </Drawer>
     );
   }

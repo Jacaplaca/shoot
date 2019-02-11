@@ -121,9 +121,10 @@ class PlayersScoresRow extends Component {
       playerId,
       competitions,
       rank,
+      number,
       totalScore
     } = row;
-
+    // console.log("player", this.props);
     return (
       <React.Fragment>
         {/* {console.log("playersscoresrow", row, finished)} */}
@@ -150,6 +151,9 @@ class PlayersScoresRow extends Component {
           </span>
           <span className={classNames(classes.rowBlock, classes.rowName)}>
             {`${playerName} ${playerSurname}`}
+          </span>
+          <span className={classNames(classes.rowBlock, classes.rowBlock)}>
+            {number}
           </span>
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}

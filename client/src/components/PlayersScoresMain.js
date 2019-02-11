@@ -104,7 +104,8 @@ class PlayersScoresMain extends Component {
           playerSurname: player.surname,
           playerId: player._id,
           competitions: [],
-          order: player.order
+          order: player.order,
+          number: player.number ? player.number : ""
         };
 
         for (let competition of competitions) {
@@ -223,7 +224,7 @@ class PlayersScoresMain extends Component {
       raport
     } = this.props;
     const zmienna = this.state.filter;
-    const grid = `50px 250px 80px repeat(${this.state.summaryRow &&
+    const grid = `50px 250px 100px 80px repeat(${this.state.summaryRow &&
       this.state.summaryRow.competitions &&
       this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
     // console.log("sum", this.state.summaryRow);
