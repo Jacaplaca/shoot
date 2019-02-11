@@ -119,8 +119,8 @@ export default (turnament, protocols) => {
     doc.addPage("l", "a4");
   }
 
-  //titlePage();
-  //judges();
+  titlePage();
+  judges();
 
   for (var i = 0; i < protocols.length; i++) {
     let description = protocols[i].description;
