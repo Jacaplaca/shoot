@@ -28,6 +28,7 @@ const styles = theme => ({
     overflow: "hidden",
     position: "relative",
     display: "flex"
+    // color: "white"
   },
   flex: {
     flexGrow: 1
@@ -49,6 +50,8 @@ const styles = theme => ({
     marginRight: 36
   },
   drawerPaper: {
+    display: "grid",
+    gridTemplateRows: "1fr 250px",
     overflow: "hidden",
     position: "fixed" /* Set the navbar to fixed position */,
     top: 0 /* Position the navbar at the top of the page */,
@@ -144,35 +147,43 @@ class DrawerMy extends React.Component {
         }}
         open={open}
       >
-        <div className={classes.toolbar}>
-          {/* {auth && auth.email.split("@")[0]} */}
-          <span style={{ color: "white" }}>{auth.user.name}</span>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
+        <div>
+          <div className={classes.toolbar}>
+            {/* {auth && auth.email.split("@")[0]} */}
+            <span style={{ color: "white" }}>{auth.user.name}</span>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </div>
+
+          <div>
+            {links.map((el, i) => {
+              const { comp, text, link, icon, rola } = el;
+              const userType = auth.user.rola;
+              // console.log(userType);
+              return rola.split(",").map(x => {
+                // console.log(x);
+                if (userType === x) {
+                  return (
+                    // <ShowLinkToComp key={i} comp={comp}>
+                    <DrawerLink
+                      key={text}
+                      text={text}
+                      link={link}
+                      icon={icon}
+                    />
+                    // </ShowLinkToComp>
+                  );
+                }
+              });
+            })}
+          </div>
         </div>
 
-        <div>
-          {links.map((el, i) => {
-            const { comp, text, link, icon, rola } = el;
-            const userType = auth.user.rola;
-            // console.log(userType);
-            return rola.split(",").map(x => {
-              // console.log(x);
-              if (userType === x) {
-                return (
-                  // <ShowLinkToComp key={i} comp={comp}>
-                  <DrawerLink key={text} text={text} link={link} icon={icon} />
-                  // </ShowLinkToComp>
-                );
-              }
-            });
-          })}
-        </div>
         <Kontakt width={drawerWidth} open={open} />
       </Drawer>
     );

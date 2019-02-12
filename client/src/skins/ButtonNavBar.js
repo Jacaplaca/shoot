@@ -15,7 +15,8 @@ const styles = theme => ({
   hover: {},
   labelButton: {
     borderColor: "gray",
-    textAlign: "left"
+    textAlign: "left",
+    fontWeight: 600
   }
 });
 

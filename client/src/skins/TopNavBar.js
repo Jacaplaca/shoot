@@ -101,7 +101,7 @@ class TopNavBar extends React.Component {
       >
         <Toolbar disableGutters={!open}>
           <IconButton
-            color="inherit"
+            color="primary"
             aria-label="Open drawer"
             onClick={handleDrawerOpen}
             className={classNames(classes.menuButton, open && classes.hide)}

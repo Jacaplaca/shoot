@@ -8,22 +8,31 @@ import * as actions from "../actions";
 const Kontakt = ({ classes, width, open }) => {
   return (
     <React.Fragment>
-      <div className={classes.root}>
+      <div
+        className={classes.root}
+        style={{
+          // backgroundColor: "red",
+          marginTop: 35,
+          padding: 7,
+          borderTop: open ? "1px solid grey" : "0px solid grey"
+        }}
+      >
         <div
           style={{
             // overflow: "hidden",
             // position: "fixed" /* Set the navbar to fixed position */,
             width: open ? width - 10 : 0,
             whiteSpace: "initial",
-            display: open ? "inline" : "none"
+            display: open ? "inline" : "none",
+            fontSize: 14
             // marginTop: 20
           }}
         >
-          <h5>Kontakty</h5>
+          <h5 style={{ fontWeight: 600 }}>Kontakt</h5>
           <p>
-            Singulis quorum quis proident quid. Duis excepteur an
-            comprehenderit, o ullamco exquisitaque e incurreret id excepteur,
-            tamen ab ad anim mandaremus. No
+            tel 048 514 800 874
+            <br />
+            info@portalstrzelecki.pl
           </p>
         </div>
       </div>
@@ -33,9 +42,8 @@ const Kontakt = ({ classes, width, open }) => {
 
 const styles = theme => ({
   root: {
-    color: theme.palette.text.primary,
-    marginTop: 25,
-    padding: 7
+    color: theme.palette.text.primary
+
     // gridTemplateColumns: "1fr 2fr",
     // display: "flex"
   }
