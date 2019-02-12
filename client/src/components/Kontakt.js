@@ -16,6 +16,7 @@ const Kontakt = ({ classes, width, open }) => {
             width: open ? width - 10 : 0,
             whiteSpace: "initial",
             display: open ? "inline" : "none"
+            // marginTop: 20
           }}
         >
           <h5>Kontakty</h5>
@@ -32,7 +33,9 @@ const Kontakt = ({ classes, width, open }) => {
 
 const styles = theme => ({
   root: {
-    color: theme.palette.text.primary
+    color: theme.palette.text.primary,
+    marginTop: 25,
+    padding: 7
     // gridTemplateColumns: "1fr 2fr",
     // display: "flex"
   }
@@ -50,8 +53,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     actions
-  ),
-  MainFrameHOC()
+  )
+  // MainFrameHOC()
 );
 
 export default enhance(Kontakt);

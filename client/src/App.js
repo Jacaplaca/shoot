@@ -47,6 +47,10 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
+  componentDidMount() {
+    document.title = `Portal Strzelecki`;
+  }
+
   render() {
     return (
       // <div

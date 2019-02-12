@@ -14,14 +14,20 @@ import ButtonMy from "../skins/ButtonMy";
 
 class LoginFormik extends Component {
   componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
+    if (this.props.auth.user.rola === "admin") {
+      this.props.history.push("/organizatorzy");
+    } else if (this.props.auth.user.rola === "promoter") {
+      this.props.history.push("/zawody");
     }
+
+    document.title = `Portal Strzelecki | Logowanie`;
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/");
+    if (nextProps.auth.user.rola === "admin") {
+      nextProps.history.push("/organizatorzy");
+    } else if (nextProps.auth.user.rola === "promoter") {
+      nextProps.history.push("/zawody");
     }
   }
 

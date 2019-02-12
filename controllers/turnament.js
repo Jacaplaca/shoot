@@ -12,7 +12,7 @@ module.exports = {
     // console.log("/api/turnament/");
 
     const loggedUser = req.user;
-    console.log("turnament req.user", loggedUser);
+    // console.log("turnament req.user", loggedUser);
 
     let query;
     if (loggedUser) {

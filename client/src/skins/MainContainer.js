@@ -103,6 +103,12 @@ export const mainStyles = theme => ({
 });
 
 class MainContainer extends React.Component {
+  componentDidMount() {
+    document.title = this.props.title
+      ? `Portal Strzelecki | ${this.props.title}`
+      : `Portal Strzelecki`;
+  }
+
   render() {
     const {
       classes,

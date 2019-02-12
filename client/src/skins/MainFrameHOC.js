@@ -59,7 +59,7 @@ const MainFrameHOC = moreProps => WrappedComponent => {
             {this.props.loading ? (
               <LinearProgress color="secondary" />
             ) : (
-              <div style={{ height: 5 }} />
+              <div style={{ height: 4 }} />
             )}
 
             {/* <CircularProgress color="secondary" /> */}

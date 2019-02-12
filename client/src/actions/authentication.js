@@ -6,6 +6,7 @@ import * as actions from "../actions";
 
 export const registerUser = (user, history) => dispatch => {
   console.log("registerUser", user);
+  console.log("registerUser history", history);
   axios
     .post("/api/users/register", user)
     // .then(res => {
@@ -38,7 +39,9 @@ export const registerUser = (user, history) => dispatch => {
     });
 };
 
-export const loginUser = user => dispatch => {
+export const loginUser = (user, history) => dispatch => {
+  console.log("login", user);
+  console.log("history login", history);
   axios
     .post("/api/users/login", user)
     .then(res => {
@@ -58,7 +61,7 @@ export const loginUser = user => dispatch => {
 };
 
 export const setCurrentUser = decoded => dispatch => {
-  // console.log("decoded", decoded);
+  console.log("decoded", decoded);
   // if (decoded.rola === "admin") {
   // console.log("kto jest", decoded.rola);
   dispatch(actions.fetchFromDB("promoters"));
@@ -89,7 +92,7 @@ export const setCurrentUser = decoded => dispatch => {
 };
 
 export const logoutUser = history => dispatch => {
-  console.log(history);
+  console.log("history", history);
   localStorage.removeItem("jwtToken");
   setAuthToken(false);
   dispatch(setCurrentUser({}));

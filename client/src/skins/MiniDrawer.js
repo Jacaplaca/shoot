@@ -71,6 +71,7 @@ class MiniDrawer extends React.Component {
 
   componentDidMount = () => {
     drawerWidth = this.props.auth.isAuthenticated !== false ? 240 : 0;
+    document.title = `Portal Strzelecki`;
   };
 
   handleDrawerOpen = () => {
@@ -172,6 +173,7 @@ class MiniDrawer extends React.Component {
               path="/organizatorzy"
               render={() => (
                 <MainContainer
+                  title={"Organizatorzy"}
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
@@ -200,6 +202,7 @@ class MiniDrawer extends React.Component {
               path="/zawody"
               render={() => (
                 <MainContainer
+                  title={"Zawody"}
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
@@ -214,6 +217,7 @@ class MiniDrawer extends React.Component {
               path="/sedziowie"
               render={() => (
                 <MainContainer
+                  title={"Sędziowie"}
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
@@ -229,6 +233,7 @@ class MiniDrawer extends React.Component {
               console.log("route /wyniki_zawodnikow/", props);
               return (
                 <MainContainer
+                  title={"Wyniki"}
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
@@ -247,6 +252,7 @@ class MiniDrawer extends React.Component {
               console.log("route /komunikat/", props);
               return (
                 <MainContainer
+                  title={"Komunikat z zawodów"}
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
@@ -279,6 +285,7 @@ class MiniDrawer extends React.Component {
               path="/konkurencje"
               render={() => (
                 <MainContainer
+                  title={"Konkurencje"}
                   open={this.state.open}
                   handleDrawerOpen={this.handleDrawerOpen}
                 >
@@ -292,6 +299,7 @@ class MiniDrawer extends React.Component {
             path="/zawodnicy"
             render={() => (
               <MainContainer
+                title={"Zawodnicy"}
                 open={this.state.open}
                 handleDrawerOpen={this.handleDrawerOpen}
               >

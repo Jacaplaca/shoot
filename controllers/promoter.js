@@ -6,7 +6,7 @@ const User = require("../models/user");
 module.exports = {
   index: async (req, res, next) => {
     const loggedUser = req.user;
-    console.log("promoters req.user", loggedUser);
+    // console.log("promoters req.user", loggedUser);
 
     let query;
 
@@ -37,7 +37,7 @@ module.exports = {
       logo,
       www
     };
-    console.log("updatre params", req.params.id);
+    // console.log("updatre params", req.params.id);
 
     try {
       const result = await User.findOneAndUpdate(
@@ -51,12 +51,12 @@ module.exports = {
   },
 
   check: async (req, res, next) => {
-    console.log(req.body);
+    // console.log(req.body);
     res.status(200).json({ aaa: 123 });
   },
 
   remove: async (req, res, next) => {
-    console.log(req.params.id);
+    // console.log(req.params.id);
 
     try {
       const removedJudge = await User.findByIdAndRemove(req.params.id)
