@@ -23,8 +23,8 @@ module.exports = {
       result.map(x => {
         anonimization.push(
           Object.assign(x, {
-            name: x.rodo ? "rodo" : x.name,
-            surname: x.rodo ? "rodo" : x.surname
+            name: x.rodo ? x.name : "rodo",
+            surname: x.rodo ? x.surname : "rodo"
           })
         );
       });

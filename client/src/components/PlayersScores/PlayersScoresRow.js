@@ -122,7 +122,8 @@ class PlayersScoresRow extends Component {
       competitions,
       rank,
       number,
-      totalScore
+      totalScore,
+      rodo
     } = row;
     // console.log("player", this.props);
     return (
@@ -150,7 +151,7 @@ class PlayersScoresRow extends Component {
             {rank}
           </span>
           <span className={classNames(classes.rowBlock, classes.rowName)}>
-            {`${playerName} ${playerSurname}`}
+            {rodo ? `${playerName} ${playerSurname}` : "RODO"}
           </span>
           <span className={classNames(classes.rowBlock, classes.rowBlock)}>
             {number}

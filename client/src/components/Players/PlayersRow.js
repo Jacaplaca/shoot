@@ -14,6 +14,7 @@ const PlayersRow = ({ row, classes, grid }) => {
   return (
     <React.Fragment>
       <span className={classNames(classes.rowBlock, classes.rowName)}>
+        {/* {rodo ? `${name} ${surname}` : "RODO"} */}
         {`${name} ${surname}`}
       </span>
       <span className={classNames(classes.rowBlock)}>{number}</span>

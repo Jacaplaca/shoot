@@ -105,7 +105,8 @@ class PlayersScoresMain extends Component {
           playerId: player._id,
           competitions: [],
           order: player.order,
-          number: player.number ? player.number : ""
+          number: player.number ? player.number : "",
+          rodo: player.rodo
         };
 
         for (let competition of competitions) {
