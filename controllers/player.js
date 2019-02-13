@@ -185,14 +185,14 @@ module.exports = {
 
         const newPlayer = new Player({
           turnament,
-          name,
-          surname,
-          caliber,
-          gun,
-          scope,
-          team,
-          number: nr,
-          club,
+          name: name || "",
+          surname: surname || "",
+          caliber: caliber || "",
+          gun: gun || "",
+          scope: scope || "",
+          team: team || "",
+          number: nr || "",
+          club: club || "",
           rodo: rodo && rodo.toLowerCase() === "tak" ? true : false
         });
 
