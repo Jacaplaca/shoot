@@ -28,6 +28,30 @@ export default (turnament, protocols) => {
       return n.toString();
     }
   }
+
+  const signature = pos => {
+    doc.setLineWidth(0.3);
+    doc.setLineDash([1]);
+
+    doc.setFontSize(12);
+    doc.setFont("PTSans", "normal");
+    doc.text("SĘDZIA GŁÓWNY", 150, pos + 15, null, null, "center");
+    doc.setFontSize(14.5);
+    doc.text(
+      `${turnament.judgeMain.name ? turnament.judgeMain.name : ""} ${
+        turnament.judgeMain.surname ? turnament.judgeMain.surname : ""
+      } `,
+      150,
+      pos + 22,
+      null,
+      null,
+      "center"
+    );
+
+    doc.line(110, pos + 50, 190, pos + 50);
+    doc.setFontSize(12);
+    doc.text("(podpis sędziego)", 150, pos + 56, null, null, "center");
+  };
   // formatNumber(12)
   function templateHead() {
     doc.setFontSize(14);
@@ -228,14 +252,16 @@ export default (turnament, protocols) => {
           doc.text(15, position + 20, splitAnnotation);
         };
 
-        if (position > bottomPosition - 50) {
+        if (position > bottomPosition - splitAnnotation.length * 10 - 50) {
           doc.addPage("l", "a4");
 
           position = 10;
           annotation();
-          doc.text(position.toString(), 10, 10);
+          signature(10 + position + splitAnnotation.length * 10);
         } else {
           annotation();
+          signature(10 + position + splitAnnotation.length * 10);
+          //doc.text((position + splitAnnotation.length * 10).toString(), 10, 10);
         }
       }
     }
