@@ -33,6 +33,7 @@ const signature = (pos) => {
   );
 
     doc.line(110,pos+50,190,pos+50)
+    doc.setFontSize(12);
      doc.text("(podpis sędziego)", 150, pos + 56, null, null, "center");
 }
 // formatNumber(12)

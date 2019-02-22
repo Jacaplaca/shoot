@@ -10,6 +10,17 @@ import RowHOC from "../RowHOC";
 
 const PromotersRow = ({ row, classes, grid }) => {
   const { name, email, adres, www, logo } = row;
+  let isImage = false;
+  try {
+    var image = require(`../../${logo}`);
+    isImage = true;
+    // do stuff
+    // console.log("img ok");
+  } catch (e) {
+    console.log("e", e);
+    isImage = false;
+    // console.log(ex);
+  }
   return (
     <React.Fragment>
       <span className={classNames(classes.rowBlock, classes.rowName)}>
@@ -19,7 +30,9 @@ const PromotersRow = ({ row, classes, grid }) => {
       <span className={classNames(classes.rowBlock)}>{adres}</span>
       <span className={classNames(classes.rowBlock)}>{www}</span>
       <span className={classNames(classes.rowBlock)}>
-        <img className={classes.rowImg} src={require(`../../${logo}`)} />
+        {isImage && (
+          <img className={classes.rowImg} src={require(`../../${logo}`)} />
+        )}
       </span>
     </React.Fragment>
   );

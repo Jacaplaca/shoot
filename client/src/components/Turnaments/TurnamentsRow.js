@@ -22,8 +22,26 @@ const TurnamentsRow = ({ row, classes, grid, auth: { user } }) => {
     logo,
     promoterName
   } = row;
-  // console.log("image", require(`../../${logo}`));
-  // console.log('image', !!require(`../../${logo}`));
+  let isImage = false;
+  try {
+    var image = require(`../../${logo}`);
+    isImage = true;
+    // do stuff
+    // console.log("img ok");
+  } catch (e) {
+    console.log("e", e);
+    isImage = false;
+    // console.log(ex);
+  }
+  // const isImage = typeof require(`../../${logo}`);
+  // console.log(
+  //   "image",
+  //   require(`../../${logo}`),
+  //   "type",
+  //   typeof require(`../../${logo}`)
+  // );
+  // console.log("image", );
+  console.log("image", isImage);
   return (
     <React.Fragment>
       <RowBlock>{date}</RowBlock>
@@ -44,7 +62,9 @@ const TurnamentsRow = ({ row, classes, grid, auth: { user } }) => {
       <RowBlock>{lzss}</RowBlock>
       {/* <span className={classNames(classes.rowBlock)}>{tech}</span> */}
       <RowBlock>
-        <img className={classes.rowImg} src={require(`../../${logo}`)} />
+        {isImage && (
+          <img className={classes.rowImg} src={require(`../../${logo}`)} />
+        )}
       </RowBlock>
     </React.Fragment>
   );
