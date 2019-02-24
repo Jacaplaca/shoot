@@ -29,7 +29,7 @@ const TurnamentsRow = ({ row, classes, grid, auth: { user } }) => {
     // do stuff
     // console.log("img ok");
   } catch (e) {
-    console.log("e", e);
+    // console.log("e", e);
     isImage = false;
     // console.log(ex);
   }
@@ -41,7 +41,7 @@ const TurnamentsRow = ({ row, classes, grid, auth: { user } }) => {
   //   typeof require(`../../${logo}`)
   // );
   // console.log("image", );
-  console.log("image", isImage);
+  // console.log("image", isImage);
   return (
     <React.Fragment>
       <RowBlock>{date}</RowBlock>

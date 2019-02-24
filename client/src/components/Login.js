@@ -49,6 +49,7 @@ class LoginFormik extends Component {
     // console.log("err formi", errors);
     // console.log("err redux", errorsRedux);
     // console.log("emial i pas", email, password);
+    console.log("errorsRedux", errorsRedux, typeof errorsRedux);
     return (
       <div
         style={{
@@ -111,7 +112,7 @@ class LoginFormik extends Component {
                 <Key style={{ marginLeft: 10 }} />
               </ButtonMy>
             </form>
-            {!email && !password && (
+            {!email && !password && errorsRedux && (
               <div style={{ color: "white", marginTop: 10, fontSize: 13 }}>
                 <div>
                   {errorsRedux.email

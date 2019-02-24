@@ -19,6 +19,7 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
 
   switch (collection) {
     case "turnaments":
+      console.log("jest turnaments?");
       url = get || `/api/turnaments`;
       type = TURNAMENTS;
       break;
@@ -69,9 +70,12 @@ export const fetchFromDB = (collection, get, id) => dispatch => {
     .then(res => {
       let fromDB = [];
       if (collection === "turnaments") {
+        // console.log("turnament fetch", res.data);
         fromDB = res.data.map(turn =>
           Object.assign(turn, {
-            promoterName: turn.promoter.name
+            promoterName: turn.promoter
+              ? turn.promoter.name
+              : "Usunięty organizator"
           })
         );
       } else {

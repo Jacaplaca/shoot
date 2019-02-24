@@ -62,6 +62,15 @@ export default (turnament, protocols) => {
 
   function templateFooter() {
     doc.setFont("PTSans", "normal");
+    doc.setFontSize(8.5);
+    doc.text(
+      "Wydruk z aplikacji SHOOTER STATS - portalstrzelecki.pl wszelkie prawa zastrzeżone",
+      105,
+      286,
+      null,
+      null,
+      "center"
+    );
     doc.setFontSize(14);
     doc.text(
       `${turnament.facility} ${turnament.date}`,

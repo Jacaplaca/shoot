@@ -124,7 +124,7 @@ class TurnamentsList extends Component {
       auth: { isAuthenticated }
     } = this.props;
     const { rows } = this.state;
-    console.log("grid", this.grid());
+    // console.log("grid", this.grid());
     return (
       <div>
         <div style={{ display: "grid", gridTemplateColumns: "50% 50%" }}>

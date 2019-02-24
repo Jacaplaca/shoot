@@ -62,7 +62,7 @@ class TurnamentsFormik extends Component {
     // const { prepopulate } = this.state;
     // setFieldValue("name", "asdfsadf");
     // console.log(toEdit);
-    console.log("TurnamentsForm", this.props.values.promoter);
+    // console.log("TurnamentsForm", this.props.values.promoter);
     return (
       <Paper
         // style={formStyles.paper}

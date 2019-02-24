@@ -212,6 +212,12 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         doc.line(47.5, 46 + a(), 47.5, 99 + a());
 
         doc.setFont("PTSans");
+        doc.setFontSize(7);
+        doc.text(
+          "Wydruk z aplikacji SHOOTER STATS - portalstrzelecki.pl wszelkie prawa zastrzeżone",
+          96,
+          80 + a()
+        );
         doc.setFontSize(8.5);
         doc.text("Konkurencja/STAGE", 5, 6 + a());
         doc.text("Numer startowy/NO", 39, 6 + a());
@@ -224,10 +230,10 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         doc.text("Nr/NO", 38, 51 + a());
         doc.text("Wynik/SCORE", 49, 51 + a());
 
-        doc.text("(podpis zawodnika)", 110, 77 + a(), "center");
-        doc.text("(podpis sedziego)", 180, 77 + a(), "center");
-        dotted(75, 72 + a(), 138, 72 + a(), 0.5);
-        dotted(150, 72 + a(), 205, 72 + a(), 0.5);
+        dotted(75, 69 + a(), 138, 69 + a(), 0.5);
+        dotted(150, 69 + a(), 205, 69 + a(), 0.5);
+        doc.text("(podpis zawodnika)", 110, 73 + a(), "center");
+        doc.text("(podpis sedziego)", 180, 73 + a(), "center");
         //  dotted(110, 60 + a(), 200, 60 + a(), 0.5);
 
         doc.setFontSize(10);
@@ -345,22 +351,29 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     for (let pic of addresses) {
       if (pic) {
         if (pic !== "") {
-          const obrazek = require(`../${pic}`);
-          const base64 = await axios.get(obrazek, {
-            responseType: "arraybuffer"
-          });
-          const nazwa = pic.split("/")[1];
-          const dim = nazwa.split("_")[0];
-          const width = dim.split("x")[0];
-          const height = dim.split("x")[1];
-          const image = Buffer.from(base64.data, "binary").toString("base64");
-          await picArray.push({
-            image,
-            width,
-            height,
-            ratio: height / width
-          });
-          await delay();
+          try {
+            const obrazek = require(`../${pic}`);
+            // console.log("obrazek");
+            const base64 = await axios.get(obrazek, {
+              responseType: "arraybuffer"
+            });
+            const nazwa = pic.split("/")[1];
+            const dim = nazwa.split("_")[0];
+            const width = dim.split("x")[0];
+            const height = dim.split("x")[1];
+            const image = Buffer.from(base64.data, "binary").toString("base64");
+            await picArray.push({
+              image,
+              width,
+              height,
+              ratio: height / width
+            });
+            await delay();
+          } catch (e) {
+            console.log("e", e);
+            // isImage = false;
+            // console.log(ex);
+          }
         }
       }
     }

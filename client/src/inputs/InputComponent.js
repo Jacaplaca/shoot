@@ -53,7 +53,7 @@ const InputComponent = props => {
     ...other
   } = props;
 
-  console.log("multiline", multiline, rows);
+  // console.log("multiline", multiline, rows);
 
   return (
     <FormControl
