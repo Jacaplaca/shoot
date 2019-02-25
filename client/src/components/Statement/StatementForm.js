@@ -46,7 +46,8 @@ class StatementForm extends Component {
     protocols: [],
     q: "",
     howManyProtocols: 0,
-    competitions: []
+    competitions: [],
+    factor: false
   };
 
   componentDidMount() {
@@ -376,7 +377,7 @@ class StatementForm extends Component {
 
   generateStatement = () => {
     const { finalProtocols, competitions } = this.state;
-    const { players } = this.props;
+    const { players, turnament } = this.props;
     let iterator = -1;
     let protocols = [];
     for (let protocol of finalProtocols) {
@@ -389,6 +390,7 @@ class StatementForm extends Component {
           annotation: protocol.annotation
         });
         const competInProt = protocol.competitions;
+        let min = 0;
         for (let player of players) {
           let wholeScore = 0;
           const competInPlayer = player.competitions;
@@ -404,14 +406,32 @@ class StatementForm extends Component {
                 : 0;
             wholeScore = score + wholeScore;
           }
+          if (turnament.factor) {
+            if (min === 0) {
+              min = wholeScore;
+            } else {
+              if (wholeScore < min && wholeScore > 0) {
+                min = wholeScore;
+              }
+            }
+            console.log("min", min);
+          }
           protocols[iterator].players.push({
-            name: !player.rodo ? `${player.name} ${player.surname}` : "RODO",
+            name: player.rodo ? `${player.name} ${player.surname}` : "RODO",
             // number: `${player.rank[0] ? player.rank[0] : ""}`,
             number: player.number ? `${player.number}` : "",
             gun: `${player.gun ? player.gun : ""}`,
             scope: `${player.scope ? player.scope : ""}`,
             score: wholeScore
           });
+        }
+        for (let player of protocols[iterator].players) {
+          console.log("player, score, min", min, player.score);
+          if (player.score === 0) {
+            Object.assign(player, { score: 0 });
+          } else {
+            Object.assign(player, { score: (min / player.score) * 100 });
+          }
         }
       }
     }
@@ -421,9 +441,9 @@ class StatementForm extends Component {
       x.players.map((player, i) => Object.assign(player, { position: i + 1 }))
     );
     console.log("protocols", protocols);
-    console.log(JSON.stringify(protocols));
-    console.log(JSON.stringify(this.props.turnament));
-    generatePDF(this.props.turnament, protocols);
+    // console.log(JSON.stringify(protocols));
+    // console.log(JSON.stringify(this.props.turnament));
+    generatePDF(turnament, protocols);
   };
 
   checkIfAllCompetitionWasUse = () => {

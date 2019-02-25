@@ -158,7 +158,10 @@ class PlayersScoresMain extends Component {
             matrixUnifilltered: matrixSorted,
             finished
           },
-          () => this.sorting("playerSurname", "up")
+          () => {
+            this.sorting("playerSurname", "up");
+            !isAuthenticated && factor && this.handleFactor();
+          }
         );
       } else {
         // console.log("sort via surname", orderIsUnd);
@@ -167,12 +170,17 @@ class PlayersScoresMain extends Component {
 
       // console.log(matrixSorted);
       // matrixSorted.push(summaryRow);
-      this.setState({
-        matrix: matrixSorted,
-        summaryRow,
-        matrixUnifilltered: matrixSorted,
-        finished
-      });
+      this.setState(
+        {
+          matrix: matrixSorted,
+          summaryRow,
+          matrixUnifilltered: matrixSorted,
+          finished
+        },
+        () => {
+          !isAuthenticated && factor && this.handleFactor();
+        }
+      );
       if (this.state.filter !== "") {
         this.searching(matrixSorted, this.state.filterNames, this.state.filter);
       }
@@ -228,8 +236,8 @@ class PlayersScoresMain extends Component {
 
   handleFactor = () => {
     const factorizationSt = JSON.stringify(this.state.matrix);
-    const factorization = JSON.parse(factorizationSt);
-
+    let factorization = JSON.parse(factorizationSt);
+    let minTotalScore = 0;
     if (!this.state.factor) {
       let minims = {};
       for (let competition of factorization[0].competitions) {
@@ -239,6 +247,19 @@ class PlayersScoresMain extends Component {
       }
       for (let player of factorization) {
         const competitions = player.competitions;
+        // !player.totalScore ? (player.totalScore = 0) : null;
+        if (
+          // !player.minTotalScore &&
+          // player.totalScore !== 0 &&
+          minTotalScore === 0 &&
+          player.totalScore
+        ) {
+          minTotalScore = player.totalScore;
+        } else if (minTotalScore !== 0 && player.totalScore) {
+          if (minTotalScore > player.totalScore) {
+            minTotalScore = player.totalScore;
+          }
+        }
         for (let competition of competitions) {
           if (minims[competition.competitionId] === 0) {
             minims[competition.competitionId] = competition.score;
@@ -253,25 +274,35 @@ class PlayersScoresMain extends Component {
 
       for (let player of factorization) {
         const competitions = player.competitions;
+        player.minTotalScore = minTotalScore;
+        player.totalScore === 0
+          ? (player.factorTotal = 0)
+          : (player.factorTotal =
+              (player.minTotalScore / player.totalScore) * 100);
+        // player.factorTotal = ;
+        console.log("player", player);
+
         for (let competition of competitions) {
           competition.min = minims[competition.competitionId];
-          competition.score =
-            (minims[competition.competitionId] / competition.score) * 100;
+          competition.score === 0
+            ? (competition.factor = 0)
+            : (competition.factor =
+                (minims[competition.competitionId] / competition.score) * 100);
         }
       }
-
-      this.setState({ factorization }, () => {
+      factorization = addRank(factorization, "factorTotal");
+      this.setState({ matrix: factorization }, () => {
         this.setState(state => {
           return { factor: !state.factor };
         });
       });
 
-      console.log("mims", minims);
-      console.log("factorization", factorization);
+      // console.log("mims", minims);
+      // console.log("factorization", factorization);
     } else {
       // this.makeMatrix(this.props);
       this.setState(state => {
-        return { factor: !state.factor };
+        return { factor: !state.factor, matrix: this.state.matrixUnifilltered };
       });
     }
   };
@@ -345,6 +376,7 @@ class PlayersScoresMain extends Component {
                         competitionClicked={this.state.competitionClicked}
                       />
                       <SummaryRow
+                        factor={factor}
                         competitionClicked={this.state.competitionClicked}
                         rows={this.state.matrixUnifilltered}
                         grid={grid}
@@ -367,10 +399,7 @@ class PlayersScoresMain extends Component {
               </Sticky>
               {this.state.summaryRow && this.state.summaryRow.competitions ? (
                 <div>
-                  <Pagination
-                    data={factor ? factorization : matrix}
-                    off={raport}
-                  >
+                  <Pagination data={matrix} off={raport}>
                     <PlayersScoresRows
                       factor={factor}
                       grid={grid}
@@ -426,7 +455,7 @@ const PlayersScoresRows = ({
 }) => {
   // console.log("psr wyzej", rows, turnament, grid, rowClick, playerClicked);
   return rows.map((player, i) => {
-    console.log("psr", player.competitions[0], factor);
+    // console.log("psr", player.competitions[0], factor);
     return (
       <PlayersScoresRow
         factor={factor}

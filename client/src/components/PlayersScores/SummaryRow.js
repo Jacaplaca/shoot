@@ -17,7 +17,7 @@ import Search from "../../inputs/Search";
 
 let value = "";
 
-const comps = (competitions, classes, sorting, competitionClicked) => {
+const comps = (competitions, classes, sorting, competitionClicked, factor) => {
   // console.log("comps", competitions);
   return competitions.map(comp => {
     const { competition, competitionId, score } = comp;
@@ -41,12 +41,14 @@ const comps = (competitions, classes, sorting, competitionClicked) => {
         <SortButtons click={e => sorting("competitions", e, competitionId)} />
         <span>
           {/* {Math.floor(score)} */}
-          <NumberFormat
-            value={formatNumber(score)}
-            displayType={"text"}
-            thousandSeparator={" "}
-            decimalSeparator={","}
-          />
+          {!factor && (
+            <NumberFormat
+              value={formatNumber(score)}
+              displayType={"text"}
+              thousandSeparator={" "}
+              decimalSeparator={","}
+            />
+          )}
         </span>
       </span>
       // <PlayersScoresForm
@@ -84,7 +86,8 @@ class SummaryRow extends Component {
       searching,
       grid,
       rows,
-      competitionClicked
+      competitionClicked,
+      factor
     } = this.props;
     const { totalScore, competitions, number } = row;
     // console.log("summaryRow", row);
@@ -152,16 +155,18 @@ class SummaryRow extends Component {
           </span>
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
-            <NumberFormat
-              value={formatNumber(totalScore)}
-              displayType={"text"}
-              thousandSeparator={" "}
-              decimalSeparator={","}
-            />
+            {!factor && (
+              <NumberFormat
+                value={formatNumber(totalScore)}
+                displayType={"text"}
+                thousandSeparator={" "}
+                decimalSeparator={","}
+              />
+            )}
           </span>
           {/* <span className={classNames(classes.rowBlock)}> */}
           {row.competitions.length !== 0
-            ? comps(competitions, classes, sorting, competitionClicked)
+            ? comps(competitions, classes, sorting, competitionClicked, factor)
             : null}
           {/* </span> */}
         </div>

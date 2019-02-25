@@ -21,7 +21,7 @@ class PlayersScoresForm extends React.Component {
 
   componentDidMount() {
     this.setState({ value: this.props.score });
-    console.log("PlayersScoresForm", this.props.score);
+    // console.log("PlayersScoresForm", this.props.score);
     const thisTurnament = this.props.turnaments.filter(
       turnam => turnam._id === this.props.turnament
     );
