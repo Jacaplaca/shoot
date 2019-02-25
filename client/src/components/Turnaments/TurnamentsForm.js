@@ -6,6 +6,8 @@ import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import { combineStyles } from "../../functions/functions";
 // import { loginUser } from "../actions/authentication";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import * as actions from "../../actions";
 import store from "../../store";
 import Key from "@material-ui/icons/VpnKey";
@@ -39,6 +41,7 @@ class TurnamentsFormik extends Component {
         judgeCounting,
         judgeRTS,
         tech,
+        factor,
         sponsor1,
         sponsor2,
         sponsor3
@@ -220,7 +223,7 @@ class TurnamentsFormik extends Component {
                 // placeholder="Organizator"
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={3}>
               <InputComponent
                 name="tech"
                 clear={() => setFieldValue("tech", "")}
@@ -232,6 +235,19 @@ class TurnamentsFormik extends Component {
                 error={touched.tech && Boolean(errors.tech)}
                 helperText={touched.tech && errors.tech ? errors.tech : " "}
                 onBlur={handleBlur}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={1}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="factor"
+                    checked={factor}
+                    onChange={handleChange}
+                    // value="zaplanowane"
+                  />
+                }
+                label="Faktor"
               />
             </Grid>
             <Grid
@@ -355,7 +371,8 @@ const TurnamentsForm = withFormik({
     collection,
     sponsor1,
     sponsor2,
-    sponsor3
+    sponsor3,
+    factor
   }) => {
     return {
       name: toEdit ? toEdit.name : name || "",
@@ -371,6 +388,7 @@ const TurnamentsForm = withFormik({
       judgeCounting: toEdit ? toEdit.judgeCounting : judgeCounting || "",
       judgeRTS: toEdit ? toEdit.judgeRTS : judgeRTS || "",
       tech: toEdit ? toEdit.tech : tech || "",
+      factor: toEdit ? toEdit.factor : factor || false,
       collection,
       toEdit
     };
@@ -389,7 +407,8 @@ const TurnamentsForm = withFormik({
       tech: values.tech,
       sponsor1: values.sponsor1,
       sponsor2: values.sponsor2,
-      sponsor3: values.sponsor3
+      sponsor3: values.sponsor3,
+      factor: values.factor
     };
     const { collection, toEdit } = values;
 
