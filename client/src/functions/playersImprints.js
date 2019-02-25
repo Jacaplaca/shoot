@@ -42,8 +42,10 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
   let teams = {};
   let arrayToPdf = [];
   console.log("generatepdf thePlayers", thePlayers);
+  console.log("generatepdf arrayToPdf", thePlayers);
 
   for (let player of thePlayers) {
+    // console.log("player", player);
     let team = player.team;
     if (team in teams) {
       teams[team].push({
@@ -84,6 +86,7 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
           // arrayToPdf.push("jestem bez druzyny");
         } else {
           arrayToPdf.push(object);
+          console.log("object", object);
         }
       }
     }
@@ -97,7 +100,7 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
           {
             playerName: player.name,
             playerSurname: player.surname,
-            startNo: player.startNo,
+            startNo: player.number ? player.number : "",
             playerId: player._id,
             team: player.team
           }
@@ -140,7 +143,7 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
     }
 
     async function imagesLine(array, xStart, yStart, height, space) {
-      console.log("images in ", array);
+      // console.log("images in ", array);
 
       let newXstart = xStart;
 

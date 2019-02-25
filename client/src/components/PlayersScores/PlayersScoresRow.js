@@ -31,6 +31,7 @@ const comps = (
   isAuthenticated,
   vertical,
   nextPos,
+  factor,
   // coordinates,
   x,
   y
@@ -39,7 +40,7 @@ const comps = (
   return competitions.map((comp, i) => {
     const { competition, competitionId, score } = comp;
     // console.log("competitionClicked", competitionClicked);
-    // console.log("class", classes.highlightBlock);
+    console.log("score", score);
     return (
       <span
         key={competitionId}
@@ -51,7 +52,7 @@ const comps = (
         )}
         style={{ textAlign: "center" }}
       >
-        {isAuthenticated ? (
+        {isAuthenticated && !factor ? (
           <PlayersScoresForm
             // focus={() => focus(x, y, i, vertical)}
             // coordinates={(x, y) => coordinates(x, y)}
@@ -113,7 +114,8 @@ class PlayersScoresRow extends Component {
       playerClicked,
       competitionClicked,
       auth: { isAuthenticated },
-      vertical
+      vertical,
+      factor
     } = this.props;
     const {
       playerName,
@@ -125,7 +127,7 @@ class PlayersScoresRow extends Component {
       totalScore,
       rodo
     } = row;
-    // console.log("player", this.props);
+    console.log("player", row.competitions[0]);
     return (
       <React.Fragment>
         {/* {console.log("playersscoresrow", row, finished)} */}
@@ -176,6 +178,7 @@ class PlayersScoresRow extends Component {
             isAuthenticated,
             vertical,
             this.nextPos,
+            factor,
             x,
             y
           )}

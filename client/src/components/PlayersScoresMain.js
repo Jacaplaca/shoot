@@ -6,12 +6,16 @@ import { StickyContainer, Sticky } from "react-sticky";
 // import Measure from "react-measure";
 import { connect } from "react-redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import * as actions from "../actions";
 import PlayersScoresRow from "../components/PlayersScores/PlayersScoresRow";
 import PlayersScoresHead from "../components/PlayersScores/PlayersScoresHead";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
 import { dynamicSort, addRank, searchingInArray } from "../functions/functions";
 import Pagination from "../skins/Pagination";
+var _ = require("lodash");
 // import PlayersScoresForm from "./PlayersScores/PlayersScoresForm";
 // import PlayersScoresList from "./PlayersScores/PlayersScoresList";
 
@@ -30,7 +34,9 @@ class PlayersScoresMain extends Component {
     rowWidth: -1,
     headerHeight: -1,
     playerClicked: null,
-    competitionClicked: null
+    competitionClicked: null,
+    isFactor: false,
+    factor: false
   };
 
   componentDidMount() {
@@ -77,6 +83,8 @@ class PlayersScoresMain extends Component {
       const theTurnament = turnaments.filter(x => x._id === turnamentId);
       const competitions = theTurnament[0].competitions;
       const finished = theTurnament[0].finished;
+      const factor = theTurnament[0].factor;
+      this.setState({ isFactor: factor });
 
       // console.log("every players", players);
       // console.log("turnamentId", turnamentId);
@@ -218,12 +226,63 @@ class PlayersScoresMain extends Component {
     }
   };
 
+  handleFactor = () => {
+    const factorizationSt = JSON.stringify(this.state.matrix);
+    const factorization = JSON.parse(factorizationSt);
+
+    if (!this.state.factor) {
+      let minims = {};
+      for (let competition of factorization[0].competitions) {
+        Object.assign(minims, {
+          [competition.competitionId]: 0
+        });
+      }
+      for (let player of factorization) {
+        const competitions = player.competitions;
+        for (let competition of competitions) {
+          if (minims[competition.competitionId] === 0) {
+            minims[competition.competitionId] = competition.score;
+          } else if (
+            competition.score !== 0 &&
+            minims[competition.competitionId] > competition.score
+          ) {
+            minims[competition.competitionId] = competition.score;
+          }
+        }
+      }
+
+      for (let player of factorization) {
+        const competitions = player.competitions;
+        for (let competition of competitions) {
+          competition.min = minims[competition.competitionId];
+          competition.score =
+            (minims[competition.competitionId] / competition.score) * 100;
+        }
+      }
+
+      this.setState({ factorization }, () => {
+        this.setState(state => {
+          return { factor: !state.factor };
+        });
+      });
+
+      console.log("mims", minims);
+      console.log("factorization", factorization);
+    } else {
+      // this.makeMatrix(this.props);
+      this.setState(state => {
+        return { factor: !state.factor };
+      });
+    }
+  };
+
   render() {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
     const {
       auth: { isAuthenticated },
       raport
     } = this.props;
+    const { isFactor, factor, matrix, factorization } = this.state;
     const zmienna = this.state.filter;
     const grid = `50px 250px 100px 80px repeat(${this.state.summaryRow &&
       this.state.summaryRow.competitions &&
@@ -265,9 +324,24 @@ class PlayersScoresMain extends Component {
                         // marginTop: distanceFromTop < 60 ? 50 : 0
                       }}
                     >
+                      <FormGroup row>
+                        {isAuthenticated && isFactor && (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={this.state.factor}
+                                onChange={this.handleFactor}
+                                // value="www"
+                                // color="primary"
+                              />
+                            }
+                            label="Faktor"
+                          />
+                        )}
+                      </FormGroup>
                       <PlayersScoresHead
                         grid={grid}
-                        row={this.state.matrix[0]}
+                        row={matrix[0]}
                         competitionClicked={this.state.competitionClicked}
                       />
                       <SummaryRow
@@ -293,10 +367,14 @@ class PlayersScoresMain extends Component {
               </Sticky>
               {this.state.summaryRow && this.state.summaryRow.competitions ? (
                 <div>
-                  <Pagination data={this.state.matrix} off={raport}>
+                  <Pagination
+                    data={factor ? factorization : matrix}
+                    off={raport}
+                  >
                     <PlayersScoresRows
+                      factor={factor}
                       grid={grid}
-                      rows={this.state.matrix}
+                      //rows={factor ? factorization : matrix}
                       turnament={
                         isAuthenticated && path !== "raport"
                           ? this.props.add.turnamentId
@@ -343,13 +421,15 @@ const PlayersScoresRows = ({
   grid,
   rowClick,
   playerClicked,
-  competitionClicked
+  competitionClicked,
+  factor
 }) => {
   // console.log("psr wyzej", rows, turnament, grid, rowClick, playerClicked);
   return rows.map((player, i) => {
-    // console.log("psr", rows);
+    console.log("psr", player.competitions[0], factor);
     return (
       <PlayersScoresRow
+        factor={factor}
         vertical={i}
         grid={grid}
         key={player.playerId}

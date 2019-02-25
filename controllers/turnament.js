@@ -56,7 +56,8 @@ module.exports = {
       tech,
       sponsor1,
       sponsor2,
-      sponsor3
+      sponsor3,
+      factor
     } = req.body;
     console.log(req.body);
     const updatedTurnament = {
@@ -72,7 +73,8 @@ module.exports = {
       tech,
       sponsor1,
       sponsor2,
-      sponsor3
+      sponsor3,
+      factor
     };
 
     try {
@@ -180,7 +182,8 @@ module.exports = {
       tech,
       sponsor1,
       sponsor2,
-      sponsor3
+      sponsor3,
+      factor
     } = req.body;
 
     const newTurnament = new Turnament({
@@ -196,7 +199,8 @@ module.exports = {
       tech,
       sponsor1,
       sponsor2,
-      sponsor3
+      sponsor3,
+      factor
     });
 
     try {
