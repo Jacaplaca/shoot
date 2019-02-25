@@ -32,15 +32,16 @@ const comps = (
   vertical,
   nextPos,
   factor,
+  factorRow,
   // coordinates,
   x,
   y
 ) => {
   // console.log("comps", turnament, finished);
   return competitions.map((comp, i) => {
-    const { competition, competitionId, score } = comp;
+    const { competition, competitionId, score, factor: factorRow } = comp;
     // console.log("competitionClicked", competitionClicked);
-    console.log("score", score);
+    // console.log("score", score);
     return (
       <span
         key={competitionId}
@@ -78,7 +79,14 @@ const comps = (
             // aaa={finished}
           />
         ) : (
-          <div>{score}</div>
+          <div style={{ marginTop: 8, marginBottom: 8 }}>
+            <NumberFormat
+              value={formatNumber(factor ? factorRow : score)}
+              displayType={"text"}
+              thousandSeparator={" "}
+              decimalSeparator={","}
+            />
+          </div>
         )}
       </span>
     );
@@ -99,7 +107,7 @@ class PlayersScoresRow extends Component {
   };
 
   nextPos = (x, y) => {
-    console.log("xy", x, y);
+    // console.log("xy", x, y);
     this.setState({ x, y });
   };
   // console.log("PlayersScoresRow", props);
@@ -125,9 +133,11 @@ class PlayersScoresRow extends Component {
       rank,
       number,
       totalScore,
+      factorTotal,
       rodo
     } = row;
-    console.log("player", row.competitions[0]);
+    // console.log("PlayersScoresRow() ROW", row);
+    // console.log("player", row.competitions[0]);
     return (
       <React.Fragment>
         {/* {console.log("playersscoresrow", row, finished)} */}
@@ -161,7 +171,7 @@ class PlayersScoresRow extends Component {
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             <NumberFormat
-              value={formatNumber(totalScore)}
+              value={formatNumber(factor ? factorTotal : totalScore)}
               displayType={"text"}
               thousandSeparator={" "}
               decimalSeparator={","}
