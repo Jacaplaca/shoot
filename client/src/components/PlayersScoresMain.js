@@ -115,6 +115,7 @@ class PlayersScoresMain extends Component {
           order: player.order,
           number: player.number ? player.number : "",
           rodo: player.rodo
+          // factorTotal: 0
         };
 
         for (let competition of competitions) {
@@ -188,6 +189,7 @@ class PlayersScoresMain extends Component {
   };
 
   sorting = (what, how, id) => {
+    const factor = this.state.factor;
     console.log("sortkin", what, how, id);
 
     let matrix = [];
@@ -195,12 +197,15 @@ class PlayersScoresMain extends Component {
     if (id) {
       const mapka = this.state.matrix.map(x =>
         Object.assign(x, {
-          sort: x[what].filter(y => y.competitionId === id)[0].score
+          sort: factor
+            ? x[what].filter(y => y.competitionId === id)[0].factor
+            : x[what].filter(y => y.competitionId === id)[0].score
         })
       );
       console.log("mapka", mapka);
       matrix = mapka.sort(dynamicSort("sort"));
     } else {
+      console.log("to czy nie");
       matrix = this.state.matrix.sort(dynamicSort(what));
     }
 
@@ -288,12 +293,17 @@ class PlayersScoresMain extends Component {
         console.log("player", player);
 
         for (let competition of competitions) {
-          competition.min = minims[competition.competitionId];
+          minims[competition.competitionId]
+            ? (competition.min = minims[competition.competitionId])
+            : (competition.min = 0);
+
           competition.score === 0
             ? (competition.factor = 0)
             : (competition.factor =
                 (minims[competition.competitionId] / competition.score) * 100);
-          totalScore = totalScore + competition.factor;
+          competition.factor
+            ? (totalScore = totalScore + competition.factor)
+            : (totalScore = totalScore + 0);
         }
         player.factorTotal = totalScore;
       }
