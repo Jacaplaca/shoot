@@ -116,7 +116,7 @@ class StatementForm extends Component {
     const finalProtocolsCookies =
       cookieTurnament && cookieTurnament.finalProtocols;
     const competitionsCookies = cookieTurnament && cookieTurnament.competitions;
-    console.log("cookieTurnament", cookieTurnament);
+    // console.log("cookieTurnament", cookieTurnament);
 
     if (
       finalProtocolsCookies &&
@@ -136,7 +136,7 @@ class StatementForm extends Component {
   };
 
   chooseProtocol = (name, value) => {
-    console.log("e", value);
+    // console.log("e", value);
     this.setState({ [name]: value });
   };
 
@@ -215,9 +215,9 @@ class StatementForm extends Component {
     //   // howManyProtocols: howManyProtocols.length
     // });
 
-    console.log("addCompetition(),", competitionId, protocolId);
+    // console.log("addCompetition(),", competitionId, protocolId);
     const finalProtocols = this.state.finalProtocols;
-    console.log("addCompetition(),", finalProtocols);
+    // console.log("addCompetition(),", finalProtocols);
 
     let protocolEdit = [...finalProtocols].filter(
       protocol => protocol._id === protocolId
@@ -232,10 +232,10 @@ class StatementForm extends Component {
       protocolsRemain.length < 1
         ? protocolEdit
         : [...protocolEdit, ...protocolsRemain].sort(dynamicSort("_id"));
-    console.log("competitionsInEditedProtocol", competitionsInEditedProtocol);
-    console.log("final competitionsInEditedProtocol", newFinalProtocols);
+    // console.log("competitionsInEditedProtocol", competitionsInEditedProtocol);
+    // console.log("final competitionsInEditedProtocol", newFinalProtocols);
 
-    console.log("addCompetition ed rem", protocolEdit, protocolsRemain);
+    // console.log("addCompetition ed rem", protocolEdit, protocolsRemain);
     this.setState({
       finalProtocols: newFinalProtocols
     });
@@ -299,7 +299,7 @@ class StatementForm extends Component {
   };
 
   removeCompetition = (protocolId, competitionId) => {
-    console.log("removeCompetition(),", protocolId, competitionId);
+    // console.log("removeCompetition(),", protocolId, competitionId);
     const { finalProtocols } = this.state;
 
     let protocolEdit = finalProtocols.filter(
@@ -317,10 +317,10 @@ class StatementForm extends Component {
       protocolsRemain.length < 1
         ? protocolEdit
         : [...protocolEdit, ...protocolsRemain].sort(dynamicSort("_id"));
-    console.log("competitionsInEditedProtocol", competitionsInEditedProtocol);
-    console.log("final competitionsInEditedProtocol", newFinalProtocols);
+    // console.log("competitionsInEditedProtocol", competitionsInEditedProtocol);
+    // console.log("final competitionsInEditedProtocol", newFinalProtocols);
 
-    console.log("removeCompetition ed rem", protocolEdit, protocolsRemain);
+    // console.log("removeCompetition ed rem", protocolEdit, protocolsRemain);
     this.setState({
       finalProtocols: newFinalProtocols
     });
@@ -360,7 +360,7 @@ class StatementForm extends Component {
     let protocols = [];
     const zbiorczy = finalProtocols[0];
     protocols.push(zbiorczy);
-    console.log("proto", protocols);
+    // console.log("proto", protocols);
     let index = 0;
     for (let competition of competitions) {
       index++;
@@ -378,8 +378,10 @@ class StatementForm extends Component {
   generateStatement = () => {
     const { finalProtocols, competitions } = this.state;
     const { players, turnament } = this.props;
+    console.log("generateStatement", finalProtocols, players);
     let iterator = -1;
     let protocols = [];
+    let minisProtocols = [];
     for (let protocol of finalProtocols) {
       if (protocol.competitions.length > 0) {
         iterator = iterator + 1;
@@ -390,10 +392,25 @@ class StatementForm extends Component {
           annotation: protocol.annotation
         });
         const competInProt = protocol.competitions;
-        let min = 0;
+
+        let minis = {};
+        console.log("competInProt", competInProt);
+        for (let competition of competInProt) {
+          minis = Object.assign(minis, { [competition]: 0 });
+        }
+        minisProtocols.push(minis);
+        // let min = 0;
         for (let player of players) {
           let wholeScore = 0;
           const competInPlayer = player.competitions;
+          // console.log("competInPlayer", competInPlayer);
+          for (let c of competInPlayer) {
+            if (minis[c.compId] === 0) {
+              minis[c.compId] = c.score;
+            } else if (minis[c.compId] > c.score) {
+              minis[c.compId] = c.score;
+            }
+          }
           for (let compet of competInProt) {
             // console.log("competInPlayer", competInPlayer);
             // console.log("compet", compet);
@@ -406,16 +423,17 @@ class StatementForm extends Component {
                 : 0;
             wholeScore = score + wholeScore;
           }
-          if (turnament.factor) {
-            if (min === 0) {
-              min = wholeScore;
-            } else {
-              if (wholeScore < min && wholeScore > 0) {
-                min = wholeScore;
-              }
-            }
-            console.log("min", min);
-          }
+
+          // if (turnament.factor) {
+          //   if (min === 0) {
+          //     min = wholeScore;
+          //   } else {
+          //     if (wholeScore < min && wholeScore > 0) {
+          //       min = wholeScore;
+          //     }
+          //   }
+          //   console.log("min", min);
+          // }
           protocols[iterator].players.push({
             name: player.rodo ? `${player.name} ${player.surname}` : "RODO",
             // number: `${player.rank[0] ? player.rank[0] : ""}`,
@@ -425,13 +443,45 @@ class StatementForm extends Component {
             score: wholeScore
           });
         }
-        for (let player of protocols[iterator].players) {
-          console.log("player, score, min", min, player.score);
-          if (player.score === 0) {
-            Object.assign(player, { score: 0 });
-          } else {
-            Object.assign(player, { score: (min / player.score) * 100 });
+
+        console.log("minis", minis);
+        let iter = -1;
+        for (let p of players) {
+          iter = iter + 1;
+          const compInPlayer = p.competitions;
+          let wholeFactor = 0;
+
+          for (let c of compInPlayer) {
+            for (let cIp of competInProt) {
+              if (cIp === c.compId) {
+                if (
+                  c.score &&
+                  c.score !== 0 &&
+                  minisProtocols[iterator][c.compId] !== 0 &&
+                  minisProtocols[iterator][c.compId] !== 0
+                ) {
+                  console.log(
+                    "liczenie",
+                    minisProtocols[iterator][c.compId],
+                    c.score
+                  );
+                  const factor =
+                    (minisProtocols[iterator][c.compId] / c.score) * 100;
+                  Object.assign(c, {
+                    factor
+                  });
+                  wholeFactor = wholeFactor + factor;
+                } else {
+                  Object.assign(c, { factor: 0 });
+                  // wholeFactor = wholeFactor + 0
+                }
+              }
+            }
           }
+          turnament.factor
+            ? (protocols[iterator].players[iter].score = wholeFactor)
+            : null;
+          // console.log("wholeFactor", wholeFactor);
         }
       }
     }
@@ -440,6 +490,7 @@ class StatementForm extends Component {
     protocols.map(x =>
       x.players.map((player, i) => Object.assign(player, { position: i + 1 }))
     );
+    console.log("players", players);
     console.log("protocols", protocols);
     // console.log(JSON.stringify(protocols));
     // console.log(JSON.stringify(this.props.turnament));

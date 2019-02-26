@@ -237,7 +237,6 @@ class PlayersScoresMain extends Component {
   handleFactor = () => {
     const factorizationSt = JSON.stringify(this.state.matrix);
     let factorization = JSON.parse(factorizationSt);
-    let minTotalScore = 0;
     if (!this.state.factor) {
       let minims = {};
       for (let competition of factorization[0].competitions) {
@@ -248,38 +247,44 @@ class PlayersScoresMain extends Component {
       for (let player of factorization) {
         const competitions = player.competitions;
         // !player.totalScore ? (player.totalScore = 0) : null;
-        if (
-          // !player.minTotalScore &&
-          // player.totalScore !== 0 &&
-          minTotalScore === 0 &&
-          player.totalScore
-        ) {
-          minTotalScore = player.totalScore;
-        } else if (minTotalScore !== 0 && player.totalScore) {
-          if (minTotalScore > player.totalScore) {
-            minTotalScore = player.totalScore;
-          }
-        }
+        // if (
+        //   // !player.minTotalScore &&
+        //   // player.totalScore !== 0 &&
+        //   minTotalScore === 0 &&
+        //   player.totalScore
+        // ) {
+        //   minTotalScore = player.totalScore;
+        // } else if (minTotalScore !== 0 && player.totalScore) {
+        //   if (minTotalScore > player.totalScore) {
+        //     minTotalScore = player.totalScore;
+        //   }
+        // }
+
         for (let competition of competitions) {
           if (minims[competition.competitionId] === 0) {
             minims[competition.competitionId] = competition.score;
+            // totalScore = totalScore + competition.score;
           } else if (
             competition.score !== 0 &&
             minims[competition.competitionId] > competition.score
           ) {
+            // totalScore = totalScore + competition.score;
             minims[competition.competitionId] = competition.score;
+            // totalScore = totalScore + competition.score;
           }
         }
+        // player.factorTotal = totalScore;
       }
 
       for (let player of factorization) {
+        let totalScore = 0;
         const competitions = player.competitions;
-        player.minTotalScore = minTotalScore;
-        player.totalScore === 0
-          ? (player.factorTotal = 0)
-          : (player.factorTotal =
-              (player.minTotalScore / player.totalScore) * 100);
-        // player.factorTotal = ;
+        // player.minTotalScore = minTotalScore;
+        // player.totalScore === 0
+        //   ? (player.factorTotal = 0)
+        //   : (player.factorTotal =
+        //       (player.minTotalScore / player.totalScore) * 100);
+
         console.log("player", player);
 
         for (let competition of competitions) {
@@ -288,7 +293,9 @@ class PlayersScoresMain extends Component {
             ? (competition.factor = 0)
             : (competition.factor =
                 (minims[competition.competitionId] / competition.score) * 100);
+          totalScore = totalScore + competition.factor;
         }
+        player.factorTotal = totalScore;
       }
       factorization = addRank(factorization, "factorTotal");
       this.setState({ matrix: factorization }, () => {

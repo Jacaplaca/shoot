@@ -41,7 +41,7 @@ const comps = (
   return competitions.map((comp, i) => {
     const { competition, competitionId, score, factor: factorRow } = comp;
     // console.log("competitionClicked", competitionClicked);
-    // console.log("score", score);
+    // console.log("factorRow", factorRow, "score", score, "factor", factor);
     return (
       <span
         key={competitionId}
