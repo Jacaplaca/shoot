@@ -51,6 +51,7 @@ module.exports = {
       // rank,
       number,
       club,
+      klasa,
       rodo
     } = req.body;
 
@@ -64,6 +65,7 @@ module.exports = {
       team,
       // rank: rank.split(", "),
       number,
+      klasa,
       club,
       rodo
     });
@@ -110,6 +112,7 @@ module.exports = {
       scope,
       team,
       club,
+      klasa,
       // rank,
       number,
       rodo
@@ -124,6 +127,7 @@ module.exports = {
       scope,
       team,
       club,
+      klasa,
       // rank,
       number,
       rodo
@@ -180,6 +184,7 @@ module.exports = {
           team,
           nr,
           club,
+          klasa,
           rodo
         } = item;
 
@@ -193,6 +198,7 @@ module.exports = {
           team: team || "",
           number: nr || "",
           club: club || "",
+          klasa: klasa || "",
           rodo: rodo && rodo.toLowerCase() === "tak" ? true : false
         });
 

@@ -238,13 +238,17 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         doc.text("(podpis zawodnika)", 110, 73 + a(), "center");
         doc.text("(podpis sedziego)", 180, 73 + a(), "center");
         //  dotted(110, 60 + a(), 200, 60 + a(), 0.5);
-
+        doc.setFontSize(8);
+        doc.text("1", 6.5, 58 + a());
+        doc.text("2", 6.5, 67 + a());
+        doc.text("3", 6.5, 76 + a());
+        doc.setFontSize(7);
+        doc.text("MISS", 7, 61.5 + a(), "center");
+        doc.text("PROCED.", 7, 70.5 + a(), "center");
+        doc.text("DQ", 7, 79.5 + a(), "center");
         doc.setFontSize(10);
-        doc.text("1", 6, 60 + a());
         doc.text("6", 41, 60 + a());
-        doc.text("2", 6, 69 + a());
         doc.text("7", 41, 69 + a());
-        doc.text("3", 6, 78 + a());
         doc.text("8", 41, 78 + a());
         doc.text("4", 6, 87 + a());
         doc.text("9", 41, 87 + a());

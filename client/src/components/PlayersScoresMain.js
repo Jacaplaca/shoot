@@ -36,7 +36,8 @@ class PlayersScoresMain extends Component {
     playerClicked: null,
     competitionClicked: null,
     isFactor: false,
-    factor: false
+    factor: false,
+    isClass: false
   };
 
   componentDidMount() {
@@ -81,6 +82,10 @@ class PlayersScoresMain extends Component {
       // console.log("makematrix because you have all");
       const thePlayers = players.filter(x => x.turnament === turnamentId);
       const theTurnament = turnaments.filter(x => x._id === turnamentId);
+      const isClass = thePlayers.filter(x => x.klasa);
+      isClass.length > 0
+        ? this.setState({ isClass: true })
+        : this.setState({ isClass: false });
       const competitions = theTurnament[0].competitions;
       const finished = theTurnament[0].finished;
       const factor = theTurnament[0].factor;
@@ -114,7 +119,8 @@ class PlayersScoresMain extends Component {
           competitions: [],
           order: player.order,
           number: player.number ? player.number : "",
-          rodo: player.rodo
+          rodo: player.rodo,
+          klasa: player.klasa
           // factorTotal: 0
         };
 
@@ -190,7 +196,7 @@ class PlayersScoresMain extends Component {
 
   sorting = (what, how, id) => {
     const factor = this.state.factor;
-    console.log("sortkin", what, how, id);
+    // console.log("sortkin", what, how, id);
 
     let matrix = [];
 
@@ -202,20 +208,19 @@ class PlayersScoresMain extends Component {
             : x[what].filter(y => y.competitionId === id)[0].score
         })
       );
-      console.log("mapka", mapka);
+      // console.log("mapka", mapka);
       matrix = mapka.sort(dynamicSort("sort"));
     } else {
-      console.log("to czy nie");
       matrix = this.state.matrix.sort(dynamicSort(what));
     }
 
     // const sortingDown = this.state.matrix.sort(dynamicSort(what)).reverse();
 
     if (how === "up") {
-      console.log("up");
+      // console.log("up");
       // this.setState({ matrix });
     } else if (how === "down") {
-      console.log("down");
+      // console.log("down");
       // return sortingDown;
       matrix = matrix.reverse();
     }
@@ -290,7 +295,7 @@ class PlayersScoresMain extends Component {
         //   : (player.factorTotal =
         //       (player.minTotalScore / player.totalScore) * 100);
 
-        console.log("player", player);
+        // console.log("player", player);
 
         for (let competition of competitions) {
           minims[competition.competitionId]
@@ -330,9 +335,10 @@ class PlayersScoresMain extends Component {
       auth: { isAuthenticated },
       raport
     } = this.props;
-    const { isFactor, factor, matrix, factorization } = this.state;
+    const { isFactor, factor, matrix, factorization, isClass } = this.state;
     const zmienna = this.state.filter;
-    const grid = `50px 250px 100px 80px repeat(${this.state.summaryRow &&
+    const grid = `50px 250px 100px ${isClass ? "150px" : ""} 80px repeat(${this
+      .state.summaryRow &&
       this.state.summaryRow.competitions &&
       this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
     // console.log("sum", this.state.summaryRow);
@@ -388,11 +394,13 @@ class PlayersScoresMain extends Component {
                         )}
                       </FormGroup>
                       <PlayersScoresHead
+                        isClass={isClass}
                         grid={grid}
                         row={matrix[0]}
                         competitionClicked={this.state.competitionClicked}
                       />
                       <SummaryRow
+                        isClass={isClass}
                         factor={factor}
                         competitionClicked={this.state.competitionClicked}
                         rows={this.state.matrixUnifilltered}
@@ -418,6 +426,7 @@ class PlayersScoresMain extends Component {
                 <div>
                   <Pagination data={matrix} off={raport}>
                     <PlayersScoresRows
+                      isClass={isClass}
                       factor={factor}
                       grid={grid}
                       //rows={factor ? factorization : matrix}
@@ -468,13 +477,15 @@ const PlayersScoresRows = ({
   rowClick,
   playerClicked,
   competitionClicked,
-  factor
+  factor,
+  isClass
 }) => {
   // console.log("psr wyzej", rows, turnament, grid, rowClick, playerClicked);
   return rows.map((player, i) => {
     // console.log("psr", player.competitions[0], factor);
     return (
       <PlayersScoresRow
+        isClass={isClass}
         factor={factor}
         vertical={i}
         grid={grid}

@@ -123,7 +123,8 @@ class PlayersScoresRow extends Component {
       competitionClicked,
       auth: { isAuthenticated },
       vertical,
-      factor
+      factor,
+      isClass
     } = this.props;
     const {
       playerName,
@@ -134,9 +135,10 @@ class PlayersScoresRow extends Component {
       number,
       totalScore,
       factorTotal,
-      rodo
+      rodo,
+      klasa
     } = row;
-    // console.log("PlayersScoresRow() ROW", row);
+    console.log("PlayersScoresRow() ROW", row);
     // console.log("player", row.competitions[0]);
     return (
       <React.Fragment>
@@ -168,6 +170,11 @@ class PlayersScoresRow extends Component {
           <span className={classNames(classes.rowBlock, classes.rowBlock)}>
             {number}
           </span>
+          {isClass && (
+            <span className={classNames(classes.rowBlock, classes.rowBlock)}>
+              {klasa}
+            </span>
+          )}
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             <NumberFormat

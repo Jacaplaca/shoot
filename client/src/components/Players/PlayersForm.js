@@ -90,6 +90,7 @@ class PlayersFormik extends Component {
         // rank,
         club,
         rodo,
+        klasa,
         number
       },
       auth: { user },
@@ -256,15 +257,15 @@ class PlayersFormik extends Component {
 
             <Grid item xs={12} sm={6} md={4}>
               <InputComponent
-                name="club"
-                clear={() => setFieldValue("club", "")}
-                label="Klub"
+                name="klasa"
+                clear={() => setFieldValue("klasa", "")}
+                label="Klasa"
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
-                value={club}
-                error={touched.club && Boolean(errors.club)}
-                helperText={touched.club && errors.club ? errors.club : " "}
+                value={klasa}
+                error={touched.klasa && Boolean(errors.klasa)}
+                helperText={touched.klasa && errors.klasa ? errors.klasa : " "}
                 onBlur={handleBlur}
               />
               {/* <span
@@ -319,6 +320,7 @@ const PlayersForm = withFormik({
     // rank,
     number,
     club,
+    klasa,
     toEdit,
     collection,
     turnamentId,
@@ -339,6 +341,7 @@ const PlayersForm = withFormik({
       number: toEdit ? toEdit.number : number || "",
       // rank: toEdit ? toEdit.rank : rank || "",
       club: toEdit ? toEdit.club : club || "",
+      klasa: toEdit ? toEdit.klasa : klasa || "",
       rodo: toEdit ? toEdit.rodo : rodo || false,
       toEdit,
       collection,
@@ -359,6 +362,7 @@ const PlayersForm = withFormik({
       number: values.number,
       // rank: values.rank,
       club: values.club,
+      klasa: values.klasa,
       rodo: values.rodo
     };
 

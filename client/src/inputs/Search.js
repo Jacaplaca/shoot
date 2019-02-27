@@ -7,7 +7,8 @@ import Clear from "@material-ui/icons/Clear";
 
 class Search extends Component {
   state = {
-    value: ""
+    value: "",
+    showOkSearch: false
   };
 
   escapeRegexCharacters = str => {
@@ -49,6 +50,9 @@ class Search extends Component {
   handleChange = e => {
     console.log("dodaje do stata", e.target.value);
     this.setState({ value: e.target.value });
+    if (e.target.value !== "") {
+      this.setState({ showOkSearch: true });
+    }
   };
 
   handleKeyPress = e => {
@@ -70,7 +74,7 @@ class Search extends Component {
   };
 
   emptyValue = () => {
-    this.setState({ value: "" }, () => {
+    this.setState({ value: "", showOkSearch: false }, () => {
       this.props.handleSearch(
         this.getSuggestions(
           this.props.data,
@@ -97,7 +101,8 @@ class Search extends Component {
             gridTemplateColumns: "1fr 70px",
             // marginTop: 13,
             // marginBottom: 13,
-            justifyItems: "center"
+            justifyItems: "center",
+            alignItems: "center"
             // marginLeft: 5,
             // marginRight: 5
           }}
@@ -132,15 +137,17 @@ class Search extends Component {
             // onBlur={() => {
             //   !button && this.save(this.state.value, id, player, turnament);
             // }}
-            margin="small"
+            margin="dense"
             variant="outlined"
             // className={classes.textField}
             // onKeyPress={this.handleKeyPress}
             inputProps={{ style: { padding: 9 } }}
           />
-          <ButtonMy onClick={this.handleSearching} size="normal">
-            OK
-          </ButtonMy>
+          {this.state.showOkSearch && (
+            <ButtonMy onClick={this.handleSearching} size="small">
+              OK
+            </ButtonMy>
+          )}
         </span>
       </span>
     );

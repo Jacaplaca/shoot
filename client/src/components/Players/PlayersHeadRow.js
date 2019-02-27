@@ -30,6 +30,12 @@ const TurnamentsRow = ({ classes, grid, sorting }) => {
         click={e => sorting("rank", e)}
         sort
       />
+      <HeadRowField
+        title="Klasa"
+        classes={classes}
+        click={e => sorting("klasa", e)}
+        sort
+      />
 
       <HeadRowField
         title="Kaliber"
@@ -53,12 +59,6 @@ const TurnamentsRow = ({ classes, grid, sorting }) => {
         title="Drużyna"
         classes={classes}
         click={e => sorting("team", e)}
-        sort
-      />
-      <HeadRowField
-        title="Klub"
-        classes={classes}
-        click={e => sorting("club", e)}
         sort
       />
       <span className={classNames(classes.headBlock)} />

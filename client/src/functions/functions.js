@@ -264,29 +264,30 @@ export const dynamicSort = property => {
           );
         });
 
-      const bPL = b[property]
-        .toLowerCase()
-        .replace(/[ąęśćółńżź]/g, function(s) {
-          return (
-            (s == "ą"
-              ? "a"
-              : s == "ę"
-              ? "e"
-              : s == "ś"
-              ? "s"
-              : s == "ć"
-              ? "c"
-              : s == "ó"
-              ? "o"
-              : s == "ł"
-              ? "l"
-              : s == "ń"
-              ? "n"
-              : s == "ż"
-              ? "z"
-              : "zż") + "ż"
-          );
-        });
+      const bPL =
+        typeof b[property] !== "string"
+          ? ""
+          : b[property].toLowerCase().replace(/[ąęśćółńżź]/g, function(s) {
+              return (
+                (s == "ą"
+                  ? "a"
+                  : s == "ę"
+                  ? "e"
+                  : s == "ś"
+                  ? "s"
+                  : s == "ć"
+                  ? "c"
+                  : s == "ó"
+                  ? "o"
+                  : s == "ł"
+                  ? "l"
+                  : s == "ń"
+                  ? "n"
+                  : s == "ż"
+                  ? "z"
+                  : "zż") + "ż"
+              );
+            });
 
       const result = aPL < bPL ? -1 : aPL > bPL ? 1 : 0;
       // console.log(result);

@@ -52,6 +52,7 @@ class ButtonMy extends Component {
       id
       //ref
     } = this.props;
+    console.log("ButtonMy()", size);
 
     return (
       <Button

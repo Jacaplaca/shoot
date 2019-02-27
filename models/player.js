@@ -47,6 +47,7 @@ const PlayerSchema = new Schema({
   order: {
     type: Number
   },
+  klasa: { type: String },
   rodo: { type: Boolean }
 });
 

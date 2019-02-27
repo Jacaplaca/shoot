@@ -87,7 +87,8 @@ class SummaryRow extends Component {
       grid,
       rows,
       competitionClicked,
-      factor
+      factor,
+      isClass
     } = this.props;
     const { totalScore, competitions, number } = row;
     // console.log("summaryRow", row);
@@ -153,6 +154,12 @@ class SummaryRow extends Component {
           <span className={classNames(classes.rowBlock)}>
             <SortButtons click={e => sorting("number", e)} />
           </span>
+          {isClass && (
+            <span className={classNames(classes.rowBlock)}>
+              <SortButtons click={e => sorting("klasa", e)} />
+            </span>
+          )}
+
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             {!factor && (

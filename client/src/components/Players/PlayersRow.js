@@ -9,7 +9,18 @@ import * as actions from "../../actions";
 import RowHOC from "../RowHOC";
 
 const PlayersRow = ({ row, classes, grid }) => {
-  const { name, surname, caliber, gun, scope, team, club, rodo, number } = row;
+  const {
+    name,
+    surname,
+    caliber,
+    gun,
+    scope,
+    team,
+    club,
+    rodo,
+    number,
+    klasa
+  } = row;
 
   return (
     <React.Fragment>
@@ -19,11 +30,11 @@ const PlayersRow = ({ row, classes, grid }) => {
       </span>
       <span className={classNames(classes.rowBlock)}>{number}</span>
       {/* {rank.map(x => `${x} `)} */}
+      <span className={classNames(classes.rowBlock)}>{klasa}</span>
       <span className={classNames(classes.rowBlock)}>{caliber}</span>
       <span className={classNames(classes.rowBlock)}>{gun}</span>
       <span className={classNames(classes.rowBlock)}>{scope}</span>
       <span className={classNames(classes.rowBlock)}>{team}</span>
-      <span className={classNames(classes.rowBlock)}>{club}</span>
     </React.Fragment>
   );
 };

@@ -50,6 +50,7 @@ const comps = (competitions, classes, sorting, competitionClicked) => {
 };
 
 const PlayersScoresHead = ({
+  isClass,
   classes,
   grid,
   sorting,
@@ -76,6 +77,15 @@ const PlayersScoresHead = ({
         // click={e => sorting("email", e)}
         // sort
       />
+      {isClass && (
+        <HeadRowField
+          title="Klasa"
+          classes={classes}
+          // click={e => sorting("email", e)}
+          // sort
+        />
+      )}
+
       <HeadRowField
         title="Suma"
         classes={classes}
