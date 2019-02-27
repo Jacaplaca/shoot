@@ -138,7 +138,7 @@ class PlayersScoresRow extends Component {
       rodo,
       klasa
     } = row;
-    console.log("PlayersScoresRow() ROW", row);
+    // console.log("PlayersScoresRow() ROW", row);
     // console.log("player", row.competitions[0]);
     return (
       <React.Fragment>

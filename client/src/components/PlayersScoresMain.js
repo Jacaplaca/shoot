@@ -10,6 +10,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import * as actions from "../actions";
+import InputSimpleSelect from "../inputs/InputSimpleSelect";
 import PlayersScoresRow from "../components/PlayersScores/PlayersScoresRow";
 import PlayersScoresHead from "../components/PlayersScores/PlayersScoresHead";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
@@ -37,7 +38,10 @@ class PlayersScoresMain extends Component {
     competitionClicked: null,
     isFactor: false,
     factor: false,
-    isClass: false
+    isClass: false,
+    klasy: [],
+    klasaId: null,
+    filtered: false
   };
 
   componentDidMount() {
@@ -82,10 +86,32 @@ class PlayersScoresMain extends Component {
       // console.log("makematrix because you have all");
       const thePlayers = players.filter(x => x.turnament === turnamentId);
       const theTurnament = turnaments.filter(x => x._id === turnamentId);
+
       const isClass = thePlayers.filter(x => x.klasa);
-      isClass.length > 0
-        ? this.setState({ isClass: true })
-        : this.setState({ isClass: false });
+
+      let klasy = [];
+      let klasyObj = [];
+
+      if (isClass.length > 0) {
+        for (let player of isClass) {
+          // i++;
+          // klasy.push({ _id: i, name: player.klasa });
+          klasy.push(player.klasa);
+        }
+        klasy = klasy.filter((v, i, a) => a.indexOf(v) === i);
+        let i = -1;
+        for (let klasa of klasy) {
+          i++;
+          klasyObj.push({ _id: i, name: klasa });
+        }
+        this.setState({
+          klasy: klasyObj,
+          isClass: true
+        });
+      } else {
+        this.setState({ isClass: false });
+      }
+
       const competitions = theTurnament[0].competitions;
       const finished = theTurnament[0].finished;
       const factor = theTurnament[0].factor;
@@ -95,16 +121,16 @@ class PlayersScoresMain extends Component {
       // console.log("turnamentId", turnamentId);
       // console.log("makeImprints", thePlayers, competitions);
       let playerCompetitions = [];
-      let summaryRow = { totalScore: 0, competitions: [] };
+      // let summaryRow = { totalScore: 0, competitions: [] };
       let orderIsUnd = "no";
-      for (let competition of competitions) {
-        const playerCompetition = {
-          competition: competition.name,
-          competitionId: competition._id,
-          score: 0
-        };
-        summaryRow.competitions.push(playerCompetition);
-      }
+      // for (let competition of competitions) {
+      //   const playerCompetition = {
+      //     competition: competition.name,
+      //     competitionId: competition._id,
+      //     score: 0
+      //   };
+      //   summaryRow.competitions.push(playerCompetition);
+      // }
 
       for (let player of thePlayers) {
         playerCompetitions = player.competitions;
@@ -140,18 +166,20 @@ class PlayersScoresMain extends Component {
           };
           playerRow.competitions.push(playerCompetition);
           // summaryRow.competitions
-          summaryRow.competitions.map(x =>
-            x.competitionId === playerCompetition.competitionId
-              ? (x.score = x.score + playerCompetition.score)
-              : (x.score = x.score)
-          );
-          // console.log(summaryRow.competitions);
+          // summaryRow.competitions.map(x =>
+          //   x.competitionId === playerCompetition.competitionId
+          //     ? (x.score = x.score + playerCompetition.score)
+          //     : (x.score = x.score)
+          // );
           Object.assign(playerRow, { totalScore: playerTotalScore });
-          summaryRow.totalScore = summaryRow.totalScore + playerTotalScore;
+          // summaryRow.totalScore = summaryRow.totalScore + playerTotalScore;
         }
         matrix.push(playerRow);
       }
-      // console.log("matrix", matrix);
+
+      const summaryRow = this.summaryRow(matrix);
+      matrix.summaryRow = summaryRow;
+      console.log("matrix in makeMatrix", typeof matrix, matrix);
       // console.log("SummaryRow", summaryRow);
       // console.log("orderIsUnd", orderIsUnd);
       let matrixSorted = [];
@@ -167,7 +195,8 @@ class PlayersScoresMain extends Component {
           },
           () => {
             this.sorting("playerSurname", "up");
-            !isAuthenticated && factor && this.handleFactor();
+            !isAuthenticated && factor && this.handleFactor(true);
+            // this.handleFactor();
           }
         );
       } else {
@@ -185,11 +214,12 @@ class PlayersScoresMain extends Component {
           finished
         },
         () => {
-          !isAuthenticated && factor && this.handleFactor();
+          !isAuthenticated && factor && this.handleFactor(true);
         }
       );
       if (this.state.filter !== "") {
         this.searching(matrixSorted, this.state.filterNames, this.state.filter);
+        // this.handleFactor();
       }
     }
   };
@@ -244,31 +274,20 @@ class PlayersScoresMain extends Component {
     }
   };
 
-  handleFactor = () => {
+  handleFactor = status => {
     const factorizationSt = JSON.stringify(this.state.matrix);
+    let matrix = JSON.parse(factorizationSt);
     let factorization = JSON.parse(factorizationSt);
-    if (!this.state.factor) {
+    if (status) {
       let minims = {};
       for (let competition of factorization[0].competitions) {
         Object.assign(minims, {
           [competition.competitionId]: 0
         });
       }
+      // console.log("handleFactor()", minims);
       for (let player of factorization) {
         const competitions = player.competitions;
-        // !player.totalScore ? (player.totalScore = 0) : null;
-        // if (
-        //   // !player.minTotalScore &&
-        //   // player.totalScore !== 0 &&
-        //   minTotalScore === 0 &&
-        //   player.totalScore
-        // ) {
-        //   minTotalScore = player.totalScore;
-        // } else if (minTotalScore !== 0 && player.totalScore) {
-        //   if (minTotalScore > player.totalScore) {
-        //     minTotalScore = player.totalScore;
-        //   }
-        // }
 
         for (let competition of competitions) {
           if (minims[competition.competitionId] === 0) {
@@ -278,24 +297,14 @@ class PlayersScoresMain extends Component {
             competition.score !== 0 &&
             minims[competition.competitionId] > competition.score
           ) {
-            // totalScore = totalScore + competition.score;
             minims[competition.competitionId] = competition.score;
-            // totalScore = totalScore + competition.score;
           }
         }
-        // player.factorTotal = totalScore;
       }
 
       for (let player of factorization) {
         let totalScore = 0;
         const competitions = player.competitions;
-        // player.minTotalScore = minTotalScore;
-        // player.totalScore === 0
-        //   ? (player.factorTotal = 0)
-        //   : (player.factorTotal =
-        //       (player.minTotalScore / player.totalScore) * 100);
-
-        // console.log("player", player);
 
         for (let competition of competitions) {
           minims[competition.competitionId]
@@ -314,19 +323,126 @@ class PlayersScoresMain extends Component {
       }
       factorization = addRank(factorization, "factorTotal");
       this.setState({ matrix: factorization }, () => {
-        this.setState(state => {
-          return { factor: !state.factor };
-        });
+        this.setState({ factor: true });
+      });
+    } else {
+      // this.setState({ factor: false }, () =>
+      //   // this.setState({ matrix: this.displayClass() })
+      //   this.displayClass()
+      // );
+
+      matrix = addRank(matrix, "totalScore");
+      this.setState({ matrix }, () => {
+        this.setState({ factor: false });
       });
 
-      // console.log("mims", minims);
-      // console.log("factorization", factorization);
-    } else {
-      // this.makeMatrix(this.props);
-      this.setState(state => {
-        return { factor: !state.factor, matrix: this.state.matrixUnifilltered };
-      });
+      // this.setState(state => {
+      //   return (
+      //     { factor: !state.factor },
+      //     () => this.setState({ matrix: this.displayClass() })
+      //   );
+      // });
     }
+  };
+
+  changeClass = event => {
+    const { matrixUnifilltered, factor } = this.state;
+    const klasaId = event.target.value;
+    this.setState({ klasaId }, () =>
+      // this.setState({ matrix: this.displayClass() })
+      this.displayClass()
+    );
+  };
+
+  displayClass = () => {
+    const { klasy, matrixUnifilltered, factor, klasaId } = this.state;
+    // let matrix = [];
+    let matrixFiltered = matrixUnifilltered;
+    let summaryRow = {};
+    if (klasaId === "all" || klasaId === null) {
+      // console.log("displayClass()");
+      // addRank(matrixUnifilltered, "totalScore");
+      matrixFiltered = matrixUnifilltered;
+      summaryRow = this.summaryRow(matrixUnifilltered);
+      // console.log("matrixUnifilltered w all", matrixUnifilltered);
+      // this.setState({
+      //   matrix: matrixUnifilltered,
+      //   filtered: false,
+      //   summaryRow
+      // });
+    } else {
+      // let competition = {competition: "", competitionId: "", score: 0}
+
+      const matrixSt = JSON.stringify(matrixUnifilltered);
+      const matrixParse = JSON.parse(matrixSt);
+      const klasa = klasy.filter(klasa => klasaId === klasa._id);
+      matrixFiltered = matrixParse.filter(x => x.klasa === klasa[0].name);
+
+      // matrix = this.summaryRow(matrixFiltered);
+      summaryRow = this.summaryRow(matrixFiltered);
+      // matrixFiltered.summaryRow = summaryRow;
+      // console.log("summaryRow", matrixFiltered);
+
+      // : addRank(matrixFiltered, "totalScore");
+
+      // factor || this.setState({ matrix: matrixFiltered, summaryRow });
+
+      // factor ? this.handleFactor(true) : addRank(matrix, "totalScore");
+      // factor ? addRank(matrix, "totalFactor") : addRank(matrix, "totalScore");
+    }
+    factor
+      ? this.setState(
+          { matrix: matrixFiltered, filtered: true, summaryRow },
+          () => {
+            this.handleFactor(true);
+          }
+        )
+      : this.setState(
+          { matrix: matrixFiltered, filtered: true, summaryRow },
+          () => {
+            this.handleFactor(false);
+          }
+        );
+  };
+
+  summaryRow = matrix => {
+    let competitions = [];
+    let totalScore = 0;
+    let summaryRow = { totalScore, competitions };
+    // console.log("matrixFiltered", matrixFiltered);
+    let i = -1;
+    for (let player of matrix) {
+      i++;
+      const playerCompetitions = JSON.parse(
+        JSON.stringify(player.competitions)
+      );
+      if (i === 0) {
+        competitions = playerCompetitions;
+      } else {
+        // console.log("else");
+        let iter = -1;
+        for (let competition of playerCompetitions) {
+          iter++;
+          // console.log("comp iter", competitions[iter].score);
+          competitions[iter].score =
+            competitions[iter].score + competition.score;
+        }
+      }
+      // const competInPlayer
+    }
+    for (let compet of competitions) {
+      // console.log("totalScore", totalScore);
+      totalScore = totalScore + compet.score;
+    }
+    // for (var score in competitions) {
+    //   if (competitions.hasOwnProperty(score)) {
+    //     console.log(score + " -> " + competitions[score]);
+    //   }
+    // }
+    summaryRow.competitions = competitions;
+    summaryRow.totalScore = totalScore;
+    // console.log("sum", summaryRow);
+    return summaryRow;
   };
 
   render() {
@@ -335,7 +451,16 @@ class PlayersScoresMain extends Component {
       auth: { isAuthenticated },
       raport
     } = this.props;
-    const { isFactor, factor, matrix, factorization, isClass } = this.state;
+    const {
+      isFactor,
+      factor,
+      matrix,
+      factorization,
+      isClass,
+      klasy,
+      filtered,
+      matrixUnifilltered
+    } = this.state;
     const zmienna = this.state.filter;
     const grid = `50px 250px 100px ${isClass ? "150px" : ""} 80px repeat(${this
       .state.summaryRow &&
@@ -384,12 +509,22 @@ class PlayersScoresMain extends Component {
                             control={
                               <Checkbox
                                 checked={this.state.factor}
-                                onChange={this.handleFactor}
+                                onChange={() =>
+                                  this.handleFactor(!this.state.factor)
+                                }
                                 // value="www"
                                 // color="primary"
                               />
                             }
                             label="Faktor"
+                          />
+                        )}
+                        {isClass && (
+                          <InputSimpleSelect
+                            label="Klasy"
+                            name="klasy"
+                            options={klasy}
+                            action={this.changeClass}
                           />
                         )}
                       </FormGroup>
@@ -403,18 +538,15 @@ class PlayersScoresMain extends Component {
                         isClass={isClass}
                         factor={factor}
                         competitionClicked={this.state.competitionClicked}
-                        rows={this.state.matrixUnifilltered}
+                        rows={matrix}
+                        // rows={filtered ? matrix : matrixUnifilltered}
                         grid={grid}
                         row={this.state.summaryRow}
                         sorting={(toSort, how, id) =>
                           this.sorting(toSort, how, id)
                         }
                         searching={(toSearch, value) =>
-                          this.searching(
-                            this.state.matrixUnifilltered,
-                            toSearch,
-                            value
-                          )
+                          this.searching(matrixUnifilltered, toSearch, value)
                         }
                         searched={result => this.setState({ matrix: result })}
                       />
