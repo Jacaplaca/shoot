@@ -21,6 +21,15 @@ export default (turnament, protocols) => {
   ttt2 = ttt2.split("],");
   doc.setFont("PTSans", "normal");
 
+  function isClass() {
+    const withClass = protocols[0].players.filter(x => x.klasa);
+    if (withClass.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function formatNumber(n) {
     if (Number(n) === n && n % 1 !== 0) {
       return n.toFixed(2);
@@ -201,7 +210,14 @@ export default (turnament, protocols) => {
       // doc.setFontType("bold");
       doc.text("Miejsce", 13, fromTop);
       doc.text("Nr startowy", 32, fromTop);
-      doc.text("Imię i nazwisko", 70, fromTop);
+      doc.text(
+        `Imię i nazwisko${isClass() ? " (klasa)" : ""}`,
+        83,
+        fromTop,
+        null,
+        null,
+        "center"
+      );
       doc.text("Broń", 120, fromTop);
       doc.text("Luneta", 150, fromTop);
       doc.text("Punkty", 179, fromTop);
@@ -223,14 +239,14 @@ export default (turnament, protocols) => {
 
       doc.text(player.position.toString(), 20, position, null, null, "center");
       doc.setFont("PTSans", "normal");
-      doc.setFontSize(11);
+      doc.setFontSize(10.5);
       doc.text(player.number.toString(), 43, position, null, null, "center");
-      doc.text(player.name, 86, position, null, null, "center");
+      doc.text(player.name, 83, position, null, null, "center");
       doc.text(player.gun, 125, position, null, null, "center");
       doc.text(player.scope, 157, position, null, null, "center");
       //doc.line(15, position + 2, 190, position + 2);
 
-      if (index % 2 === 0) {
+      if (index % 2 === 0 && index < playersLength - 1) {
         doc.setDrawColor(0);
         doc.setFillColor(246, 246, 246);
         doc.rect(15, position + 2, 176, playerHeight, "F");
@@ -238,7 +254,7 @@ export default (turnament, protocols) => {
 
       //doc.rect(100, 30, 10, 10, 'F');
 
-      doc.setFontSize(13);
+      doc.setFontSize(12);
       doc.setFont("PTSans", "bold");
       doc.text(formatNumber(player.score), 186, position, null, null, "center");
       lastPosition = position;

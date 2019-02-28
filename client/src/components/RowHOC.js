@@ -87,8 +87,8 @@ const RowRowHOC = WrappedComponent => {
                 >
                   <Edit
                     style={styles.button}
-                    iconStyle={styles.icon}
-                    tooltipStyles={styles.tooltip}
+                    iconstyle={styles.icon}
+                    tooltipstyles={styles.tooltip}
                   />
                 </IconButton>
               ) : null}
@@ -111,8 +111,8 @@ const RowRowHOC = WrappedComponent => {
                   >
                     <MenuIcon
                       style={styles.button}
-                      iconStyle={styles.icon}
-                      tooltipStyles={styles.tooltip}
+                      iconstyle={styles.icon}
+                      tooltipstyles={styles.tooltip}
                     />
                   </IconButton>
                 ) : (
@@ -167,8 +167,8 @@ const RowRowHOC = WrappedComponent => {
                 >
                   <DeleteIcon
                     style={styles.button}
-                    iconStyle={styles.icon}
-                    tooltipStyles={styles.tooltip}
+                    iconstyle={styles.icon}
+                    tooltipstyles={styles.tooltip}
                   />
                 </IconButton>
               )}

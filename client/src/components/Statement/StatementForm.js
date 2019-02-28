@@ -48,6 +48,7 @@ class StatementForm extends Component {
     howManyProtocols: 0,
     competitions: [],
     factor: false
+    // isClass: false
   };
 
   componentDidMount() {
@@ -400,6 +401,19 @@ class StatementForm extends Component {
         }
         minisProtocols.push(minis);
         // let min = 0;
+        // const isThereAclass = players.filter(x => x.klasa);
+        // console.log("isThereAclass", isThereAclass);
+        // let isClass;
+        // if (isThereAclass.length > 0) {
+        //   isClass = true;
+        // } else {
+        //   isClass = false;
+        // }
+        //
+        // this.setState({ isClass }, () => {
+        //
+        // });
+
         for (let player of players) {
           let wholeScore = 0;
           const competInPlayer = player.competitions;
@@ -435,7 +449,12 @@ class StatementForm extends Component {
           //   console.log("min", min);
           // }
           protocols[iterator].players.push({
-            name: player.rodo ? `${player.name} ${player.surname}` : "RODO",
+            name: player.rodo
+              ? `${player.name} ${player.surname}${
+                  player.klasa ? ` (${player.klasa})` : ""
+                }`
+              : `RODO${player.klasa ? ` (${player.klasa})` : ""}`,
+            klasa: player.klasa ? `${player.klasa}` : "",
             // number: `${player.rank[0] ? player.rank[0] : ""}`,
             number: player.number ? `${player.number}` : "",
             gun: `${player.gun ? player.gun : ""}`,
@@ -492,8 +511,10 @@ class StatementForm extends Component {
     );
     console.log("players", players);
     console.log("protocols", protocols);
-    // console.log(JSON.stringify(protocols));
-    // console.log(JSON.stringify(this.props.turnament));
+    console.log("turnament", turnament);
+    console.log(JSON.stringify(protocols));
+    console.log(JSON.stringify(turnament));
+    // console.log("isClass", this.state.isClass);
     generatePDF(turnament, protocols);
   };
 
