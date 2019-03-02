@@ -27,7 +27,7 @@ const TurnamentsRow = ({ classes, grid, sorting }) => {
       <HeadRowField
         title="Nr startowy"
         classes={classes}
-        click={e => sorting("rank", e)}
+        click={e => sorting("number", e)}
         sort
       />
       <HeadRowField

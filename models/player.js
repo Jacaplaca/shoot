@@ -9,7 +9,7 @@ const Turnament = mongoose.model("turnaments");
 const Schema = mongoose.Schema;
 const PlayerSchema = new Schema({
   turnament: { type: Schema.Types.ObjectId, ref: Turnament },
-  number: { type: String },
+  number: { type: Number },
   name: {
     type: String
     // required: true

@@ -5,6 +5,7 @@ import axios from "axios";
 // gm = require('gm');
 // import gm from "gm";
 // import FileBase64 from 'react-file-base64';
+import { combineStyles, dynamicSort } from "../functions/functions";
 import store from "../store";
 import * as actions from "../actions";
 import { PTSans } from "../skins/PTSans";
@@ -38,6 +39,7 @@ export const makeImprints = async turnamentId => {
 };
 
 const generatePDFs = async (theTurnament, thePlayers, competitions) => {
+  thePlayers.sort(dynamicSort("number"));
   let playerCompetition = [];
   let teams = {};
   let arrayToPdf = [];
