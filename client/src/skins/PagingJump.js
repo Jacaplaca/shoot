@@ -33,6 +33,12 @@ const PagingJump = ({ anchorEl, onClose, action }) => {
       <MenuItem onClick={() => action(100)}>
         Na jednej stronie 100 rzędów
       </MenuItem>
+      <MenuItem onClick={() => action(150)}>
+        Na jednej stronie 150 rzędów
+      </MenuItem>
+      <MenuItem onClick={() => action(200)}>
+        Na jednej stronie 200 rzędów
+      </MenuItem>
     </Menu>
   );
 };
