@@ -13,14 +13,15 @@ class Pagination extends Component {
 
   state = {
     matrixPaginated: [],
-    page_size: 25,
+    page_size: 100,
     page_number: 1,
     howManyPages: 0
   };
 
   componentDidMount() {
+    console.log("pagination mount");
     const { off } = this.props;
-    this.setState({ page_size: off ? 9999 : 25 });
+    this.setState({ page_size: off ? 9999 : 100 });
     this.setState({ page_number: 1 }, () => {
       this.paginate(
         this.props.data,
@@ -31,15 +32,16 @@ class Pagination extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log("pagination", nextProps);
+    // console.log("pagination", nextProps, this.state.page_number);
     if (
       nextProps &&
       nextProps.data &&
       nextProps.data[0] &&
-      nextProps.data.length !== this.props &&
+      nextProps.data.length !== this.props.data.length &&
       this.props.data &&
       this.props.data[0]
     ) {
+      // console.log("tu?", nextProps.data);
       this.setState({ page_number: 1 }, () => {
         this.paginate(
           nextProps.data,
@@ -112,6 +114,7 @@ class Pagination extends Component {
             page={this.state.page_number}
             pages={this.state.howManyPages}
             size={this.changePageSize}
+            pageSize={this.state.page_size}
           />
         )}
       </React.Fragment>

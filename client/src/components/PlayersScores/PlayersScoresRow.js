@@ -211,14 +211,14 @@ const styles = theme => ({
   },
   rank: {
     background: "white",
-    fontWeight: "800",
+    fontWeight: "700",
     alignSelf: "center",
     justifySelf: "center",
     textAlign: "center",
     borderRadius: 30,
     width: 30,
     maxHeight: 30,
-    fontSize: 20,
+    fontSize: 17,
     color: theme.palette.menu
   },
   gold: {

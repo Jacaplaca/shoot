@@ -69,6 +69,7 @@ class SummaryRow extends Component {
   state = { search: "" };
 
   handleSearching = () => {
+    console.log("handleSearching()");
     this.props.searching(["playerName", "playerSurname"], this.state.searching);
   };
 

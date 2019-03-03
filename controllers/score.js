@@ -38,7 +38,7 @@ module.exports = {
     //   playerId,
     //   turnament
     // });
-    const score = { compId, score: value };
+    const score = { compId, score: value || 0 };
     const options = { upsert: true, new: true, setDefaultsOnInsert: true };
     console.log(req.body);
 
@@ -50,7 +50,7 @@ module.exports = {
         try {
           const compCreated = await Player.update(
             { _id: playerId },
-            { $push: { competitions: score } }
+            { $push: { competitions: score || 0 } }
           );
 
           res.status(200).json({
@@ -76,7 +76,7 @@ module.exports = {
             { _id: playerId, "competitions.compId": compId },
             {
               $set: {
-                "competitions.$.score": score.score
+                "competitions.$.score": score.score || 0
               }
             }
           ).exec();

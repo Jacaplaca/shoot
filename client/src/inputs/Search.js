@@ -8,7 +8,8 @@ import Clear from "@material-ui/icons/Clear";
 class Search extends Component {
   state = {
     value: "",
-    showOkSearch: false
+    showOkSearch: false,
+    dataUnfiltered: []
   };
 
   escapeRegexCharacters = str => {
@@ -16,6 +17,7 @@ class Search extends Component {
   };
 
   componentDidMount() {
+    this.setState({ dataUnfiltered: this.props.data });
     document.addEventListener("keydown", this.escFunction, false);
   }
   componentWillUnmount() {
@@ -69,15 +71,20 @@ class Search extends Component {
   handleSearching = () => {
     console.log("handleSearching", this.state.value, this.props.data);
     this.props.handleSearch(
-      this.getSuggestions(this.props.data, this.state.value, this.props.columns)
+      this.getSuggestions(
+        this.state.dataUnfiltered,
+        this.state.value,
+        this.props.columns
+      )
     );
   };
 
   emptyValue = () => {
+    console.log("emptyValue", this.props.data);
     this.setState({ value: "", showOkSearch: false }, () => {
       this.props.handleSearch(
         this.getSuggestions(
-          this.props.data,
+          this.state.dataUnfiltered,
           this.state.value,
           this.props.columns
         )

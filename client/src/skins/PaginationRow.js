@@ -150,6 +150,7 @@ class PaginationRow extends Component {
           anchorEl={this.state.anchorEl}
           open={Boolean(this.state.anchorEl)}
           onClose={this.handleClose}
+          pageSize={this.props.pageSize}
           action={e => {
             size(e), this.handleClose();
           }}

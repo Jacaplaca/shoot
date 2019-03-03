@@ -163,7 +163,9 @@ class PlayersScoresForm extends React.Component {
               marginRight: 5
             }}
             // value={this.state.value}
-            value={this.state.value.replace(".", ",")}
+            value={
+              this.state.value === "0" ? "" : this.state.value.replace(".", ",")
+            }
             InputLabelProps={{ shrink: true, className: classes.label }}
             id="outlined-name"
             // label={label.slice(0, 12)}
