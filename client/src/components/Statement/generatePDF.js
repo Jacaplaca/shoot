@@ -14,12 +14,32 @@ export default (turnament, protocols) => {
   doc.addFont("PTSans.ttf", "PTSans", "normal");
   doc.addFont("PTSansBold.ttf", "PTSans", "bold");
   doc.addFont("PTSansItalic.ttf", "PTSans", "italic");
+  const pageOrientation = "landscape";
+  // const pageProperties = doc.addPage('a4', 'portrait');
 
   var ttt2 = JSON.stringify(doc.getFontList());
   ttt2 = ttt2.replace("{", "");
   ttt2 = ttt2.replace("}", "");
   ttt2 = ttt2.split("],");
   doc.setFont("PTSans", "normal");
+
+  const midPage = orientation => {
+    //   let point = 0
+    if (orientation === "portrait") {
+      return 105;
+    } else if (orientation === "landscape") {
+      return 148.5;
+    }
+  };
+
+  const bottomPage = orientation => {
+    //   let point = 0
+    if (orientation === "portrait") {
+      return 286;
+    } else if (orientation === "landscape") {
+      return 199;
+    }
+  };
 
   function isClass() {
     const withClass = protocols[0].players.filter(x => x.klasa);
@@ -62,20 +82,20 @@ export default (turnament, protocols) => {
     doc.text("(podpis sędziego)", 150, pos + 56, null, null, "center");
   };
   // formatNumber(12)
-  function templateHead() {
+  function templateHead(orientation) {
     doc.setFontSize(14);
     // doc.setFontType("bold");
     doc.setFont("PTSans", "normal");
-    doc.text(turnament.name, 105, 20, null, null, "center");
+    doc.text(turnament.name, midPage(orientation), 20, null, null, "center");
   }
 
-  function templateFooter() {
+  function templateFooter(orientation) {
     doc.setFont("PTSans", "normal");
     doc.setFontSize(8.5);
     doc.text(
       "Wydruk z aplikacji SHOOTER STATS - portalstrzelecki.pl wszelkie prawa zastrzeżone",
-      105,
-      286,
+      midPage(orientation),
+      bottomPage(orientation),
       null,
       null,
       "center"
@@ -83,8 +103,8 @@ export default (turnament, protocols) => {
     doc.setFontSize(14);
     doc.text(
       `${turnament.facility} ${turnament.date}`,
-      105,
-      280,
+      midPage(orientation),
+      bottomPage(orientation) - 6,
       null,
       null,
       "center"
@@ -120,11 +140,11 @@ export default (turnament, protocols) => {
       "center"
     );
 
-    doc.addPage("l", "a4");
+    doc.addPage("a4", "portrait");
   }
 
-  function judges() {
-    templateHead();
+  function judges(orientation) {
+    templateHead(orientation);
 
     doc.setFontSize(20);
     doc.text("OBSADA SĘDZIOWSKA", 10, 40);
@@ -157,12 +177,12 @@ export default (turnament, protocols) => {
     doc.text("OBSERWATOR PZSS:", 10, 100);
     doc.text(`${turnament.lzss ? turnament.lzss : ""} `, 90, 100);
 
-    templateFooter();
-    doc.addPage("l", "a4");
+    templateFooter(orientation);
+    doc.addPage("a4", pageOrientation);
   }
 
   titlePage();
-  judges();
+  judges("portrait");
 
   for (var i = 0; i < protocols.length; i++) {
     let description = protocols[i].description;
@@ -171,7 +191,7 @@ export default (turnament, protocols) => {
     const podescription = () => {
       const descriptionLength = description.length;
       const lineHeight = 7;
-      const charInLine = 150;
+      const charInLine = 220;
       const headLineHeight = 50;
       const descriptionHeight =
         Math.ceil(descriptionLength / charInLine) * lineHeight + headLineHeight;
@@ -180,31 +200,32 @@ export default (turnament, protocols) => {
 
     const playersLength = protocols[i].players.length;
     const playerHeight = 7.3;
-    const bottomPosition = 260;
+    // const bottomPosition = 260;
+    const bottomPosition = 177;
 
-    const template = () => {
-      templateHead();
+    const template = orientation => {
+      templateHead(orientation);
       // doc.setFontType("light");
       doc.setFontSize(18);
       doc.setFont("PTSans", "bold");
-      doc.text(protocols[i].protocol, 105, 35, null, null, "center");
+      doc.text(protocols[i].protocol, 147.5, 35, null, null, "center");
       doc.setFont("PTSans", "normal");
       // doc.setFontType("normal");
-      templateFooter();
+      templateFooter(orientation);
     };
 
-    template();
+    template("landscape");
 
     doc.setFontSize(11);
-    const splitDescription = doc.splitTextToSize(description, 180);
+    const splitDescription = doc.splitTextToSize(description, 265);
     doc.text(15, 50, splitDescription);
 
-    const splitAnnotation = doc.splitTextToSize(annotation, 180);
+    const splitAnnotation = doc.splitTextToSize(annotation, 265);
 
     const scoresHeadline = fromTop => {
       doc.setDrawColor(0);
       doc.setFillColor(246, 246, 246);
-      doc.rect(10, fromTop - 5, 185, playerHeight, "F");
+      doc.rect(10, fromTop - 5, 270, playerHeight, "F");
       doc.setFontSize(12);
       doc.setFont("PTSans", "bold");
       // doc.setFontType("bold");
@@ -212,15 +233,15 @@ export default (turnament, protocols) => {
       doc.text("Nr startowy", 32, fromTop);
       doc.text(
         `Imię i nazwisko${isClass() ? " (klasa)" : ""}`,
-        83,
+        120,
         fromTop,
         null,
         null,
         "center"
       );
-      doc.text("Broń", 120, fromTop);
-      doc.text("Luneta", 150, fromTop);
-      doc.text("Punkty", 179, fromTop);
+      doc.text("Broń", 195, fromTop);
+      doc.text("Luneta", 225, fromTop);
+      doc.text("Punkty", 260, fromTop);
     };
 
     scoresHeadline(podescription());
@@ -241,28 +262,26 @@ export default (turnament, protocols) => {
       doc.setFont("PTSans", "normal");
       doc.setFontSize(10.5);
       doc.text(player.number.toString(), 43, position, null, null, "center");
-      doc.text(player.name, 83, position, null, null, "center");
-      doc.text(player.gun, 125, position, null, null, "center");
-      doc.text(player.scope, 157, position, null, null, "center");
+      doc.text(player.name, 120, position, null, null, "center");
+      doc.text(player.gun, 200, position, null, null, "center");
+      doc.text(player.scope, 232, position, null, null, "center");
       //doc.line(15, position + 2, 190, position + 2);
 
-      if (index % 2 === 0 && index < playersLength - 1) {
-        doc.setDrawColor(0);
-        doc.setFillColor(246, 246, 246);
-        doc.rect(15, position + 2, 176, playerHeight, "F");
-      }
+      doc.setDrawColor(0);
+      doc.setFillColor(220, 220, 220);
+      doc.rect(10, position + 2, 270, 0.1, "F");
 
       //doc.rect(100, 30, 10, 10, 'F');
 
       doc.setFontSize(12);
       doc.setFont("PTSans", "bold");
-      doc.text(formatNumber(player.score), 186, position, null, null, "center");
+      doc.text(formatNumber(player.score), 266, position, null, null, "center");
       lastPosition = position;
 
       // doc.text(indexReset.toString(), 1, position)
       if (position > bottomPosition) {
-        doc.addPage("l", "a4");
-        template();
+        doc.addPage("a4", pageOrientation);
+        template("landscape");
 
         indexReset = 0;
         descriptionHeight = 49;
@@ -278,8 +297,9 @@ export default (turnament, protocols) => {
         };
 
         if (position > bottomPosition - splitAnnotation.length * 10 - 50) {
-          doc.addPage("l", "a4");
-
+          doc.addPage("a4", pageOrientation);
+          templateHead("landscape");
+          templateFooter("landscape");
           position = 10;
           annotation();
           signature(10 + position + splitAnnotation.length * 10);
@@ -291,7 +311,7 @@ export default (turnament, protocols) => {
       }
     }
     if (i < protocols.length - 1) {
-      doc.addPage("l", "a4");
+      doc.addPage("a4", pageOrientation);
       //   doc.text(i.toString(), 20, 20);
       //   doc.text(protocols.length.toString(), 20, 50);
     }
