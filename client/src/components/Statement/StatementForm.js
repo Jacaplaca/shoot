@@ -397,7 +397,7 @@ class StatementForm extends Component {
         let minis = {};
         console.log("competInProt", competInProt);
         for (let competition of competInProt) {
-          minis = Object.assign(minis, { [competition]: 0 });
+          minis = Object.assign(minis, { [competition]: [] });
         }
         minisProtocols.push(minis);
         // let min = 0;
@@ -418,13 +418,16 @@ class StatementForm extends Component {
           let wholeScore = 0;
           const competInPlayer = player.competitions;
           // console.log("competInPlayer", competInPlayer);
+
           for (let c of competInPlayer) {
-            if (minis[c.compId] === 0) {
-              minis[c.compId] = c.score;
-            } else if (minis[c.compId] > c.score) {
-              minis[c.compId] = c.score;
-            }
+            // if (minis[c.compId] === 0) {
+            //   minis[c.compId] = c.score;
+            // } else if (minis[c.compId] > c.score) {
+            //   minis[c.compId] = c.score;
+            // }
+            minis[c.compId].push(c.score);
           }
+
           for (let compet of competInProt) {
             // console.log("competInPlayer", competInPlayer);
             // console.log("compet", compet);
@@ -448,6 +451,7 @@ class StatementForm extends Component {
           //   }
           //   console.log("min", min);
           // }
+          // console.log("statement score count", player.name, wholeScore);
           protocols[iterator].players.push({
             name: player.rodo
               ? `${player.name} ${player.surname}${
@@ -462,8 +466,16 @@ class StatementForm extends Component {
             score: wholeScore
           });
         }
+        // console.log("minis", JSON.stringify(minis));
 
-        console.log("minis", minis);
+        for (var min in minis) {
+          if (minis.hasOwnProperty(min)) {
+            const minValue = Math.min.apply(null, minis[min].filter(Boolean));
+            Object.assign(minis, { [min]: minValue });
+          }
+        }
+        // console.log("loop in minis", minis);
+
         let iter = -1;
         for (let p of players) {
           iter = iter + 1;
@@ -479,17 +491,20 @@ class StatementForm extends Component {
                   minisProtocols[iterator][c.compId] !== 0 &&
                   minisProtocols[iterator][c.compId] !== 0
                 ) {
-                  console.log(
-                    "liczenie",
-                    minisProtocols[iterator][c.compId],
-                    c.score
-                  );
+                  // console.log(
+                  //   "liczenie",
+                  //   p.name,
+                  //   minisProtocols[iterator][c.compId],
+                  //   c.score
+                  // );
                   const factor =
                     (minisProtocols[iterator][c.compId] / c.score) * 100;
                   Object.assign(c, {
                     factor
                   });
+                  console.log("befor sum wholeFactor", p.name, wholeFactor);
                   wholeFactor = wholeFactor + factor;
+                  console.log(p.name, factor, wholeFactor);
                 } else {
                   Object.assign(c, { factor: 0 });
                   // wholeFactor = wholeFactor + 0
