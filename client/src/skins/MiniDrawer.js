@@ -126,7 +126,7 @@ class MiniDrawer extends React.Component {
     return (
       <BrowserRouter>
         <div className={classes.root}>
-          <Route exact path="/register" component={Register} />
+          {/* <Route exact path="/register" component={Register} /> */}
           <Route exact path="/login" component={Login} />
           <Route
             exact

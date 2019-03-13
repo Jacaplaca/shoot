@@ -11,6 +11,7 @@ const cors = require("cors");
 const turnament = require("./routes/turnament");
 const turnamentOpen = require("./routes/turnamentOpen");
 const users = require("./routes/user");
+// const register = require("./routes/user");
 const promoter = require("./routes/promoter");
 const player = require("./routes/player");
 const playerOpen = require("./routes/playerOpen");
@@ -51,7 +52,9 @@ app.use(fileUpload());
 const protectedRoute = passport.authenticate("jwt", { session: false });
 
 app.use("/public", express.static(path.join(__dirname, "public")));
+// app.use("/api/users", protectedRoute, users);
 app.use("/api/users", users);
+// app.use("/api/users/register", protectedRoute, users);
 // app.use("/api/contests", contest);
 app.use("/api/judges", protectedRoute, judge);
 app.use("/api/competitions", competition);

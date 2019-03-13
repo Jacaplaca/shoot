@@ -79,7 +79,7 @@ class TopNavBar extends React.Component {
       case false:
         return [
           // <ButtonNavBar key="3b" link="/kontakt" text="Kontakt" />,
-          <ButtonNavBar key="1a" link="/register" text="Rejestracja" />,
+          // <ButtonNavBar key="1a" link="/register" text="Rejestracja" />,
           <ButtonNavBar key="2b" link="/login" text="Logowanie" />
           // <LanguageSwitch key={3} />
         ];

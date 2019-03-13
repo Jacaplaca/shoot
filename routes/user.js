@@ -29,56 +29,60 @@ const User = mongoose.model("users");
 //     .catch(e => console.log(e));
 // });
 
-router.post("/register", function(req, res) {
-  console.log("register", req.body);
-  // const { errors, isValid } = validateRegisterInput(req.body);
-  console.log(req.body);
+router.post(
+  "/register",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    console.log("register", req.body);
+    // const { errors, isValid } = validateRegisterInput(req.body);
+    console.log(req.body);
 
-  // if (!isValid) {
-  //   return res.status(400).json(errors);
-  // }
-  User.findOne({
-    email: req.body.email
-  }).then(user => {
-    if (user) {
-      console.log("jest juz");
-      return res.status(400).json({
-        email: "Email already exists"
-      });
-    } else {
-      // const avatar = gravatar.url(req.body.email, {
-      //   s: "200",
-      //   r: "pg",
-      //   d: "mm"
-      // });
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        adres: req.body.adres,
-        logo: req.body.logo,
-        www: req.body.www,
-        rola: req.body.rola
-        // contests: req.body.contest
-      });
+    // if (!isValid) {
+    //   return res.status(400).json(errors);
+    // }
+    User.findOne({
+      email: req.body.email
+    }).then(user => {
+      if (user) {
+        console.log("jest juz");
+        return res.status(400).json({
+          email: "Email already exists"
+        });
+      } else {
+        // const avatar = gravatar.url(req.body.email, {
+        //   s: "200",
+        //   r: "pg",
+        //   d: "mm"
+        // });
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          adres: req.body.adres,
+          logo: req.body.logo,
+          www: req.body.www,
+          rola: req.body.rola
+          // contests: req.body.contest
+        });
 
-      bcrypt.genSalt(10, (err, salt) => {
-        if (err) console.error("There was an error", err);
-        else {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) console.error("There was an error", err);
-            else {
-              newUser.password = hash;
-              newUser.save().then(user => {
-                res.json(user);
-              });
-            }
-          });
-        }
-      });
-    }
-  });
-});
+        bcrypt.genSalt(10, (err, salt) => {
+          if (err) console.error("There was an error", err);
+          else {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) console.error("There was an error", err);
+              else {
+                newUser.password = hash;
+                newUser.save().then(user => {
+                  res.json(user);
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+);
 
 router.post("/login", (req, res) => {
   console.log("/login", req.body);
