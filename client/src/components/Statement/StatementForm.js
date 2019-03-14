@@ -395,11 +395,12 @@ class StatementForm extends Component {
         const competInProt = protocol.competitions;
 
         let minis = {};
-        console.log("competInProt", competInProt);
+        // console.log("minis competInProt", competInProt);
         for (let competition of competInProt) {
           minis = Object.assign(minis, { [competition]: [] });
         }
         minisProtocols.push(minis);
+        // console.log("minis", minis);
         // let min = 0;
         // const isThereAclass = players.filter(x => x.klasa);
         // console.log("isThereAclass", isThereAclass);
@@ -420,12 +421,15 @@ class StatementForm extends Component {
           // console.log("competInPlayer", competInPlayer);
 
           for (let c of competInPlayer) {
+            // console.log("minis c competInPlayer", minis);
             // if (minis[c.compId] === 0) {
             //   minis[c.compId] = c.score;
             // } else if (minis[c.compId] > c.score) {
             //   minis[c.compId] = c.score;
             // }
-            minis[c.compId].push(c.score);
+            if (competInProt.includes(c.compId)) {
+              minis[c.compId].push(c.score);
+            }
           }
 
           for (let compet of competInProt) {
@@ -502,9 +506,9 @@ class StatementForm extends Component {
                   Object.assign(c, {
                     factor
                   });
-                  console.log("befor sum wholeFactor", p.name, wholeFactor);
+                  // console.log("befor sum wholeFactor", p.name, wholeFactor);
                   wholeFactor = wholeFactor + factor;
-                  console.log(p.name, factor, wholeFactor);
+                  // console.log(p.name, factor, wholeFactor);
                 } else {
                   Object.assign(c, { factor: 0 });
                   // wholeFactor = wholeFactor + 0
