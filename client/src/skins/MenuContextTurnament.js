@@ -100,10 +100,10 @@ const MenuContextTurnament = ({
         <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
       </Link>
       <MenuItem
-        onClick={onClose}
-        // onClick={() => deleteAction(turnamentId)}
+      // onClick={onClose}
+      // onClick={() => deleteAction(turnamentId)}
       >
-        <ExportExcel id={turnamentId} />
+        <ExportExcel id={turnamentId} onClose={onClose} />
         {/* <DeleteIcon /> Usuń zawody */}
       </MenuItem>
 

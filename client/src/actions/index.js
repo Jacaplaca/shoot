@@ -11,3 +11,4 @@ export * from "./addToDB";
 export * from "./fetchFromDB";
 export * from "./showedTurnament";
 export * from "./language";
+export * from "./nulling";

@@ -2,7 +2,6 @@ import React from "react";
 import ReactExport from "react-data-export";
 import { connect } from "react-redux";
 import ButtonMy from "../../skins/ButtonMy";
-import { data } from "./dummy";
 import * as actions from "../../actions";
 import CreateXLS from "./CreateXLS";
 
@@ -88,8 +87,11 @@ class ExportExcel extends React.Component {
   render() {
     // console.log("data", data);
     return (
-      <div>
-        <span onClick={this.createDataSet}>Export do Excela</span>
+      <div
+        style={{ height: "100%", width: "100%" }}
+        onClick={this.createDataSet}
+      >
+        <span>Export do Excela</span>
         {this.props.players.length > 0 &&
           this.state.competitions.length > 0 &&
           this.state.turnament.name && (
@@ -97,6 +99,7 @@ class ExportExcel extends React.Component {
               data={this.props.players}
               compets={this.state.competitions}
               name={this.state.turnament.name}
+              onClose={this.props.onClose}
             />
           )}
       </div>
