@@ -16,6 +16,8 @@ import PlayersScoresHead from "../components/PlayersScores/PlayersScoresHead";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
 import { dynamicSort, addRank, searchingInArray } from "../functions/functions";
 import Pagination from "../skins/Pagination";
+import ButtonMy from "../skins/ButtonMy";
+import ExportExcel from "./PlayersScores/ExportExcel";
 // var _ = require("lodash");
 // import PlayersScoresForm from "./PlayersScores/PlayersScoresForm";
 // import PlayersScoresList from "./PlayersScores/PlayersScoresList";
@@ -179,7 +181,8 @@ class PlayersScoresMain extends Component {
 
       const summaryRow = this.summaryRow(matrix);
       matrix.summaryRow = summaryRow;
-      console.log("matrix in makeMatrix", typeof matrix, matrix);
+      // console.log("matrix in makeMatrix", typeof matrix, matrix);
+
       // console.log("SummaryRow", summaryRow);
       // console.log("orderIsUnd", orderIsUnd);
       let matrixSorted = [];
@@ -445,6 +448,8 @@ class PlayersScoresMain extends Component {
     return summaryRow;
   };
 
+  // handleExportExcel = () => {}
+
   render() {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
     const {
@@ -527,6 +532,8 @@ class PlayersScoresMain extends Component {
                             action={this.changeClass}
                           />
                         )}
+
+                        <ExportExcel data={matrixUnifilltered} />
                       </FormGroup>
                       <PlayersScoresHead
                         isClass={isClass}

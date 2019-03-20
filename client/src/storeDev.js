@@ -6,7 +6,6 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import reduxThunk from "redux-thunk";
 
 import reducers from "./reducers";
-import { env } from "./env";
 
 // const inititalState = {};
 
@@ -19,16 +18,14 @@ import { env } from "./env";
 // export default store;
 
 // const store = createStore(reducers, {}, composeWithDevTools((applyMiddleware(reduxThunk)));
+const storeDev = createStore(
+  reducers,
+  composeWithDevTools(
+    applyMiddleware(reduxThunk)
+    // other store enhancers if any
+  )
+);
 
-const store =
-  env === "dev"
-    ? createStore(
-        reducers,
-        composeWithDevTools(
-          applyMiddleware(reduxThunk)
-          // other store enhancers if any
-        )
-      )
-    : createStore(reducers, applyMiddleware(reduxThunk));
+// const store = createStore(reducers, applyMiddleware(reduxThunk));
 
-export default store;
+export default storeDev;

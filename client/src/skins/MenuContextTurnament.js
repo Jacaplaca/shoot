@@ -9,6 +9,7 @@ import { makeImprints } from "../functions/playersImprints";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import * as actions from "../actions";
+import ExportExcel from "../components/PlayersScores/ExportExcel";
 // const fs = require("fs");
 
 const handleImprints = (onClose, turnamentId) => {
@@ -98,6 +99,13 @@ const MenuContextTurnament = ({
       >
         <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
       </Link>
+      <MenuItem
+        onClick={onClose}
+        // onClick={() => deleteAction(turnamentId)}
+      >
+        <ExportExcel id={turnamentId} />
+        {/* <DeleteIcon /> Usuń zawody */}
+      </MenuItem>
 
       {user.rola === "admin" && (
         <MenuItem onClick={() => deleteAction(turnamentId)}>

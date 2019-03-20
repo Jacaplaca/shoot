@@ -5,6 +5,7 @@ import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authentication";
+// import { env } from "./env";
 //testowanie
 // import localStorage from "./localStorage";
 // import { fetchPromoters } from "./actions/promoters";

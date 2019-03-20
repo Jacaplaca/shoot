@@ -72,6 +72,7 @@ app.use("/api/score", score);
 // });
 
 const PORT = process.env.PORT || 5001;
+// console.log("env", process.env.NODE_ENV);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT ${PORT}`);
