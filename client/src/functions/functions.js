@@ -339,7 +339,6 @@ export const addRank = (array, property) => {
   }
   const sortedProperties = onlyProperties.sort(sortNumber).reverse();
   const sorted = _.sortedUniqBy(sortedProperties);
-  console.log(sortedProperties, sorted);
 
   const rankedArray = array.map(x => {
     let rank = 0;
@@ -354,16 +353,13 @@ export const addRank = (array, property) => {
   return rankedArray;
 };
 
-export const addRankWithCenter = (array, property, property2) => {
-  console.log("array", array);
+export const addRankWithCenter = (array, property, property2, firstAsc) => {
   let onlyProperties = [];
   for (let elem of array) {
     onlyProperties.push(elem[property]);
   }
   const sortedProperties = onlyProperties.sort(sortNumber).reverse();
   const sorted = _.sortedUniqBy(sortedProperties);
-  console.log(sortedProperties, sorted);
-  // console.log("array dupli" );
   let dupObj = {};
   let dupObjSorted = {};
   const duplicates = find_duplicate_in_array(sortedProperties);
@@ -371,159 +367,56 @@ export const addRankWithCenter = (array, property, property2) => {
   for (let dup of duplicates) {
     dupObj = Object.assign(dupObj, { [dup]: [] });
     dupObjSorted = Object.assign(dupObjSorted, { [dup]: [] });
-    // if (x[property] === Math.trunc(dup)) {
-    //   const dp = dupObj[dup];
-    //   console.log("dup", x[property2], dp);
-    //   // dp.push("3");
-    //   dupObj[dup].push(3);
-    //   console.log("dupObj", dupObj);
-    // } else {
-    // }
   }
 
   const rankedArray = array.map(x => {
-    // let rank = 0;
-    // for (var i = 0; i < sorted.length; i++) {
-    //   console.log("sore", sorted[i]);
-    //   if (sorted[i] === x[property]) {
-    //     rank = i + 1;
-    //   }
-    // }
     dupObj[x[property]] &&
       dupObj[x[property]].push({ id: x.playerId, [property2]: x[property2] });
-    console.log("dupObj", dupObj);
     for (var ob in dupObj) {
-      console.log("ob", ob);
-      // let rankCenter = 0;
       if (dupObj.hasOwnProperty(ob)) {
         let onlyProps = [];
         for (let elem of dupObj[ob]) {
-          // console.log("elem", elem);
           onlyProps.push(elem[property2]);
         }
-        // const ra = addRank(dupObj[ob], "totalCenter");
-        // console.log("ra", ra);
         dupObjSorted[ob] = addRank(dupObj[ob], "totalCenter");
-        // const sortedProps = onlyProps.sort(sortNumber).reverse();
-        // const sortedUni = _.sortedUniqBy(sortedProps);
-        // console.log("sorted", sortedUni);
-
-        // for (let elem of dupObj[ob]) {
-        //   for (var it = 0; it < sortedUni.length; it++) {
-        //     // console.log("sore", sortedUni[it]);
-        //     console.log("elem2", elem);
-        //     Object.assign(dupObjSorted[ob][it], {
-        //       rankCenter: sortedUni.indexOf(elem.totalCenter)
-        //     });
-        //     // if (sortedUni[it] === x[property2]) {
-        //     //   rankCenter = it + 1;
-        //     // }
-        //   }
-        // }
       }
     }
-    console.log("dupObjSorted", dupObjSorted);
     return Object.assign(x, { rank: 0 });
   });
-  console.log("dupObj", dupObj);
-  console.log("rankedArray", rankedArray);
-  // rankedArray.map(x => {
-  //
-  // });
 
-  // let iterator = 0;
-  //
-  // for (var key in dupObj) {
-  //   if (dupObj.hasOwnProperty(key)) {
-  //     iterator++;
-  //   }
-  // }
-
-  // console.log("iterator", iterator);
-  // rankedArray.map((x, i) => {
-  //   const dupli = dupObj[x.totalScore];
-  //   // console.log("dupli", dupli);
-  //   const dupliFiltered =
-  //     dupli && dupli.filter(y => y.totalCenter === x.totalCenter);
-  //   console.log("dupliFiltered", dupliFiltered);
-  //   const rankCenter = dupliFiltered ? dupliFiltered[0].rank - 1 : 0;
-  //   console.log("rankCenter", rankCenter);
-  //   let newRank = x.rank + rankCenter;
-  //   // Object.assign(x, {
-  //   //   rank: x.rank * sorted.indexOf(x.totalScore) + rankCenter
-  //   // });
-  //   Object.assign(x, {
-  //     rank: rankCenter === 0 ? newRank + 1 : newRank
-  //   });
-  // });
   rankedArray.sort(function(a, b) {
-    var x = a.totalScore - b.totalScore;
-    return x == 0 ? a.totalCenter - b.totalCenter : x;
+    let x;
+    if (firstAsc) {
+      x = a.totalScore - b.totalScore;
+    } else {
+      x = b.totalScore - a.totalScore;
+    }
+    return x == 0 ? b.totalCenter - a.totalCenter : x;
   });
 
-  const rankedArrayReverse = rankedArray.reverse();
+  // const rankedArrayReverse = rankedArray.reverse();
 
-  let scoresPrev = {};
   let iterator = 0;
   let rankedSorted = [];
   let tsPrev;
   let tcPrev;
-  for (let player of rankedArrayReverse) {
-    console.log(
-      "player",
-      player.totalScore,
-      player.totalCenter,
-      player.totalScore !== tsPrev && tcPrev !== player.totalCenter,
-      player.totalScore === tsPrev && tcPrev === player.totalCenter,
-      player.totalScore === tsPrev,
-      tcPrev === player.totalCenter
-    );
-    if (
-      player.totalScore !== tsPrev ||
-      tcPrev !== player.totalCenter
-      // player.totalCenter === 0 &&
-      // player.totalScore !== 0
-    ) {
+  for (let player of rankedArray) {
+    const ts = player.totalScore;
+    const tc = player.totalCenter;
+    if (ts === 0) {
+      rankedSorted.push(Object.assign(player, { rank: rankedArray.length }));
+    } else if (ts !== tsPrev || tcPrev !== tc) {
       iterator++;
-      console.log("iterator", iterator);
       rankedSorted.push(Object.assign(player, { rank: iterator }));
-    } else if (player.totalScore === tsPrev || tcPrev === player.totalCenter) {
-      console.log("dlaczego");
+    } else if (ts === tsPrev || tcPrev === tc) {
       rankedSorted.push(Object.assign(player, { rank: iterator }));
     } else {
-      rankedSorted.push(
-        Object.assign(player, { rank: rankedArrayReverse.length })
-      );
+      rankedSorted.push(Object.assign(player, { rank: rankedArray.length }));
     }
-    tsPrev = player.totalScore;
-    tcPrev = player.totalCenter;
+    tsPrev = ts;
+    tcPrev = tc;
   }
 
-  // rankedArrayReverse.map((x, i)=> {
-  //
-  //
-  //     return Object.assign(x, {
-  //       rank: x.totalScore ? i + 1 : rankedArray.length
-  //     });
-  //
-  // })
-
-  // rankedArray.reverse().map(x => {
-  //   let rank = 0;
-  //   for (var i = 0; i < sorted.length; i++) {
-  //     console.log("sore", sorted[i]);
-  //     if (sorted[i] === x[property]) {
-  //       rank = i + 1;
-  //     }
-  //   }
-  //   return Object.assign(x, { rank });
-  // });
-  // rankedArray.reverse().map((x, i) => {
-  //   return Object.assign(x, {
-  //     rank: x.totalScore ? i + 1 : rankedArray.length
-  //   });
-  // });
-  // console.log("rankedArray", rankedArray);
   return rankedSorted;
 };
 

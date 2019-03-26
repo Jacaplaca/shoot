@@ -258,7 +258,14 @@ export default (turnament, protocols) => {
       doc.setFont("PTSans", "bold");
       // doc.setFontType("normal");
 
-      doc.text(player.rank.toString(), 20, position, null, null, "center");
+      doc.text(
+        player.totalScore === 0 ? "X" : player.rank.toString(),
+        20,
+        position,
+        null,
+        null,
+        "center"
+      );
       doc.setFont("PTSans", "normal");
       doc.setFontSize(10.5);
       doc.text(player.number.toString(), 43, position, null, null, "center");

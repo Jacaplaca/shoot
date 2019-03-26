@@ -340,7 +340,13 @@ class PlayersScoresMain extends Component {
         }
         player.factorTotal = totalScore;
       }
-      factorization = addRank(factorization, "factorTotal");
+      factorization = addRankWithCenter(
+        factorization,
+        "factorTotal",
+        "totalCenter",
+        true
+      );
+      // factorization = addRank(factorization, "factorTotal", "totalCenter");
       this.setState({ matrix: factorization }, () => {
         this.setState({ factor: true });
       });
@@ -487,17 +493,52 @@ class PlayersScoresMain extends Component {
       filtered,
       matrixUnifilltered
     } = this.state;
+    const wide = isAuthenticated ? "200px" : "100px";
     const zmienna = this.state.filter;
     const grid = `50px 250px 100px ${isClass ? "150px" : ""} 80px repeat(${this
       .state.summaryRow &&
       this.state.summaryRow.competitions &&
-      this.state.summaryRow.competitions.length}, minmax(200px, 1fr))`;
+      this.state.summaryRow.competitions.length}, minmax(${wide}, 1fr))`;
     // console.log("sum", this.state.summaryRow);
     return (
       <div id="raport">
         {/* <h4 style={{ color: "white" }}>aslkdjfls lsakdfj</h4> */}
         {this.state.summaryRow && this.state.summaryRow.competitions ? (
           <React.Fragment>
+            <div
+              style={{
+                display: "grid",
+                gridGap: 10,
+                gridTemplateColumns: "1fr 1fr"
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  justifyContent: "center",
+                  alignContent: "center"
+                }}
+              >
+                <img
+                  src="http://portalstrzelecki.pl/wp-content/uploads/2019/03/jaroszynski_longshot.jpg"
+                  alt="new"
+                  style={{ width: 500 }}
+                />
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  justifyContent: "center",
+                  alignContent: "center"
+                }}
+              >
+                <img
+                  src="http://portalstrzelecki.pl/wp-content/uploads/2019/03/f-class-e1553501753156.jpg"
+                  alt="new"
+                  style={{ width: 500 }}
+                />
+              </div>
+            </div>
             <StickyContainer>
               {/* Other elements can be in between `StickyContainer` and `Sticky`,
         but certain styles can break the positioning logic used. */}

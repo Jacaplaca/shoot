@@ -3,6 +3,7 @@ import {
   emphasize,
   lighten
 } from "@material-ui/core/styles/colorManipulator";
+import red from "@material-ui/core/colors/red";
 
 export const rowStyles = theme => ({
   back: { background: "red", color: "yellow", fontWeight: "800" },
@@ -32,6 +33,11 @@ export const rowStyles = theme => ({
     background: lighten(theme.palette.menu, 0.1),
     marginBottom: 2
   },
+  // rowGold: {
+  //   // -webkit-box-shadow: inset 0px 1px 24px 1px rgba(255,157,0,1);
+  //   // -moz-box-shadow: inset 0px 1px 24px 1px rgba(255,157,0,1);
+  //   boxShadow: "inset 0px 1px 15px 1px rgba(255, 237, 0, 1)"
+  // },
   rowHighlight: {
     "&:hover": {
       backgroundImage: `linear-gradient(to right, ${lighten(

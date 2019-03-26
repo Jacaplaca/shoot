@@ -29,6 +29,7 @@ const glowny = "#2b2b2b";
 const szary = "rgb(135, 135, 135)";
 const czerwony = "rgb(255, 0, 0)";
 const bialy = "#e7e7e7";
+// const darkGrey = "rgb(89, 89, 89)";
 const pomaranczowy = orange[300];
 
 // export const style = {

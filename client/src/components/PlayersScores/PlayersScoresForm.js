@@ -150,7 +150,7 @@ class PlayersScoresForm extends React.Component {
       // finished,
       turnaments,
       enable,
-      auth: { user }
+      auth: { user, isAuthenticated }
     } = this.props;
 
     // console.log("PlayersScoresForm", typeof this.state.value);
@@ -244,23 +244,18 @@ class PlayersScoresForm extends React.Component {
             }}
           >
             <TextField
-              // autoFocus={() => false}
-              // inputRef={this.focusUsernameInputField}
-              // inputStyle={{ backgroundColor: "red" }}
-              // type="number"
-              disabled={
-                user.rola === "admin" || this.state.finished || enable
-                  ? true
-                  : false
-              }
-              // InputProps={{ className: classes.input }}
+              disabled={true}
+              // disabled={
+              //   user.rola === "admin" || this.state.finished || enable
+              //     ? true
+              //     : false
+              // }
               style={{
                 marginTop: 3,
                 marginBottom: 3,
                 marginLeft: 5,
                 marginRight: 5
               }}
-              // value={this.state.value}
               value={
                 this.state.center === "0"
                   ? ""
@@ -268,12 +263,7 @@ class PlayersScoresForm extends React.Component {
               }
               InputLabelProps={{ shrink: true, className: classes.label }}
               id="outlined-name"
-              // label={label.slice(0, 12)}
-              // className={classes.textField}
-              // value={this.state.value}
-              // placeholder={score}
               onClick={() => {
-                // console.log("click", this.state.value, id, player, turnament);
                 return this.props.rowClicked(player, id);
               }}
               onChange={this.handleChange("center")}
@@ -281,10 +271,8 @@ class PlayersScoresForm extends React.Component {
                 !button &&
                   this.save("center", this.state.center, id, player, turnament);
               }}
-              // margin="normal"
               variant="outlined"
               className={classes.textField}
-              // onKeyDown={this.handleKeyPress}
               InputProps={{
                 inputComponent: NumberFormatCustom
               }}

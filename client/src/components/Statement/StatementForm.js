@@ -529,7 +529,7 @@ class StatementForm extends Component {
             }
           }
           turnament.factor
-            ? (protocols[iterator].players[iter].score = wholeFactor)
+            ? (protocols[iterator].players[iter].totalScore = wholeFactor)
             : null;
           // console.log("wholeFactor", wholeFactor);
         }

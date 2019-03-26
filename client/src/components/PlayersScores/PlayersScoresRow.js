@@ -154,7 +154,9 @@ class PlayersScoresRow extends Component {
           className={classNames(
             classes.rowTable,
             classes.table,
-            playerId === playerClicked && classes.rowHighlight
+            playerId === playerClicked && classes.rowHighlight,
+            totalScore === 0 && classes.black
+            // rank === 1 && classes.rowGold
             // playerId !== this.state.clickedPlayer && classes.rowTable
           )}
           style={{
@@ -164,12 +166,13 @@ class PlayersScoresRow extends Component {
           <span
             className={classNames(
               classes.rank,
+              totalScore === 0 && classes.black,
               rank === 1 && classes.gold,
               rank === 2 && classes.silver,
               rank === 3 && classes.brown
             )}
           >
-            {rank}
+            {totalScore !== 0 ? rank : "X"}
           </span>
           <span className={classNames(classes.rowBlock, classes.rowName)}>
             {rodo ? `${playerName} ${playerSurname}` : "RODO"}
@@ -218,15 +221,16 @@ const styles = theme => ({
   },
   rank: {
     background: "white",
-    fontWeight: "700",
+    fontWeight: "600",
     alignSelf: "center",
     justifySelf: "center",
     textAlign: "center",
-    borderRadius: 30,
+    borderRadius: 1,
     width: 30,
     maxHeight: 30,
     fontSize: 17,
-    color: theme.palette.menu
+    color: theme.palette.menu,
+    opacity: 0.9
   },
   gold: {
     background: "gold"
@@ -237,6 +241,11 @@ const styles = theme => ({
   brown: {
     background: "brown",
     color: "white"
+  },
+  black: {
+    background: "black",
+    color: "grey",
+    opacity: 0.75
   }
 });
 
