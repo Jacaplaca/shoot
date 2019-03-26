@@ -20,7 +20,7 @@ const MainFrameHOC = moreProps => WrappedComponent => {
           display: "grid",
           flexWrap: "nowrap",
           padding: this.props.theme.spacing.unit * 3,
-          marginBottom: 20
+          marginBottom: 55
           // paddingTop: isAuthenticated ? 80 : 0
           // background: this.props.auth.isAuthenticated || "white"
         },

@@ -42,7 +42,7 @@ const PlayerSchema = new Schema({
       // competition: { type: String },
       compId: { type: String },
       score: { type: Number },
-      center: { type: Number }
+      center: { type: String }
     }
   ],
   order: {

@@ -10,7 +10,14 @@ import { tableHeadStyles } from "../../skins/mainStyles";
 import { combineStyles } from "../../functions/functions";
 import RowHOC from "../RowHOC";
 
-const comps = (competitions, classes, sorting, competitionClicked) => {
+const comps = (
+  competitions,
+  classes,
+  sorting,
+  competitionClicked,
+  isFactor,
+  isAuthenticated
+) => {
   // console.log("comps", competitions);
   return competitions.map(comp => {
     const { competition, competitionId, score } = comp;
@@ -26,13 +33,14 @@ const comps = (competitions, classes, sorting, competitionClicked) => {
           display: "grid",
           alignItems: "center",
           justifyContent: "center",
-          gridTemplateColumns: "1fr",
+          gridTemplateColumns: `7fr ${!isFactor && isAuthenticated && "3fr"}`,
           width: "100%",
           height: "100%"
         }}
       >
         {/* <SortButtons click={e => sorting("competitions", e, competitionId)} /> */}
         <span>{competition}</span>
+        {!isFactor && isAuthenticated && <span>X</span>}
       </span>
       // <PlayersScoresForm
       //   key={competitionId}
@@ -55,7 +63,9 @@ const PlayersScoresHead = ({
   grid,
   sorting,
   row,
-  competitionClicked
+  competitionClicked,
+  isFactor,
+  isAuthenticated
 }) => {
   return (
     <div
@@ -93,8 +103,24 @@ const PlayersScoresHead = ({
         // sort
       />
       {row && row.competitions && row.competitions.length !== 0
-        ? comps(row.competitions, classes, sorting, competitionClicked)
+        ? comps(
+            row.competitions,
+            classes,
+            sorting,
+            competitionClicked,
+            isFactor,
+            isAuthenticated
+          )
         : null}
+      {!isFactor && (
+        <HeadRowField
+          title="Suma X"
+          classes={classes}
+          style={{ textAlign: "center" }}
+          // click={e => sorting("email", e)}
+          // sort
+        />
+      )}
     </div>
   );
 };

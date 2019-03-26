@@ -241,7 +241,8 @@ export default (turnament, protocols) => {
       );
       doc.text("Broń", 195, fromTop);
       doc.text("Luneta", 225, fromTop);
-      doc.text("Punkty", 260, fromTop);
+      doc.text("Punkty", turnament.factor ? 260 : 250, fromTop);
+      !turnament.factor && doc.text("X", 270, fromTop);
     };
 
     scoresHeadline(podescription());
@@ -284,12 +285,23 @@ export default (turnament, protocols) => {
       doc.setFont("PTSans", "bold");
       doc.text(
         formatNumber(player.totalScore),
-        266,
+        turnament.factor ? 266 : 256,
         position,
         null,
         null,
         "center"
       );
+      doc.setFontSize(10);
+      !turnament.factor &&
+        doc.text(
+          player.totalCenter.toFixed(0).toString(),
+          272,
+          position,
+          null,
+          null,
+          "center"
+        );
+
       lastPosition = position;
 
       // doc.text(indexReset.toString(), 1, position)

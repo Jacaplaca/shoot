@@ -150,7 +150,8 @@ class PlayersScoresForm extends React.Component {
       // finished,
       turnaments,
       enable,
-      auth: { user, isAuthenticated }
+      auth: { user, isAuthenticated },
+      isFactor
     } = this.props;
 
     // console.log("PlayersScoresForm", typeof this.state.value);
@@ -164,7 +165,7 @@ class PlayersScoresForm extends React.Component {
               // display: "inline-block",
               // textAlign: "center",
               // minWidth: 100,
-              width: "70%"
+              width: !isFactor ? "70%" : "100%"
             }}
             noValidate
             autoComplete="off"
@@ -225,62 +226,76 @@ class PlayersScoresForm extends React.Component {
               }}
             />
           </form>
-          <form
-            // className={classes.container}
-            style={{
-              // display: "inline-block",
-              // textAlign: "center",
-              // maxWidth: 150
-              minWidth: 50,
-              width: "30%"
-            }}
-            noValidate
-            autoComplete="off"
-            onSubmit={e => {
-              e.preventDefault();
-              !button
-                ? this.save("center", this.state.center, id, player, turnament)
-                : enterAction();
-            }}
-          >
-            <TextField
-              disabled={true}
-              // disabled={
-              //   user.rola === "admin" || this.state.finished || enable
-              //     ? true
-              //     : false
-              // }
+          {!isFactor && (
+            <form
+              // className={classes.container}
               style={{
-                marginTop: 3,
-                marginBottom: 3,
-                marginLeft: 5,
-                marginRight: 5
+                // display: "inline-block",
+                // textAlign: "center",
+                // maxWidth: 150
+                minWidth: 50,
+                width: "30%"
               }}
-              value={
-                this.state.center === "0"
-                  ? ""
-                  : this.state.center.replace(".", ",")
-              }
-              InputLabelProps={{ shrink: true, className: classes.label }}
-              id="outlined-name"
-              onClick={() => {
-                return this.props.rowClicked(player, id);
+              noValidate
+              autoComplete="off"
+              onSubmit={e => {
+                e.preventDefault();
+                !button
+                  ? this.save(
+                      "center",
+                      this.state.center,
+                      id,
+                      player,
+                      turnament
+                    )
+                  : enterAction();
               }}
-              onChange={this.handleChange("center")}
-              onBlur={() => {
-                !button &&
-                  this.save("center", this.state.center, id, player, turnament);
-              }}
-              variant="outlined"
-              className={classes.textField}
-              InputProps={{
-                inputComponent: NumberFormatCustom
-              }}
-              inputProps={{
-                className: classes.input
-              }}
-            />
-          </form>
+            >
+              <TextField
+                // disabled={true}
+                disabled={
+                  user.rola === "admin" || this.state.finished || enable
+                    ? true
+                    : false
+                }
+                style={{
+                  marginTop: 3,
+                  marginBottom: 3,
+                  marginLeft: 5,
+                  marginRight: 5
+                }}
+                value={
+                  this.state.center === "0"
+                    ? ""
+                    : this.state.center.replace(".", ",")
+                }
+                InputLabelProps={{ shrink: true, className: classes.label }}
+                id="outlined-name"
+                onClick={() => {
+                  return this.props.rowClicked(player, id);
+                }}
+                onChange={this.handleChange("center")}
+                onBlur={() => {
+                  !button &&
+                    this.save(
+                      "center",
+                      this.state.center,
+                      id,
+                      player,
+                      turnament
+                    );
+                }}
+                variant="outlined"
+                className={classes.textField}
+                InputProps={{
+                  inputComponent: NumberFormatCustom
+                }}
+                inputProps={{
+                  className: classes.input
+                }}
+              />
+            </form>
+          )}
         </div>
       </React.Fragment>
     );

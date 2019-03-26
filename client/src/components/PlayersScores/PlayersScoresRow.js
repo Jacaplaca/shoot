@@ -32,11 +32,13 @@ const comps = (
   vertical,
   nextPos,
   factor,
-  factorRow,
+  // factorRow,
   // coordinates,
   x,
-  y
+  y,
+  isFactor
 ) => {
+  console.log(isFactor);
   // console.log("comps", turnament, finished);
   return competitions.map((comp, i) => {
     const {
@@ -44,9 +46,10 @@ const comps = (
       competitionId,
       score,
       factor: factorRow,
-      center
+      center,
+      totalCenter
     } = comp;
-    // console.log("competitionClicked", competitionClicked);
+    // console.log("competitionClicked", comp);
     // console.log("factorRow", factorRow, "score", score, "factor", factor);
     return (
       <span
@@ -67,6 +70,7 @@ const comps = (
             // horizontal={i}
             // vertical={vertical}
             // position={{ x, y }}
+            isFactor={isFactor}
             className={
               classNames()
               // classes.rowBlock,
@@ -131,7 +135,8 @@ class PlayersScoresRow extends Component {
       auth: { isAuthenticated },
       vertical,
       factor,
-      isClass
+      isClass,
+      isFactor
     } = this.props;
     const {
       playerName,
@@ -143,8 +148,10 @@ class PlayersScoresRow extends Component {
       totalScore,
       factorTotal,
       rodo,
-      klasa
+      klasa,
+      totalCenter
     } = row;
+    // console.log("row", isFactor);
     // console.log("PlayersScoresRow() ROW", row);
     // console.log("player", row.competitions[0]);
     return (
@@ -207,7 +214,18 @@ class PlayersScoresRow extends Component {
             this.nextPos,
             factor,
             x,
-            y
+            y,
+            isFactor
+          )}
+          {!isFactor && (
+            <div style={{ marginTop: 8, marginBottom: 8, textAlign: "center" }}>
+              <NumberFormat
+                value={totalCenter.toFixed(0)}
+                displayType={"text"}
+                thousandSeparator={" "}
+                decimalSeparator={","}
+              />
+            </div>
           )}
         </div>
       </React.Fragment>

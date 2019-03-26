@@ -160,6 +160,7 @@ class PlayersScoresMain extends Component {
 
         for (let competition of competitions) {
           let thisComp = { compId: "", score: 0, center: 0 };
+          let center;
           if (playerCompetitions.length > 0) {
             const comp = playerCompetitions.filter(
               x => x.compId === competition._id
@@ -167,7 +168,11 @@ class PlayersScoresMain extends Component {
             thisComp =
               comp.length > 0 ? comp[0] : { compId: "", score: 0, center: 0 };
             playerTotalScore = playerTotalScore + thisComp.score;
-            playerTotalCenter = playerTotalCenter + thisComp.center;
+            center = thisComp.center
+              ? parseFloat(thisComp.center.replace(",", "."))
+              : 0;
+            // console.log("center", center);
+            playerTotalCenter = playerTotalCenter + center;
           }
           const playerCompetition = {
             competition: competition.name,
@@ -340,13 +345,13 @@ class PlayersScoresMain extends Component {
         }
         player.factorTotal = totalScore;
       }
-      factorization = addRankWithCenter(
-        factorization,
-        "factorTotal",
-        "totalCenter",
-        true
-      );
-      // factorization = addRank(factorization, "factorTotal", "totalCenter");
+      // factorization = addRankWithCenter(
+      //   factorization,
+      //   "factorTotal",
+      //   "totalCenter",
+      //   true
+      // );
+      factorization = addRank(factorization, "factorTotal");
       this.setState({ matrix: factorization }, () => {
         this.setState({ factor: true });
       });
@@ -493,12 +498,14 @@ class PlayersScoresMain extends Component {
       filtered,
       matrixUnifilltered
     } = this.state;
-    const wide = isAuthenticated ? "200px" : "100px";
+    const wide = isAuthenticated && isFactor ? "200px" : "100px";
     const zmienna = this.state.filter;
     const grid = `50px 250px 100px ${isClass ? "150px" : ""} 80px repeat(${this
       .state.summaryRow &&
       this.state.summaryRow.competitions &&
-      this.state.summaryRow.competitions.length}, minmax(${wide}, 1fr))`;
+      this.state.summaryRow.competitions.length}, minmax(${wide}, 1fr)) ${
+      isFactor ? "0px" : "50px"
+    }`;
     // console.log("sum", this.state.summaryRow);
     return (
       <div id="raport">
@@ -520,7 +527,7 @@ class PlayersScoresMain extends Component {
                 }}
               >
                 <img
-                  src="http://portalstrzelecki.pl/wp-content/uploads/2019/03/jaroszynski_longshot.jpg"
+                  src="http://wordpress1813247.home.pl/s1.jpg"
                   alt="new"
                   style={{ width: 500 }}
                 />
@@ -533,7 +540,7 @@ class PlayersScoresMain extends Component {
                 }}
               >
                 <img
-                  src="http://portalstrzelecki.pl/wp-content/uploads/2019/03/f-class-e1553501753156.jpg"
+                  src="http://wordpress1813247.home.pl/s2.jpg"
                   alt="new"
                   style={{ width: 500 }}
                 />
@@ -598,12 +605,15 @@ class PlayersScoresMain extends Component {
                         <ExportExcel data={matrixUnifilltered} />
                       </FormGroup>
                       <PlayersScoresHead
+                        isFactor={isFactor}
                         isClass={isClass}
                         grid={grid}
                         row={matrix[0]}
                         competitionClicked={this.state.competitionClicked}
+                        isAuthenticated={isAuthenticated}
                       />
                       <SummaryRow
+                        isFactor={isFactor}
                         isClass={isClass}
                         factor={factor}
                         competitionClicked={this.state.competitionClicked}
@@ -627,6 +637,7 @@ class PlayersScoresMain extends Component {
                 <div>
                   <Pagination data={matrix} off={raport}>
                     <PlayersScoresRows
+                      isFactor={isFactor}
                       isClass={isClass}
                       factor={factor}
                       grid={grid}
@@ -673,6 +684,7 @@ class PlayersScoresMain extends Component {
 
 const PlayersScoresRows = ({
   rows,
+  isFactor,
   turnament,
   grid,
   rowClick,
@@ -696,6 +708,7 @@ const PlayersScoresRows = ({
         rowClick={rowClick}
         playerClicked={playerClicked}
         competitionClicked={competitionClicked}
+        isFactor={isFactor}
       />
     );
   });

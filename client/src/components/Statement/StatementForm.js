@@ -10,7 +10,8 @@ import TextField from "@material-ui/core/TextField";
 import {
   combineStyles,
   dynamicSort,
-  addRankWithCenter
+  addRankWithCenter,
+  addRank
 } from "../../functions/functions";
 import store from "../../store";
 import * as actions from "../../actions";
@@ -451,8 +452,10 @@ class StatementForm extends Component {
             const center =
               foundCompetsInPlayer.length > 0
                 ? foundCompetsInPlayer[0].center
-                : 0;
-            totalCenter = center + totalCenter;
+                : "0";
+            console.log("center", center);
+            console.log("center parse", parseFloat(center.replace(",", ".")));
+            totalCenter = parseFloat(center.replace(",", ".")) + totalCenter;
           }
 
           // if (turnament.factor) {
@@ -537,10 +540,21 @@ class StatementForm extends Component {
     }
     // protocols.sort(dynamicSort("score"));
     // protocols.map((x, i) => x.players.sort(dynamicSort("score")).reverse());
-    protocols.map((x, i) => {
-      const players = addRankWithCenter(x.players, "totalScore", "totalCenter");
-      return Object.assign(x, { players, laskjf: 909784 });
-    });
+    if (turnament.factor) {
+      protocols.map((x, i) => {
+        const players = addRank(x.players, "totalScore");
+        return Object.assign(x, { players, laskjf: 909784 });
+      });
+    } else {
+      protocols.map((x, i) => {
+        const players = addRankWithCenter(
+          x.players,
+          "totalScore",
+          "totalCenter"
+        );
+        return Object.assign(x, { players, laskjf: 909784 });
+      });
+    }
     // protocols.map(x =>
     //   Object.assign(x=> dynamicSort("score") )
     // );
