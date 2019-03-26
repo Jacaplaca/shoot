@@ -7,7 +7,11 @@ import { withStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
 import Cookies from "universal-cookie";
 import TextField from "@material-ui/core/TextField";
-import { combineStyles, dynamicSort } from "../../functions/functions";
+import {
+  combineStyles,
+  dynamicSort,
+  addRankWithCenter
+} from "../../functions/functions";
 import store from "../../store";
 import * as actions from "../../actions";
 import Paper from "@material-ui/core/Paper";
@@ -417,6 +421,7 @@ class StatementForm extends Component {
 
         for (let player of players) {
           let wholeScore = 0;
+          let totalCenter = 0;
           const competInPlayer = player.competitions;
           // console.log("competInPlayer", competInPlayer);
 
@@ -443,6 +448,11 @@ class StatementForm extends Component {
                 ? foundCompetsInPlayer[0].score
                 : 0;
             wholeScore = score + wholeScore;
+            const center =
+              foundCompetsInPlayer.length > 0
+                ? foundCompetsInPlayer[0].center
+                : 0;
+            totalCenter = center + totalCenter;
           }
 
           // if (turnament.factor) {
@@ -457,6 +467,7 @@ class StatementForm extends Component {
           // }
           // console.log("statement score count", player.name, wholeScore);
           protocols[iterator].players.push({
+            playerId: player._id,
             name: player.rodo
               ? `${player.name} ${player.surname}${
                   player.klasa ? ` (${player.klasa})` : ""
@@ -467,7 +478,8 @@ class StatementForm extends Component {
             number: player.number ? `${player.number}` : "",
             gun: `${player.gun ? player.gun : ""}`,
             scope: `${player.scope ? player.scope : ""}`,
-            score: wholeScore
+            totalScore: wholeScore,
+            totalCenter
           });
         }
         // console.log("minis", JSON.stringify(minis));
@@ -524,15 +536,22 @@ class StatementForm extends Component {
       }
     }
     // protocols.sort(dynamicSort("score"));
-    protocols.map((x, i) => x.players.sort(dynamicSort("score")).reverse());
-    protocols.map(x =>
-      x.players.map((player, i) => Object.assign(player, { position: i + 1 }))
-    );
-    console.log("players", players);
+    // protocols.map((x, i) => x.players.sort(dynamicSort("score")).reverse());
+    protocols.map((x, i) => {
+      const players = addRankWithCenter(x.players, "totalScore", "totalCenter");
+      return Object.assign(x, { players, laskjf: 909784 });
+    });
+    // protocols.map(x =>
+    //   Object.assign(x=> dynamicSort("score") )
+    // );
+    // protocols.map(x =>
+    //   x.players.map((player, i) => Object.assign(player, { position: i + 1 }))
+    // );
+    // console.log("players", players);
     console.log("protocols", protocols);
-    console.log("turnament", turnament);
-    console.log(JSON.stringify(protocols));
-    console.log(JSON.stringify(turnament));
+    // console.log("turnament", turnament);
+    // console.log(JSON.stringify(protocols));
+    // console.log(JSON.stringify(turnament));
     // console.log("isClass", this.state.isClass);
     generatePDF(turnament, protocols);
   };

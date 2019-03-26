@@ -4,7 +4,7 @@ import { PTSansBold } from "../../skins/PTSansBold";
 import { PTSansItalic } from "../../skins/PTSansItalic";
 
 export default (turnament, protocols) => {
-  console.log("generatePDF()", turnament, protocols.length);
+  console.log("generatePDF()", turnament, protocols);
 
   var doc = new jsPDF();
 
@@ -258,7 +258,7 @@ export default (turnament, protocols) => {
       doc.setFont("PTSans", "bold");
       // doc.setFontType("normal");
 
-      doc.text(player.position.toString(), 20, position, null, null, "center");
+      doc.text(player.rank.toString(), 20, position, null, null, "center");
       doc.setFont("PTSans", "normal");
       doc.setFontSize(10.5);
       doc.text(player.number.toString(), 43, position, null, null, "center");
@@ -275,7 +275,14 @@ export default (turnament, protocols) => {
 
       doc.setFontSize(12);
       doc.setFont("PTSans", "bold");
-      doc.text(formatNumber(player.score), 266, position, null, null, "center");
+      doc.text(
+        formatNumber(player.totalScore),
+        266,
+        position,
+        null,
+        null,
+        "center"
+      );
       lastPosition = position;
 
       // doc.text(indexReset.toString(), 1, position)

@@ -41,7 +41,8 @@ const PlayerSchema = new Schema({
     {
       // competition: { type: String },
       compId: { type: String },
-      score: { type: Number }
+      score: { type: Number },
+      center: { type: Number }
     }
   ],
   order: {

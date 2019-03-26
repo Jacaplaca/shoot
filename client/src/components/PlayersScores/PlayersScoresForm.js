@@ -15,12 +15,13 @@ import * as actions from "../../actions";
 class PlayersScoresForm extends React.Component {
   state = {
     value: "",
-    finished: false
+    finished: false,
+    center: ""
     // focus: false
   };
 
   componentDidMount() {
-    this.setState({ value: this.props.score });
+    this.setState({ value: this.props.score, center: this.props.center });
     // console.log("PlayersScoresForm", this.props.score);
     const thisTurnament = this.props.turnaments.filter(
       turnam => turnam._id === this.props.turnament
@@ -39,10 +40,29 @@ class PlayersScoresForm extends React.Component {
     this.props.button && this.props.sendValue(event.target.value);
   };
 
-  save = (value, compId, playerId, turnament) => {
-    const form = { value, compId, playerId, turnament };
-    const score = value.replace(",", ".");
-    form.value = score;
+  save = (field, value, compId, playerId, turnament) => {
+    let form;
+
+    if (field === "score") {
+      form = {
+        score: value,
+        center: this.state.center,
+        compId,
+        playerId,
+        turnament
+      };
+      // const score = value.replace(",", ".");
+    } else if (field === "center") {
+      form = {
+        score: this.state.value,
+        center: value,
+        compId,
+        playerId,
+        turnament
+      };
+    }
+
+    // form.value = score;
 
     const adding = {
       post: `/api/score/`,
@@ -53,7 +73,11 @@ class PlayersScoresForm extends React.Component {
       collection: "score"
     };
     // console.log(adding);
-    this.props.score !== score && this.props.addToDB(adding);
+    if (field === "score") {
+      this.props.score !== value && this.props.addToDB(adding);
+    } else if (field === "center") {
+      this.props.center !== value && this.props.addToDB(adding);
+    }
 
     // console.log("save", value, compId, playerId, turnament);
   };
@@ -133,65 +157,143 @@ class PlayersScoresForm extends React.Component {
 
     return (
       <React.Fragment>
-        <form
-          // className={classes.container}
-          style={{ display: "inline-block", textAlign: "center" }}
-          noValidate
-          autoComplete="off"
-          onSubmit={e => {
-            e.preventDefault();
-            !button
-              ? this.save(this.state.value, id, player, turnament)
-              : enterAction();
-          }}
-        >
-          <TextField
-            // autoFocus={() => false}
-            // inputRef={this.focusUsernameInputField}
-            // inputStyle={{ backgroundColor: "red" }}
-            // type="number"
-            disabled={
-              user.rola === "admin" || this.state.finished || enable
-                ? true
-                : false
-            }
-            // InputProps={{ className: classes.input }}
+        <div style={{ display: "flex", textAlign: "center" }}>
+          <form
+            // className={classes.container}
             style={{
-              marginTop: 3,
-              marginBottom: 3,
-              marginLeft: 5,
-              marginRight: 5
+              // display: "inline-block",
+              // textAlign: "center",
+              // minWidth: 100,
+              width: "70%"
             }}
-            // value={this.state.value}
-            value={
-              this.state.value === "0" ? "" : this.state.value.replace(".", ",")
-            }
-            InputLabelProps={{ shrink: true, className: classes.label }}
-            id="outlined-name"
-            // label={label.slice(0, 12)}
-            // className={classes.textField}
-            // value={this.state.value}
-            // placeholder={score}
-            onClick={() => {
-              // console.log("click", this.state.value, id, player, turnament);
-              return this.props.rowClicked(player, id);
+            noValidate
+            autoComplete="off"
+            onSubmit={e => {
+              e.preventDefault();
+              !button
+                ? this.save("score", this.state.value, id, player, turnament)
+                : enterAction();
             }}
-            onChange={this.handleChange("value")}
-            onBlur={() => {
-              !button && this.save(this.state.value, id, player, turnament);
+          >
+            <TextField
+              // autoFocus={() => false}
+              // inputRef={this.focusUsernameInputField}
+              // inputStyle={{ backgroundColor: "red" }}
+              // type="number"
+              disabled={
+                user.rola === "admin" || this.state.finished || enable
+                  ? true
+                  : false
+              }
+              // InputProps={{ className: classes.input }}
+              style={{
+                marginTop: 3,
+                marginBottom: 3,
+                marginLeft: 5,
+                marginRight: 5
+              }}
+              // value={this.state.value}
+              value={
+                this.state.value === "0"
+                  ? ""
+                  : this.state.value.replace(".", ",")
+              }
+              InputLabelProps={{ shrink: true, className: classes.label }}
+              id="outlined-name"
+              // label={label.slice(0, 12)}
+              // className={classes.textField}
+              // value={this.state.value}
+              // placeholder={score}
+              onClick={() => {
+                // console.log("click", this.state.value, id, player, turnament);
+                return this.props.rowClicked(player, id);
+              }}
+              onChange={this.handleChange("value")}
+              onBlur={() => {
+                !button &&
+                  this.save("score", this.state.value, id, player, turnament);
+              }}
+              // margin="normal"
+              variant="outlined"
+              className={classes.textField}
+              // onKeyDown={this.handleKeyPress}
+              InputProps={{
+                inputComponent: NumberFormatCustom
+              }}
+              inputProps={{
+                className: classes.input
+              }}
+            />
+          </form>
+          <form
+            // className={classes.container}
+            style={{
+              // display: "inline-block",
+              // textAlign: "center",
+              // maxWidth: 150
+              minWidth: 50,
+              width: "30%"
             }}
-            // margin="normal"
-            variant="outlined"
-            className={classes.textField}
-            // onKeyDown={this.handleKeyPress}
-            InputProps={{
-              inputComponent: NumberFormatCustom
+            noValidate
+            autoComplete="off"
+            onSubmit={e => {
+              e.preventDefault();
+              !button
+                ? this.save("center", this.state.center, id, player, turnament)
+                : enterAction();
             }}
-            inputProps={{
-              className: classes.input
-            }}
-          />
-        </form>
+          >
+            <TextField
+              // autoFocus={() => false}
+              // inputRef={this.focusUsernameInputField}
+              // inputStyle={{ backgroundColor: "red" }}
+              // type="number"
+              disabled={
+                user.rola === "admin" || this.state.finished || enable
+                  ? true
+                  : false
+              }
+              // InputProps={{ className: classes.input }}
+              style={{
+                marginTop: 3,
+                marginBottom: 3,
+                marginLeft: 5,
+                marginRight: 5
+              }}
+              // value={this.state.value}
+              value={
+                this.state.center === "0"
+                  ? ""
+                  : this.state.center.replace(".", ",")
+              }
+              InputLabelProps={{ shrink: true, className: classes.label }}
+              id="outlined-name"
+              // label={label.slice(0, 12)}
+              // className={classes.textField}
+              // value={this.state.value}
+              // placeholder={score}
+              onClick={() => {
+                // console.log("click", this.state.value, id, player, turnament);
+                return this.props.rowClicked(player, id);
+              }}
+              onChange={this.handleChange("center")}
+              onBlur={() => {
+                !button &&
+                  this.save("center", this.state.center, id, player, turnament);
+              }}
+              // margin="normal"
+              variant="outlined"
+              className={classes.textField}
+              // onKeyDown={this.handleKeyPress}
+              InputProps={{
+                inputComponent: NumberFormatCustom
+              }}
+              inputProps={{
+                className: classes.input
+              }}
+            />
+          </form>
+        </div>
       </React.Fragment>
     );
   }

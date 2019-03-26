@@ -39,7 +39,13 @@ const comps = (
 ) => {
   // console.log("comps", turnament, finished);
   return competitions.map((comp, i) => {
-    const { competition, competitionId, score, factor: factorRow } = comp;
+    const {
+      competition,
+      competitionId,
+      score,
+      factor: factorRow,
+      center
+    } = comp;
     // console.log("competitionClicked", competitionClicked);
     // console.log("factorRow", factorRow, "score", score, "factor", factor);
     return (
@@ -72,6 +78,7 @@ const comps = (
             label={competition}
             id={competitionId}
             score={score ? score.toString() : "0"}
+            center={center ? center.toString() : "0"}
             player={playerId}
             turnament={turnament}
             rowClicked={rowClicked}

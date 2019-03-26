@@ -30,7 +30,9 @@ module.exports = {
   },
 
   add: async (req, res, next) => {
-    const { value, compId, playerId, turnament } = req.body;
+    console.log("add score", req.body);
+    const { score: scoreValue, center, compId, playerId, turnament } = req.body;
+    console.log("score", scoreValue, center, compId, playerId, turnament);
 
     // const score = new Player({
     //   value,
@@ -38,7 +40,9 @@ module.exports = {
     //   playerId,
     //   turnament
     // });
-    const score = { compId, score: value || 0 };
+    const score = { compId, score: scoreValue || 0, center: center || 0 };
+    const score0 = { compId, score: 0, center: 0 };
+    console.log("sc", score, score0);
     const options = { upsert: true, new: true, setDefaultsOnInsert: true };
     console.log(req.body);
 
@@ -50,7 +54,7 @@ module.exports = {
         try {
           const compCreated = await Player.update(
             { _id: playerId },
-            { $push: { competitions: score || 0 } }
+            { $push: { competitions: score || score0 } }
           );
 
           res.status(200).json({
@@ -76,7 +80,8 @@ module.exports = {
             { _id: playerId, "competitions.compId": compId },
             {
               $set: {
-                "competitions.$.score": score.score || 0
+                "competitions.$.score": score.score || 0,
+                "competitions.$.center": score.center || 0
               }
             }
           ).exec();

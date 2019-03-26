@@ -14,7 +14,12 @@ import InputSimpleSelect from "../inputs/InputSimpleSelect";
 import PlayersScoresRow from "../components/PlayersScores/PlayersScoresRow";
 import PlayersScoresHead from "../components/PlayersScores/PlayersScoresHead";
 import SummaryRow from "../components/PlayersScores/SummaryRow.js";
-import { dynamicSort, addRank, searchingInArray } from "../functions/functions";
+import {
+  dynamicSort,
+  addRank,
+  searchingInArray,
+  addRankWithCenter
+} from "../functions/functions";
 import Pagination from "../skins/Pagination";
 import ButtonMy from "../skins/ButtonMy";
 import ExportExcel from "./PlayersScores/ExportExcel";
@@ -137,6 +142,7 @@ class PlayersScoresMain extends Component {
       for (let player of thePlayers) {
         playerCompetitions = player.competitions;
         let playerTotalScore = 0;
+        let playerTotalCenter = 0;
         if (typeof player.order !== "number") {
           orderIsUnd = "yes";
         }
@@ -153,18 +159,21 @@ class PlayersScoresMain extends Component {
         };
 
         for (let competition of competitions) {
-          let thisComp = { compId: "", score: 0 };
+          let thisComp = { compId: "", score: 0, center: 0 };
           if (playerCompetitions.length > 0) {
             const comp = playerCompetitions.filter(
               x => x.compId === competition._id
             );
-            thisComp = comp.length > 0 ? comp[0] : { compId: "", score: 0 };
+            thisComp =
+              comp.length > 0 ? comp[0] : { compId: "", score: 0, center: 0 };
             playerTotalScore = playerTotalScore + thisComp.score;
+            playerTotalCenter = playerTotalCenter + thisComp.center;
           }
           const playerCompetition = {
             competition: competition.name,
             competitionId: competition._id,
-            score: thisComp.score
+            score: thisComp.score,
+            center: thisComp.center
           };
           playerRow.competitions.push(playerCompetition);
           // summaryRow.competitions
@@ -173,7 +182,10 @@ class PlayersScoresMain extends Component {
           //     ? (x.score = x.score + playerCompetition.score)
           //     : (x.score = x.score)
           // );
-          Object.assign(playerRow, { totalScore: playerTotalScore });
+          Object.assign(playerRow, {
+            totalScore: playerTotalScore,
+            totalCenter: playerTotalCenter
+          });
           // summaryRow.totalScore = summaryRow.totalScore + playerTotalScore;
         }
         matrix.push(playerRow);
@@ -188,7 +200,7 @@ class PlayersScoresMain extends Component {
       let matrixSorted = [];
       if (orderIsUnd === "yes") {
         // console.log("sort via order", orderIsUnd);
-        matrixSorted = addRank(matrix, "totalScore");
+        matrixSorted = addRankWithCenter(matrix, "totalScore", "totalCenter");
         this.setState(
           {
             matrix: matrixSorted,
@@ -204,7 +216,11 @@ class PlayersScoresMain extends Component {
         );
       } else {
         // console.log("sort via surname", orderIsUnd);
-        matrixSorted = addRank(matrix, "totalScore").sort(dynamicSort("order"));
+        matrixSorted = addRankWithCenter(
+          matrix,
+          "totalScore",
+          "totalCenter"
+        ).sort(dynamicSort("order"));
       }
 
       // console.log(matrixSorted);
@@ -334,7 +350,7 @@ class PlayersScoresMain extends Component {
       //   this.displayClass()
       // );
 
-      matrix = addRank(matrix, "totalScore");
+      matrix = addRankWithCenter(matrix, "totalScore", "totalCenter");
       this.setState({ matrix }, () => {
         this.setState({ factor: false });
       });
@@ -411,7 +427,8 @@ class PlayersScoresMain extends Component {
   summaryRow = matrix => {
     let competitions = [];
     let totalScore = 0;
-    let summaryRow = { totalScore, competitions };
+    let totalCenter = 0;
+    let summaryRow = { totalScore, totalCenter, competitions };
     // console.log("matrixFiltered", matrixFiltered);
     let i = -1;
     for (let player of matrix) {
@@ -429,6 +446,8 @@ class PlayersScoresMain extends Component {
           // console.log("comp iter", competitions[iter].score);
           competitions[iter].score =
             competitions[iter].score + competition.score;
+          competitions[iter].center =
+            competitions[iter].center + competition.center;
         }
       }
       // const competInPlayer
@@ -436,6 +455,7 @@ class PlayersScoresMain extends Component {
     for (let compet of competitions) {
       // console.log("totalScore", totalScore);
       totalScore = totalScore + compet.score;
+      totalCenter = totalCenter + compet.center;
     }
     // for (var score in competitions) {
     //   if (competitions.hasOwnProperty(score)) {
@@ -444,6 +464,7 @@ class PlayersScoresMain extends Component {
     // }
     summaryRow.competitions = competitions;
     summaryRow.totalScore = totalScore;
+    summaryRow.totalCenter = totalCenter;
     // console.log("sum", summaryRow);
     return summaryRow;
   };
@@ -470,7 +491,7 @@ class PlayersScoresMain extends Component {
     const grid = `50px 250px 100px ${isClass ? "150px" : ""} 80px repeat(${this
       .state.summaryRow &&
       this.state.summaryRow.competitions &&
-      this.state.summaryRow.competitions.length}, minmax(100px, 1fr))`;
+      this.state.summaryRow.competitions.length}, minmax(200px, 1fr))`;
     // console.log("sum", this.state.summaryRow);
     return (
       <div id="raport">
