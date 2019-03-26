@@ -342,6 +342,7 @@ class MiniDrawer extends React.Component {
           {/* {this.props.children} */}
 
           {/* </main> */}
+          {/* <Route exact path="/register" component={Register} /> */}
           {(!isAuthenticated && path === "wyniki") || path === "raport" || (
             <Footer />
           )}
