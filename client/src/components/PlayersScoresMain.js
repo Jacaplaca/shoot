@@ -527,7 +527,7 @@ class PlayersScoresMain extends Component {
                 }}
               >
                 <img
-                  src="http://wordpress1813247.home.pl/s1.jpg"
+                  src="http://wordpress1813247.home.pl/autoinstalator/wordpressplus/s1.jpg"
                   alt="new"
                   style={{ width: 500 }}
                 />
@@ -540,7 +540,7 @@ class PlayersScoresMain extends Component {
                 }}
               >
                 <img
-                  src="http://wordpress1813247.home.pl/s2.jpg"
+                  src="http://wordpress1813247.home.pl/autoinstalator/wordpressplus/s2.jpg"
                   alt="new"
                   style={{ width: 500 }}
                 />
