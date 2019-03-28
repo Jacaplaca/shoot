@@ -207,7 +207,7 @@ class PlayersScoresMain extends Component {
       // console.log("orderIsUnd", orderIsUnd);
       let matrixSorted = [];
       if (orderIsUnd === "yes") {
-        // console.log("sort via order", orderIsUnd);
+        console.log("sort via order", orderIsUnd);
         matrixSorted = addRankWithCenter(matrix, "totalScore", "totalCenter");
         this.setState(
           {
@@ -223,14 +223,12 @@ class PlayersScoresMain extends Component {
           }
         );
       } else {
-        // console.log("sort via surname", orderIsUnd);
-        // !isAuthenticated && ?
-        matrixSorted = addRankWithCenter(matrix, "totalScore", "totalCenter");
-        if (isAuthenticated) {
-          matrixSorted.sort(dynamicSort("order"));
-        } else {
-          matrixSorted.sort(dynamicSort("rank"));
-        }
+        console.log("sort via surname", orderIsUnd);
+        matrixSorted = addRankWithCenter(
+          matrix,
+          "totalScore",
+          "totalCenter"
+        ).sort(dynamicSort("order"));
       }
 
       // console.log(matrixSorted);
@@ -244,6 +242,7 @@ class PlayersScoresMain extends Component {
         },
         () => {
           !isAuthenticated && factor && this.handleFactor(true);
+          !isAuthenticated && this.sorting("rank", "up");
         }
       );
       if (this.state.filter !== "") {
