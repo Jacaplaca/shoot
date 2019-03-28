@@ -1,5 +1,6 @@
 import React, { Component, createRef } from "react";
-import { withTheme } from "@material-ui/core/styles";
+import { withTheme, withStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
 import { compose } from "redux";
 import axios from "axios";
 import { StickyContainer, Sticky } from "react-sticky";
@@ -18,8 +19,10 @@ import {
   dynamicSort,
   addRank,
   searchingInArray,
-  addRankWithCenter
+  addRankWithCenter,
+  combineStyles
 } from "../functions/functions";
+import { tableHeadStyles } from "../skins/mainStyles";
 import Pagination from "../skins/Pagination";
 import ButtonMy from "../skins/ButtonMy";
 import ExportExcel from "./PlayersScores/ExportExcel";
@@ -221,11 +224,13 @@ class PlayersScoresMain extends Component {
         );
       } else {
         // console.log("sort via surname", orderIsUnd);
-        matrixSorted = addRankWithCenter(
-          matrix,
-          "totalScore",
-          "totalCenter"
-        ).sort(dynamicSort("order"));
+        // !isAuthenticated && ?
+        matrixSorted = addRankWithCenter(matrix, "totalScore", "totalCenter");
+        if (isAuthenticated) {
+          matrixSorted.sort(dynamicSort("order"));
+        } else {
+          matrixSorted.sort(dynamicSort("rank"));
+        }
       }
 
       // console.log(matrixSorted);
@@ -250,7 +255,7 @@ class PlayersScoresMain extends Component {
 
   sorting = (what, how, id) => {
     const factor = this.state.factor;
-    // console.log("sortkin", what, how, id);
+    console.log("sortkin", what, how, id);
 
     let matrix = [];
 
@@ -486,7 +491,8 @@ class PlayersScoresMain extends Component {
     // console.log("PlayersScores(),", this.props.add.turnamentId);
     const {
       auth: { isAuthenticated },
-      raport
+      raport,
+      classes
     } = this.props;
     const {
       isFactor,
@@ -570,16 +576,25 @@ class PlayersScoresMain extends Component {
                       style={{
                         ...style,
                         // top: 70
-                        paddingTop:
-                          isAuthenticated && path !== "raport" ? 60 : 0,
-                        zIndex: 3
+                        marginTop:
+                          isAuthenticated && path !== "raport" ? 60 : 60,
+                        zIndex: 3,
+                        borderTop: "1px solid rgb(62, 62, 62)",
+                        borderRight: "1px solid rgb(62, 62, 62)",
+                        borderLeft: "1px solid rgb(62, 62, 62)"
                         // marginTop: isSticky ? 50 : 0
                         // marginTop: distanceFromTop < 60 ? 50 : 0
+                        // backgroundColor: "red"
                       }}
+                      className={classNames(
+                        classes.firstRowHeadTable,
+                        classes.table
+                      )}
                     >
                       <FormGroup row>
                         {isAuthenticated && isFactor && (
                           <FormControlLabel
+                            style={{ marginLeft: 10, marginTop: 5 }}
                             control={
                               <Checkbox
                                 checked={this.state.factor}
@@ -602,7 +617,7 @@ class PlayersScoresMain extends Component {
                           />
                         )}
 
-                        <ExportExcel data={matrixUnifilltered} />
+                        {/* <ExportExcel data={matrixUnifilltered} /> */}
                       </FormGroup>
                       <PlayersScoresHead
                         isFactor={isFactor}
@@ -634,7 +649,13 @@ class PlayersScoresMain extends Component {
                 }}
               </Sticky>
               {this.state.summaryRow && this.state.summaryRow.competitions ? (
-                <div>
+                <div
+                  style={{
+                    borderBottom: "1px solid rgb(62, 62, 62)",
+                    borderRight: "1px solid rgb(62, 62, 62)",
+                    borderLeft: "1px solid rgb(62, 62, 62)"
+                  }}
+                >
                   <Pagination data={matrix} off={raport}>
                     <PlayersScoresRows
                       isFactor={isFactor}
@@ -714,6 +735,14 @@ const PlayersScoresRows = ({
   });
 };
 
+const styles = theme => ({
+  table: {
+    // gridTemplateColumns:
+    //   "50px minmax(80px, 100px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr 70px 60px"
+    // height: 44
+  }
+});
+
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,
@@ -723,9 +752,11 @@ const mapStateToProps = state => ({
   loading: state.loading
 });
 
+const combinedStyles = combineStyles(styles, tableHeadStyles);
+
 const enhance = compose(
   // withRouter,
-  withTheme(),
+  withStyles(combinedStyles, { withTheme: true }),
   connect(
     mapStateToProps,
     actions

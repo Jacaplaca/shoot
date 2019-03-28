@@ -108,12 +108,15 @@ export const tableHeadStyles = theme => ({
     minWidth: "100%",
     color: theme.palette.text.primary,
     // background: "red",
-    background: lighten(theme.palette.menu, 0.1)
+    background: lighten(theme.palette.menu, 0.05)
     // padding: 3
-    // border: "1px solid white"
+    // border: "0.3px solid white"
     // marginBottom: 2,
     // minHeight: 50,
     // zIndex: 2000000000
+  },
+  firstRowHeadTable: {
+    background: lighten(theme.palette.menu, 0.1)
   }
 });
 

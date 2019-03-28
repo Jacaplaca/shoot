@@ -10,7 +10,7 @@ const Footer = ({ classes }) => {
         <a href="https://swiadomafirma.pl/">
           {" "}
           <img
-            src="http://51.68.136.111/sf.jpg"
+            src="/sf.jpg"
             alt="Świadoma Firma"
             style={{ width: 90, padding: 5 }}
           />{" "}

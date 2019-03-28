@@ -172,14 +172,15 @@ class PlayersScoresRow extends Component {
         >
           <span
             className={classNames(
-              classes.rank,
+              // classes.rank,
               totalScore === 0 && classes.black,
               rank === 1 && classes.gold,
               rank === 2 && classes.silver,
-              rank === 3 && classes.brown
+              rank === 3 && classes.brown,
+              rank > 3 && classes.rank
             )}
           >
-            {totalScore !== 0 ? rank : "X"}
+            {totalScore !== 0 ? (rank > 3 ? rank : "") : "X"}
           </span>
           <span className={classNames(classes.rowBlock, classes.rowName)}>
             {rodo ? `${playerName} ${playerSurname}` : "RODO"}
@@ -238,7 +239,7 @@ const styles = theme => ({
     // gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
   },
   rank: {
-    background: "white",
+    background: "silver",
     fontWeight: "600",
     alignSelf: "center",
     justifySelf: "center",
@@ -251,14 +252,26 @@ const styles = theme => ({
     opacity: 0.9
   },
   gold: {
-    background: "gold"
+    // background: "gold"
+    backgroundImage: "url(/1stplace.png)",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center"
   },
   silver: {
-    background: "silver"
+    // background: "white"
+    backgroundImage: "url(/2stplace.png)",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center"
   },
   brown: {
-    background: "brown",
-    color: "white"
+    // background: "orange"
+    backgroundImage: "url(/3stplace.png)",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center"
+    // color: "white"
   },
   black: {
     background: "black",
