@@ -3,7 +3,17 @@ import { withTheme, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import { compose } from "redux";
 import axios from "axios";
+import _ from "lodash";
 import { StickyContainer, Sticky } from "react-sticky";
+import {
+  Link,
+  DirectLink,
+  Element,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller
+} from "react-scroll";
 // import Measure from "react-measure";
 import { connect } from "react-redux";
 import MainFrameHOC from "../skins/MainFrameHOC";
@@ -26,6 +36,7 @@ import { tableHeadStyles } from "../skins/mainStyles";
 import Pagination from "../skins/Pagination";
 import ButtonMy from "../skins/ButtonMy";
 import ExportExcel from "./PlayersScores/ExportExcel";
+
 // var _ = require("lodash");
 // import PlayersScoresForm from "./PlayersScores/PlayersScoresForm";
 // import PlayersScoresList from "./PlayersScores/PlayersScoresList";
@@ -51,11 +62,23 @@ class PlayersScoresMain extends Component {
     isClass: false,
     klasy: [],
     klasaId: null,
-    filtered: false
+    klasaName: "",
+    filtered: false,
+    autoScroll: false,
+    onScreenPosition: 0
   };
 
   componentDidMount() {
     turnamentId = window.location.pathname.split("/")[2];
+
+    Events.scrollEvent.register("begin", function() {
+      console.log("begin", arguments);
+    });
+
+    Events.scrollEvent.register("end", function() {
+      console.log("end", arguments);
+    });
+
     // console.log(
     //   "psm",
     //   this.props.auth.isAuthenticated,
@@ -63,6 +86,11 @@ class PlayersScoresMain extends Component {
     //   turnamentId
     //   // this.props
     // );
+    this.fetch();
+  }
+
+  fetch = () => {
+    console.log("im fetching");
     this.props.auth.isAuthenticated
       ? this.props.fetchFromDB("players", null, turnamentId)
       : this.props.fetchFromDB("playersopen", null, turnamentId);
@@ -72,7 +100,7 @@ class PlayersScoresMain extends Component {
         `/api/turnamentsopen/${turnamentId}`,
         null
       );
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (
@@ -81,6 +109,165 @@ class PlayersScoresMain extends Component {
     ) {
       this.makeMatrix(nextProps);
     }
+  }
+
+  scrollToTop = () => {
+    scroll.scrollToTop();
+  };
+  scrollTo = () => {
+    scroller.scrollTo("scroll-to-element", {
+      duration: 800,
+      delay: 0,
+      smooth: "easeInOutQuart"
+    });
+  };
+
+  scrollLoop = async () => {
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        this.fetch();
+        resolve("foo");
+      }, 5000);
+    });
+    this.jumping();
+    // console.log("after fetch()");
+  };
+
+  jumping = () => {
+    const { autoScroll, matrixUnifilltered, klasy } = this.state;
+    let viewportHeight = document.getElementById("last").offsetTop;
+    const scrollOnce = 500;
+    const timeForView = 10000;
+    const jumps = Math.ceil(viewportHeight / scrollOnce + 1);
+    let iter = 0;
+    let iString;
+    // let promises = [];
+    let pin = Promise.resolve();
+    for (let i of new Array(jumps)) {
+      const howManyJumps = new Array(jumps).length;
+      pin = pin.then(() => {
+        const prom = new Promise(resolve =>
+          setTimeout(() => {
+            scroll.scrollMore(scrollOnce, { duration: 500 });
+            iter++;
+            iString = iter.toString();
+            if (parseFloat(iString) === howManyJumps) {
+              scroll.scrollToTop(2000);
+              setTimeout(() => {
+                this.scrollLoop();
+                console.log("ost", i);
+              }, 1000);
+            }
+            resolve();
+          }, timeForView)
+        );
+        // promises.push(prom);
+        // console.log("promises", promises);
+        return prom;
+      });
+    }
+  };
+
+  scrolling = async () => {
+    this.setState({ autoScroll: !this.state.autoScroll }, async () => {
+      console.log("autoScroll", this.state.autoScroll);
+      if (this.state.autoScroll) {
+        // const matrixParse = _.clone(matrixUnifilltered);
+
+        this.jumping();
+        // await Promise.all(promises);
+        // console.log("finish");
+
+        // // for (let klasaChoose of klasy) {
+        // //   setTimeout(function() {
+        // //     const klasa = klasy.filter(klasa => klasaChoose._id === klasa._id);
+        // //     const matrixFilteredLength = matrixParse.filter(
+        // //       x => x.klasa === klasa[0].name
+        // //     ).length;
+        // //     console.log("hello", matrixFilteredLength);
+        // //   }, 3000);
+        // // }
+        //
+        // let p = Promise.resolve();
+        // // let matrixFilteredLength = 1;
+        // for (let klasaChoose of klasy) {
+        //   p = p.then(
+        //     async () =>
+        //       new Promise(resolve =>
+        //         setTimeout(async () => {
+        //           // const klasa = klasy.filter(
+        //           //   klasa => klasaChoose._id === klasa._id
+        //           // );
+        //           // if (klasaChoose._id === "all") {
+        //           //   matrixFilteredLength = matrixParse.length;
+        //           // } else {
+        //           //   matrixFilteredLength = matrixParse.filter(
+        //           //     x => x.klasa === klasa[0].name
+        //           //   ).length;
+        //           // }
+        //           // console.log("klasa", klasa);
+        //           // console.log("matrixFilteredLength", matrixFilteredLength);
+        //           await this.displayClass(klasaChoose._id);
+        //           viewportHeight = document.getElementById("last").offsetTop;
+        //           console.log("id", klasaChoose._id, viewportHeight);
+        //
+        //           let pin = Promise.resolve();
+        //           for (let i of new Array(
+        //             jumps
+        //           )) {
+        //             pin = pin.then(
+        //               () =>
+        //                 new Promise(resolve =>
+        //                   setTimeout(() => {
+        //                     scroll.scrollMore(scrollOnce, { duration: 1000 });
+        //                     resolve();
+        //                   }, timeForView)
+        //                 )
+        //             );
+        //           }
+        //
+        //           // scroll.scrollToBottom({
+        //           //   duration: matrixFilteredLength * 200,
+        //           //   delay: 1000
+        //           // });
+        //
+        //           // scroll.scrollToBottom({
+        //           //   duration: matrixFilteredLength * 50,
+        //           //   delay: 500
+        //           // });
+        //           //
+        //           // setTimeout(() => {
+        //           //   scroll.scrollToTop({
+        //           //     duration: matrixFilteredLength * 50,
+        //           //     delay: 500
+        //           //   });
+        //           // }, matrixFilteredLength * 50 + 500);
+        //
+        //           // scroll.scrollMore(500, { duration: 1000 });
+        //
+        //           resolve();
+        //         }, Math.ceil(viewportHeight / scrollOnce) * timeForView)
+        //       )
+        //   );
+        // }
+        //
+        // // const matrixSt = JSON.stringify(matrixUnifilltered);
+        // // const matrixParse = JSON.parse(matrixSt);
+        //
+        // // scroll.scrollToBottom({ duration: 4500 });
+        //
+        // // for (var i = 0; i < array.length;) {
+        // //   array[i]
+        // // }
+      } else {
+        scroll.scrollToTop(1000);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    Events.scrollEvent.remove("begin");
+    Events.scrollEvent.remove("end");
   }
 
   makeMatrix = nextProps => {
@@ -302,7 +489,8 @@ class PlayersScoresMain extends Component {
     }
   };
 
-  handleFactor = status => {
+  handleFactor = async (status, sorting) => {
+    console.log("handlefactor", status, sorting);
     const factorizationSt = JSON.stringify(this.state.matrix);
     let matrix = JSON.parse(factorizationSt);
     let factorization = JSON.parse(factorizationSt);
@@ -356,8 +544,9 @@ class PlayersScoresMain extends Component {
       //   true
       // );
       factorization = addRank(factorization, "factorTotal");
-      this.setState({ matrix: factorization }, () => {
-        this.setState({ factor: true });
+      sorting && factorization.sort(dynamicSort("factorTotal")).reverse();
+      this.setState({ matrix: factorization }, async () => {
+        await this.setAsyncState({ factor: true });
       });
     } else {
       // this.setState({ factor: false }, () =>
@@ -366,8 +555,9 @@ class PlayersScoresMain extends Component {
       // );
 
       matrix = addRankWithCenter(matrix, "totalScore", "totalCenter");
-      this.setState({ matrix }, () => {
-        this.setState({ factor: false });
+      sorting && matrix.sort(dynamicSort("totalScore")).reverse();
+      this.setState({ matrix }, async () => {
+        await this.setAsyncState({ factor: false });
       });
 
       // this.setState(state => {
@@ -379,21 +569,24 @@ class PlayersScoresMain extends Component {
     }
   };
 
+  setAsyncState = newState =>
+    new Promise(resolve => this.setState(newState, () => resolve()));
+
   changeClass = event => {
     const { matrixUnifilltered, factor } = this.state;
     const klasaId = event.target.value;
     this.setState({ klasaId }, () =>
       // this.setState({ matrix: this.displayClass() })
-      this.displayClass()
+      this.displayClass(klasaId)
     );
   };
-
-  displayClass = () => {
+  displayClass = async id => {
     const { klasy, matrixUnifilltered, factor, klasaId } = this.state;
     // let matrix = [];
     let matrixFiltered = matrixUnifilltered;
     let summaryRow = {};
-    if (klasaId === "all" || klasaId === null) {
+    let klasa;
+    if (id === "all" || id === null) {
       // console.log("displayClass()");
       // addRank(matrixUnifilltered, "totalScore");
       matrixFiltered = matrixUnifilltered;
@@ -407,9 +600,11 @@ class PlayersScoresMain extends Component {
     } else {
       // let competition = {competition: "", competitionId: "", score: 0}
 
-      const matrixSt = JSON.stringify(matrixUnifilltered);
-      const matrixParse = JSON.parse(matrixSt);
-      const klasa = klasy.filter(klasa => klasaId === klasa._id);
+      // const matrixSt = JSON.stringify(matrixUnifilltered);
+      const matrixParse = _.clone(matrixUnifilltered);
+      // const matrixSt = JSON.stringify(matrixUnifilltered);
+      // const matrixParse = JSON.parse(matrixSt);
+      klasa = klasy.filter(klasa => id === klasa._id);
       matrixFiltered = matrixParse.filter(x => x.klasa === klasa[0].name);
 
       // matrix = this.summaryRow(matrixFiltered);
@@ -426,15 +621,25 @@ class PlayersScoresMain extends Component {
     }
     factor
       ? this.setState(
-          { matrix: matrixFiltered, filtered: true, summaryRow },
-          () => {
-            this.handleFactor(true);
+          {
+            matrix: matrixFiltered,
+            filtered: true,
+            summaryRow,
+            klasaName: klasa ? klasa[0].name : "Wszystkie"
+          },
+          async () => {
+            await this.handleFactor(true, true);
           }
         )
       : this.setState(
-          { matrix: matrixFiltered, filtered: true, summaryRow },
-          () => {
-            this.handleFactor(false);
+          {
+            matrix: matrixFiltered,
+            filtered: true,
+            summaryRow,
+            klasaName: klasa ? klasa[0].name : "Wszystkie"
+          },
+          async () => {
+            await this.handleFactor(false, true);
           }
         );
   };
@@ -501,7 +706,9 @@ class PlayersScoresMain extends Component {
       isClass,
       klasy,
       filtered,
-      matrixUnifilltered
+      matrixUnifilltered,
+      autoScroll,
+      klasaName
     } = this.state;
     const wide = isAuthenticated && isFactor ? "200px" : "100px";
     const zmienna = this.state.filter;
@@ -615,9 +822,25 @@ class PlayersScoresMain extends Component {
                             action={this.changeClass}
                           />
                         )}
-
                         {/* <ExportExcel data={matrixUnifilltered} /> */}
+                        {
+                          <div
+                            style={{
+                              display: "grid",
+                              alignContent: "center",
+                              marginLeft: 20
+                            }}
+                          >
+                            {/* <h3
+                              style={{ color: "white" }}
+                            >{`Klasa: ${klasaName}`}</h3> */}
+                            <ButtonMy onClick={this.scrolling}>
+                              Prezentuj wszystkie wyniki
+                            </ButtonMy>
+                          </div>
+                        }
                       </FormGroup>
+
                       <PlayersScoresHead
                         isFactor={isFactor}
                         isClass={isClass}
@@ -647,6 +870,7 @@ class PlayersScoresMain extends Component {
                   );
                 }}
               </Sticky>
+
               {this.state.summaryRow && this.state.summaryRow.competitions ? (
                 <div
                   style={{
@@ -655,7 +879,11 @@ class PlayersScoresMain extends Component {
                     borderLeft: "1px solid rgb(62, 62, 62)"
                   }}
                 >
-                  <Pagination data={matrix} off={raport}>
+                  <Pagination
+                    data={matrix}
+                    off={raport || autoScroll}
+                    // off
+                  >
                     <PlayersScoresRows
                       isFactor={isFactor}
                       isClass={isClass}
@@ -684,6 +912,7 @@ class PlayersScoresMain extends Component {
             </StickyContainer>
           </React.Fragment>
         ) : null}
+        <div id="last" />
         {/* <Pagination data={this.state.matrix}>
           {this.state.summaryRow && this.state.summaryRow.competitions ? (
             <PlayersScoresRows
@@ -713,9 +942,9 @@ const PlayersScoresRows = ({
   factor,
   isClass
 }) => {
-  // console.log("psr wyzej", rows, turnament, grid, rowClick, playerClicked);
+  // console.log("psr");
   return rows.map((player, i) => {
-    // console.log("psr", player.competitions[0], factor);
+    // console.log("psr", i);
     return (
       <PlayersScoresRow
         isClass={isClass}

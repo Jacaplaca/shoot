@@ -13,7 +13,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 // };
 
 const PagingJump = ({ anchorEl, onClose, action, pageSize }) => {
-  console.log("PagingJump", pageSize);
+  // console.log("PagingJump", pageSize);
 
   return (
     <Menu
@@ -39,6 +39,15 @@ const PagingJump = ({ anchorEl, onClose, action, pageSize }) => {
       </MenuItem>
       <MenuItem onClick={() => action(200)} selected={200 === pageSize}>
         Na jednej stronie 200 rzędów
+      </MenuItem>
+      <MenuItem onClick={() => action(300)} selected={300 === pageSize}>
+        Na jednej stronie 300 rzędów
+      </MenuItem>
+      <MenuItem onClick={() => action(500)} selected={500 === pageSize}>
+        Na jednej stronie 500 rzędów
+      </MenuItem>
+      <MenuItem onClick={() => action(1000)} selected={1000 === pageSize}>
+        Na jednej stronie 1000 rzędów
       </MenuItem>
     </Menu>
   );

@@ -35,6 +35,7 @@ export const arr_diff = (a1, a2) => {
 };
 
 export const formatNumber = n => {
+  // console.log("formatNumber()", n);
   if (Number(n) === n && n % 1 !== 0) {
     return n
       .toFixed(2)

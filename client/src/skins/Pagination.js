@@ -19,7 +19,7 @@ class Pagination extends Component {
   };
 
   componentDidMount() {
-    console.log("pagination mount");
+    // console.log("pagination mount");
     const { off } = this.props;
     this.setState({ page_size: off ? 9999 : 100 });
     this.setState({ page_number: 1 }, () => {
@@ -32,30 +32,60 @@ class Pagination extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log("pagination", nextProps, this.state.page_number);
-    if (
-      nextProps &&
-      nextProps.data &&
-      nextProps.data[0] &&
-      nextProps.data.length !== this.props.data.length &&
-      this.props.data &&
-      this.props.data[0]
-    ) {
-      // console.log("tu?", nextProps.data);
-      this.setState({ page_number: 1 }, () => {
-        this.paginate(
-          nextProps.data,
-          this.state.page_size,
-          this.state.page_number
+    // console.log("receive props pagination", nextProps);
+    const { page_size } = this.state;
+    const { off } = this.props;
+
+    if (nextProps.off !== off) {
+      if (nextProps.off) {
+        // console.log("nextProps.off true", nextProps.off);
+        this.setState({ page_size: 9999 }, () =>
+          this.paginate(
+            nextProps.data,
+            this.state.page_size,
+            this.state.page_number
+          )
         );
-      });
-    } else {
-      this.paginate(
-        nextProps.data,
-        this.state.page_size,
-        this.state.page_number
-      );
+      } else {
+        // console.log("nextProps.off false", nextProps.off);
+        this.setState({ page_size: 100 }, () =>
+          this.paginate(
+            nextProps.data,
+            this.state.page_size,
+            this.state.page_number
+          )
+        );
+      }
     }
+    // console.log("pagination", nextProps, this.state.page_number);
+    // if (
+    //   nextProps &&
+    //   nextProps.data &&
+    //   nextProps.data[0] &&
+    //   nextProps.data.length !== this.props.data.length &&
+    //   this.props.data &&
+    //   this.props.data[0]
+    // ) {
+    //   // console.log("tu?", nextProps.data);
+    //   this.setState({ page_number: 1 }, () => {
+    //     this.paginate(
+    //       nextProps.data,
+    //       this.state.page_size,
+    //       this.state.page_number
+    //     );
+    //   });
+    // } else {
+    //   this.paginate(
+    //     nextProps.data,
+    //     this.state.page_size,
+    //     this.state.page_number
+    //   );
+    // }
+    return this.paginate(
+      nextProps.data,
+      this.state.page_size,
+      this.state.page_number
+    );
   }
 
   changePageSize = size => {
@@ -94,7 +124,7 @@ class Pagination extends Component {
   };
 
   render() {
-    const { children, data, grid } = this.props;
+    const { children, data, grid, off } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
         rows: this.state.matrixPaginated
@@ -108,7 +138,7 @@ class Pagination extends Component {
     return (
       <React.Fragment>
         {childrenWithProps}
-        {data.length > 9 && path !== "raport" && (
+        {!off && data.length > 9 && path !== "raport" && (
           <PaginationRow
             changePageNumber={this.changePage}
             page={this.state.page_number}

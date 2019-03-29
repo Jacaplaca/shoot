@@ -38,7 +38,7 @@ const comps = (
   y,
   isFactor
 ) => {
-  console.log(isFactor);
+  // console.log(isFactor);
   // console.log("comps", turnament, finished);
   return competitions.map((comp, i) => {
     const {
@@ -49,7 +49,7 @@ const comps = (
       center,
       totalCenter
     } = comp;
-    // console.log("competitionClicked", comp);
+    // console.log("competitionClicked", i, score);
     // console.log("factorRow", factorRow, "score", score, "factor", factor);
     return (
       <span
@@ -92,7 +92,9 @@ const comps = (
         ) : (
           <div style={{ marginTop: 8, marginBottom: 8 }}>
             <NumberFormat
-              value={formatNumber(factor ? factorRow : score)}
+              value={formatNumber(
+                isAuthenticated ? (factor ? factorRow : score) : score
+              )}
               displayType={"text"}
               thousandSeparator={" "}
               decimalSeparator={","}
@@ -156,7 +158,7 @@ class PlayersScoresRow extends Component {
     // console.log("player", row.competitions[0]);
     return (
       <React.Fragment>
-        {/* {console.log("playersscoresrow", row, finished)} */}
+        {/* {console.log("playersscoresrow", factor, factorTotal, totalScore)} */}
         <div
           className={classNames(
             classes.rowTable,
@@ -196,7 +198,13 @@ class PlayersScoresRow extends Component {
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             <NumberFormat
-              value={formatNumber(factor ? factorTotal : totalScore)}
+              value={formatNumber(
+                isAuthenticated
+                  ? factor
+                    ? factorTotal
+                    : totalScore
+                  : totalScore
+              )}
               displayType={"text"}
               thousandSeparator={" "}
               decimalSeparator={","}
