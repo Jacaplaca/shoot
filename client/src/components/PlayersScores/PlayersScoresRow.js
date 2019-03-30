@@ -92,9 +92,7 @@ const comps = (
         ) : (
           <div style={{ marginTop: 8, marginBottom: 8 }}>
             <NumberFormat
-              value={formatNumber(
-                isAuthenticated ? (factor ? factorRow : score) : score
-              )}
+              value={formatNumber(factor ? factorRow : score)}
               displayType={"text"}
               thousandSeparator={" "}
               decimalSeparator={","}
@@ -198,13 +196,7 @@ class PlayersScoresRow extends Component {
           <span className={classNames(classes.rowBlock)}>
             {/* {Math.floor(totalScore)} */}
             <NumberFormat
-              value={formatNumber(
-                isAuthenticated
-                  ? factor
-                    ? factorTotal
-                    : totalScore
-                  : totalScore
-              )}
+              value={formatNumber(factor ? factorTotal : totalScore)}
               displayType={"text"}
               thousandSeparator={" "}
               decimalSeparator={","}

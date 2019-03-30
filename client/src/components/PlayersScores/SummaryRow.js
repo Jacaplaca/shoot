@@ -89,9 +89,10 @@ class SummaryRow extends Component {
       rows,
       competitionClicked,
       factor,
-      isClass
+      isClass,
+      isFactor
     } = this.props;
-    const { totalScore, competitions, number } = row;
+    const { totalScore, competitions, number, factorTotal } = row;
     // console.log("summaryRow", row);
 
     return (

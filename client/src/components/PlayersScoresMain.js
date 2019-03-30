@@ -491,9 +491,9 @@ class PlayersScoresMain extends Component {
 
   handleFactor = async (status, sorting) => {
     console.log("handlefactor", status, sorting);
-    const factorizationSt = JSON.stringify(this.state.matrix);
-    let matrix = JSON.parse(factorizationSt);
-    let factorization = JSON.parse(factorizationSt);
+    // const factorizationSt = JSON.stringify(this.state.matrix);
+    let matrix = _.clone(this.state.matrix);
+    let factorization = _.clone(this.state.matrix);
     if (status) {
       let minims = {};
       for (let competition of factorization[0].competitions) {
@@ -543,11 +543,19 @@ class PlayersScoresMain extends Component {
       //   "totalCenter",
       //   true
       // );
+      // factorization = addRank(factorization, "totalScore");
       factorization = addRank(factorization, "factorTotal");
       sorting && factorization.sort(dynamicSort("factorTotal")).reverse();
-      this.setState({ matrix: factorization }, async () => {
-        await this.setAsyncState({ factor: true });
-      });
+      // this.setState({ matrix: factorization }, async () => {
+      //   await this.setAsyncState({ factor: true });
+      //   console.log("matrix", factorization);
+      // });
+      await this.setAsyncState({ matrix: factorization, factor: true });
+      console.log(
+        "after factorization, after state",
+        factorization,
+        this.state.matrix
+      );
     } else {
       // this.setState({ factor: false }, () =>
       //   // this.setState({ matrix: this.displayClass() })
