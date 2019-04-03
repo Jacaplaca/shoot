@@ -1,5 +1,8 @@
 {
   "name": "frontend",
+  "config": {
+    "port": "3000"
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -42,7 +45,7 @@
   },
   "proxy": {
     "/api/*": {
-      "target": "http://localhost:5001/"
+      "target": "HOST"
     }
   },
   "devDependencies": {
