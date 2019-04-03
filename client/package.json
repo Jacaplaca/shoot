@@ -1,8 +1,9 @@
 {
   "name": "frontend",
   "config": {
-    "port": "3000"
+    "host": "http://localhost:5001/"
   },
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,8 +13,10 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
     "classnames": "^2.2.6",
+    "cross-var": "^1.1.0",
     "date-fns": "^1.30.1",
     "formik": "^1.4.3",
+    "if-env": "^1.0.4",
     "jspdf": "^1.5.3",
     "jwt-decode": "^2.2.0",
     "material-ui-pickers": "^2.1.2",
@@ -41,11 +44,15 @@
     "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fun": "if-env OS=Windows_NT && echo %OS% || echo %OS%",
+    "fun2": "node fun.js",
+    "fun3": "echo %npm_package_proxy__api___target%",
+    "fun4": "echo %npm_package_config_host%"
   },
   "proxy": {
     "/api/*": {
-      "target": "HOST"
+      "target": "http://shooterstats.pl:5001/"
     }
   },
   "devDependencies": {
