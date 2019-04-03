@@ -1,9 +1,5 @@
 {
   "name": "frontend",
-  "config": {
-    "host": "http://localhost:5001/"
-  },
-  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -49,11 +45,6 @@
     "fun2": "node fun.js",
     "fun3": "echo %npm_package_proxy__api___target%",
     "fun4": "echo %npm_package_config_host%"
-  },
-  "proxy": {
-    "/api/*": {
-      "target": "http://shooterstats.pl:5001/"
-    }
   },
   "devDependencies": {
     "enzyme": "^3.8.0",
