@@ -71,13 +71,13 @@ class PlayersScoresMain extends Component {
   componentDidMount() {
     turnamentId = window.location.pathname.split("/")[2];
 
-    Events.scrollEvent.register("begin", function() {
-      console.log("begin", arguments);
-    });
-
-    Events.scrollEvent.register("end", function() {
-      console.log("end", arguments);
-    });
+    // Events.scrollEvent.register("begin", function() {
+    //   console.log("begin", arguments);
+    // });
+    //
+    // Events.scrollEvent.register("end", function() {
+    //   console.log("end", arguments);
+    // });
 
     // console.log(
     //   "psm",
@@ -832,20 +832,20 @@ class PlayersScoresMain extends Component {
                         )}
                         {/* <ExportExcel data={matrixUnifilltered} /> */}
                         {
-                          <div
-                            style={{
-                              display: "grid",
-                              alignContent: "center",
-                              marginLeft: 20
-                            }}
-                          >
-                            {/* <h3
-                              style={{ color: "white" }}
-                            >{`Klasa: ${klasaName}`}</h3> */}
-                            <ButtonMy onClick={this.scrolling}>
-                              Prezentuj wszystkie wyniki
-                            </ButtonMy>
-                          </div>
+                          // <div
+                          //   style={{
+                          //     display: "grid",
+                          //     alignContent: "center",
+                          //     marginLeft: 20
+                          //   }}
+                          // >
+                          //   {/* <h3
+                          //     style={{ color: "white" }}
+                          //   >{`Klasa: ${klasaName}`}</h3> */}
+                          //   <ButtonMy onClick={this.scrolling}>
+                          //     Prezentuj wszystkie wyniki
+                          //   </ButtonMy>
+                          // </div>
                         }
                       </FormGroup>
 

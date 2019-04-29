@@ -31,7 +31,7 @@ const User = mongoose.model("users");
 
 router.post(
   "/register",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   function(req, res) {
     console.log("register", req.body);
     // const { errors, isValid } = validateRegisterInput(req.body);

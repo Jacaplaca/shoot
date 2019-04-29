@@ -27,7 +27,8 @@ const MenuContextTurnament = ({
   user,
   fetchFromDB,
   finished,
-  www
+  www,
+  turnaments
 }) => {
   // console.log("fs menu", fs);
 
@@ -62,6 +63,8 @@ const MenuContextTurnament = ({
       .then(() => onClose());
   };
 
+  const turnament = turnaments.filter(x => x._id === turnamentId);
+  const competitions = turnament[0] ? turnament[0].competitions.length : 0;
   return (
     <Menu
       id="simple-menu"
@@ -77,35 +80,44 @@ const MenuContextTurnament = ({
       >
         <MenuItem onClick={onClose}>Metryczki zawodników</MenuItem>
       </Link> */}
-      <MenuItem onClick={() => handleImprints(onClose, turnamentId)}>
-        Metryczki zawodników
-      </MenuItem>
-      <Link
-        to={{
-          pathname: `/wyniki_zawodnikow/${turnamentId}`,
-          state: { turnamentId }
-        }}
-      >
-        <MenuItem onClick={onClose}>Wyniki zawodników</MenuItem>
-      </Link>
-      {/* <MenuItem onClick={onClose}>Zobacz wyniki</MenuItem> */}
+      {competitions || <MenuItem>Brak dodanych konkurencji</MenuItem>}
+      {competitions && (
+        <MenuItem onClick={() => handleImprints(onClose, turnamentId)}>
+          Metryczki zawodników
+        </MenuItem>
+      )}
 
-      <Link
-        to={{
-          pathname: `/komunikat/${turnamentId}`,
-          state: { turnamentId }
-        }}
-        // target="_blank"
-      >
-        <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
-      </Link>
-      <MenuItem
-      // onClick={onClose}
-      // onClick={() => deleteAction(turnamentId)}
-      >
-        <ExportExcel id={turnamentId} onClose={onClose} />
-        {/* <DeleteIcon /> Usuń zawody */}
-      </MenuItem>
+      {competitions && (
+        <Link
+          to={{
+            pathname: `/wyniki_zawodnikow/${turnamentId}`,
+            state: { turnamentId }
+          }}
+        >
+          <MenuItem onClick={onClose}>Wyniki zawodników</MenuItem>
+        </Link>
+      )}
+      {/* <MenuItem onClick={onClose}>Zobacz wyniki</MenuItem> */}
+      {competitions && (
+        <Link
+          to={{
+            pathname: `/komunikat/${turnamentId}`,
+            state: { turnamentId }
+          }}
+          // target="_blank"
+        >
+          <MenuItem onClick={onClose}>Pobierz raport do druku</MenuItem>
+        </Link>
+      )}
+      {competitions && (
+        <MenuItem
+        // onClick={onClose}
+        // onClick={() => deleteAction(turnamentId)}
+        >
+          <ExportExcel id={turnamentId} onClose={onClose} />
+          {/* <DeleteIcon /> Usuń zawody */}
+        </MenuItem>
+      )}
 
       {user.rola === "admin" && (
         <MenuItem onClick={() => deleteAction(turnamentId)}>
@@ -122,6 +134,7 @@ const MenuContextTurnament = ({
         </MenuItem>
       )}
       {user.rola === "admin" &&
+        competitions &&
         (www ? (
           <MenuItem onClick={() => noWww(turnamentId)}>
             Anuluj publikację
@@ -135,7 +148,8 @@ const MenuContextTurnament = ({
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  turnaments: state.turnaments
 });
 
 const enhance = compose(
