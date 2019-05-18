@@ -449,12 +449,18 @@ class StatementForm extends Component {
                 ? foundCompetsInPlayer[0].score
                 : 0;
             wholeScore = score + wholeScore;
+            console.log(
+              "StatementForm() foundCompetsInPlayer",
+              foundCompetsInPlayer
+            );
             const center =
               foundCompetsInPlayer.length > 0
                 ? foundCompetsInPlayer[0].center
+                  ? foundCompetsInPlayer[0].center
+                  : "0"
                 : "0";
-            console.log("center", center);
-            console.log("center parse", parseFloat(center.replace(",", ".")));
+            // console.log("center", center);
+            // console.log("center parse", parseFloat(center.replace(",", ".")));
             totalCenter = parseFloat(center.replace(",", ".")) + totalCenter;
           }
 
@@ -542,7 +548,9 @@ class StatementForm extends Component {
     // protocols.map((x, i) => x.players.sort(dynamicSort("score")).reverse());
     if (turnament.factor) {
       protocols.map((x, i) => {
-        const players = addRank(x.players, "totalScore");
+        const players = addRank(x.players, "totalScore").sort(
+          dynamicSort("rank")
+        );
         return Object.assign(x, { players, laskjf: 909784 });
       });
     } else {

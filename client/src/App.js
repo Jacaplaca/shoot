@@ -48,6 +48,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // }
 
 class App extends Component {
+  componentWillMount() {
+    if (localStorage.jwtToken) {
+      const token = localStorage.jwtToken;
+      setAuthToken(token);
+      const decoded = jwt_decode(token);
+      store.dispatch(setCurrentUser(decoded));
+      console.log(decoded);
+    }
+  }
+
   componentDidMount() {
     document.title = `Portal Strzelecki`;
   }

@@ -67,8 +67,18 @@ export default (turnament, protocols) => {
     doc.text("SĘDZIA GŁÓWNY", 150, pos + 15, null, null, "center");
     doc.setFontSize(14.5);
     doc.text(
-      `${turnament.judgeMain.name ? turnament.judgeMain.name : ""} ${
-        turnament.judgeMain.surname ? turnament.judgeMain.surname : ""
+      `${
+        turnament.judgeMain
+          ? turnament.judgeMain.name
+            ? turnament.judgeMain.name
+            : ""
+          : ""
+      } ${
+        turnament.judgeMain
+          ? turnament.judgeMain.surname
+            ? turnament.judgeMain.surname
+            : ""
+          : ""
       } `,
       150,
       pos + 22,
@@ -152,24 +162,54 @@ export default (turnament, protocols) => {
     doc.setFontSize(16);
     doc.text("SĘDZIA GŁÓWNY:", 10, 55);
     doc.text(
-      `${turnament.judgeMain.name ? turnament.judgeMain.name : ""} ${
-        turnament.judgeMain.surname ? turnament.judgeMain.surname : ""
+      `${
+        turnament.judgeMain
+          ? turnament.judgeMain.name
+            ? turnament.judgeMain.name
+            : ""
+          : ""
+      } ${
+        turnament.judgeMain
+          ? turnament.judgeMain.surname
+            ? turnament.judgeMain.surname
+            : ""
+          : ""
       } `,
       90,
       55
     );
     doc.text("SĘDZIA LICZĄCY:", 10, 70);
     doc.text(
-      `${turnament.judgeCounting.name ? turnament.judgeCounting.name : ""} ${
-        turnament.judgeCounting.surname ? turnament.judgeCounting.surname : ""
+      `${
+        turnament.judgeCounting
+          ? turnament.judgeCounting.name
+            ? turnament.judgeCounting.name
+            : ""
+          : ""
+      } ${
+        turnament.judgeCounting
+          ? turnament.judgeCounting.surname
+            ? turnament.judgeCounting.surname
+            : ""
+          : ""
       } `,
       90,
       70
     );
     doc.text("SĘDZIA RTS:", 10, 85);
     doc.text(
-      `${turnament.judgeRTS.name ? turnament.judgeRTS.name : ""} ${
-        turnament.judgeRTS.surname ? turnament.judgeRTS.surname : ""
+      `${
+        turnament.judgeRTS
+          ? turnament.judgeRTS.name
+            ? turnament.judgeRTS.name
+            : ""
+          : ""
+      } ${
+        turnament.judgeRTS
+          ? turnament.judgeRTS.surname
+            ? turnament.judgeRTS.surname
+            : ""
+          : ""
       } `,
       90,
       85

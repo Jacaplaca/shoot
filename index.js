@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+// const cookieSession = require("cookie-session");
 const passport = require("passport");
 const config = require("./db");
 const path = require("path");
@@ -40,7 +41,6 @@ mongoose
   );
 
 const app = express();
-app.use(passport.initialize());
 require("./passport")(passport);
 // mongoose.connection.close();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -48,6 +48,17 @@ app.use(bodyParser.json());
 
 app.use(cors());
 app.use(fileUpload());
+
+// app.use(
+//   cookieSession({
+//     maxAge: 30 * 24 * 60 * 60 * 1000,
+//     // keys: [keys.cookieKey]
+//     keys: [process.env.COOKIE_KEY]
+//   })
+// );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 const protectedRoute = passport.authenticate("jwt", { session: false });
 

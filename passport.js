@@ -10,8 +10,10 @@ opts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET_COOKIE;
 
 module.exports = passport => {
+  console.log("passport");
   passport.use(
     new JWTStrategy(opts, (jwt_payload, done) => {
+      console.log("jwtstrategy", opts);
       User.findById(jwt_payload.id)
         .then(user => {
           if (user) {
