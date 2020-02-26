@@ -4,9 +4,9 @@ import { withStyles } from "@material-ui/core/styles";
 const Footer = ({ classes }) => {
   return (
     <div className={classes.root}>
-      <div>© SHOOTER STATS, 2019</div>
-      <div style={{ fontSize: 13 }}>
-        Shooter Stats powstaje przy współpracy ze{" "}
+      <div style={{fontSize: 12}}>© SHOOTER STATS, 2019</div>
+      <div style={{ fontSize: 11 }}>
+        System powstaje przy współpracy ze{" "}
         <a href="https://swiadomafirma.pl/">
           {" "}
           <img
@@ -15,8 +15,8 @@ const Footer = ({ classes }) => {
             style={{ width: 90, padding: 5 }}
           />{" "}
         </a>
-        która oferuje skuteczne wsparcie analityczne oraz programistyczne dla
-        biznesu.
+        {/* która oferuje skuteczne wsparcie analityczne oraz programistyczne dla
+        biznesu. */}
       </div>
     </div>
   );

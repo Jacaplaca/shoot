@@ -2,13 +2,18 @@ import * as jsPDF from "jspdf";
 // import fetch from "fetch-base64";
 
 import axios from "axios";
+
+import { PTSans } from "../skins/PTSans";
+import { PTSansBold } from "../skins/PTSansBold";
+import { PTSansItalic } from "../skins/PTSansItalic";
+
 // gm = require('gm');
 // import gm from "gm";
 // import FileBase64 from 'react-file-base64';
 import { combineStyles, dynamicSort } from "../functions/functions";
 import store from "../store";
 import * as actions from "../actions";
-import { PTSans } from "../skins/PTSans";
+// import { PTSans } from "../skins/PTSans";
 // const resizebase64 = require("resize-base64");
 
 // var sizeOf = require("image-size");
@@ -131,6 +136,13 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
       //   format: [80, 190]
     });
 
+    doc.addFileToVFS("PTSans.ttf", PTSans);
+  doc.addFileToVFS("PTSansBold.ttf", PTSansBold);
+  doc.addFileToVFS("PTSansItalic.ttf", PTSansItalic);
+  doc.addFont("PTSans.ttf", "PTSans", "normal");
+  doc.addFont("PTSansBold.ttf", "PTSans", "bold");
+  doc.addFont("PTSansItalic.ttf", "PTSans", "italic");
+
     function dotted(xStart, yStart, xStop, yStop, prog) {
       const odlegloscX = xStop - xStart;
       const iloscProgow = odlegloscX / prog / 2;
@@ -244,15 +256,19 @@ const generatePDFs = async (theTurnament, thePlayers, competitions) => {
         doc.text("1", 6.5, 58 + a());
         doc.text("2", 6.5, 67 + a());
         doc.text("3", 6.5, 76 + a());
+        doc.text("4", 6.5, 85 + a());
         doc.setFontSize(7);
+        // doc.setFont("PTSans", "bold");
+        doc.setFontType('bold');
         doc.text("MISS", 7, 61.5 + a(), "center");
         doc.text("PROCED.", 7, 70.5 + a(), "center");
         doc.text("DQ", 7, 79.5 + a(), "center");
+        doc.text("No Shoot", 7, 88.5 + a(), "center");
         doc.setFontSize(10);
+        doc.setFontType('normal');
         doc.text("6", 41, 60 + a());
         doc.text("7", 41, 69 + a());
         doc.text("8", 41, 78 + a());
-        doc.text("4", 6, 87 + a());
         doc.text("9", 41, 87 + a());
         doc.text("5", 6, 96 + a());
         doc.text("10", 41, 96 + a());
