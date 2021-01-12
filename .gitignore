@@ -8,7 +8,7 @@
 
 # production
 /build
-
+/db_backups
 #pic
 /client/src/images
 
@@ -23,3 +23,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.bash_history

@@ -35,13 +35,13 @@ class PlayersFormik extends Component {
     var reader = new FileReader();
     console.log(reader);
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       var data = e.target.result;
       var workbook = XLSX.read(data, {
         type: "binary"
       });
 
-      workbook.SheetNames.forEach(function(sheetName) {
+      workbook.SheetNames.forEach(function (sheetName) {
         // Here is your object
         console.log("XLSX", sheetName);
         var XL_row_object = XLSX.utils.sheet_to_row_object_array(
@@ -70,7 +70,7 @@ class PlayersFormik extends Component {
       });
     };
 
-    reader.onerror = function(ex) {
+    reader.onerror = function (ex) {
       console.log(ex);
     };
 
@@ -135,7 +135,7 @@ class PlayersFormik extends Component {
                 // wybrano={e => onChange(e)}
                 value={turnament}
                 label="Zawody"
-                // placeholder="Organizator"
+              // placeholder="Organizator"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -146,7 +146,7 @@ class PlayersFormik extends Component {
                 type="string"
                 // edytuj={change.bind(null, "email")}
                 edytuj={handleChange}
-                value={number}
+                value={number || ""}
                 error={touched.rank && Boolean(errors.rank)}
                 helperText={touched.rank && errors.rank ? errors.rank : " "}
                 onBlur={handleBlur}
@@ -173,7 +173,7 @@ class PlayersFormik extends Component {
                     name="rodo"
                     checked={rodo}
                     onChange={handleChange}
-                    // value="zaplanowane"
+                  // value="zaplanowane"
                   />
                 }
                 label="RODO"
